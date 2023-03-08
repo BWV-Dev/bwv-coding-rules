@@ -8,11 +8,10 @@
 
 - <u>**lowercase_with_underscores**</u> names use only lowercase letters, even for acronyms, and separate words with _. etc: `home_screen.dart`
 
-
 ### 1. Name of files, packages, directories
 
 Name types using [lowercase_with_underscores](#definitions).
-```
+```dart
 my_package
 └─ lib
    └─ file_system.dart
@@ -22,4 +21,12 @@ my_package
 ### 2. Name of classes, extensions, enum types
 
 Name types using [UpperCamelCase](#definitions).
+
+```dart
+class SliderMenu { ... }
+
+extension MyFancyList<T> on List<T> { ... }
+
+enum MyType { ... } 
+```
 
