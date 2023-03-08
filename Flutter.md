@@ -1,14 +1,14 @@
 
 # Flutter Coding Rules
 
-### Definitions
+## Definitions
 - <u>**UpperCamelCase**</u> names capitalize the first letter of each word, including the first. etc: `MyClass`
 
 - <u>**lowerCamelCase**</u> names capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: `studentList`
 
 - <u>**lowercase_with_underscores**</u> names use only lowercase letters, even for acronyms, and separate words with _. etc: `home_screen.dart`
 
-### 1. Naming rules 
+## 1. Naming rules 
 
 - Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format.
 ```dart
@@ -68,3 +68,4 @@ const kDefaultTimeout = 10;  //bad
 class HttpConnection {} //good
 class HTTPConnection {} //bad
 ```
+
