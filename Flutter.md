@@ -2,12 +2,11 @@
 # Flutter Coding Rules
 
 ### Definitions
-- <u>**UpperCamelCase**</u> names capitalize the first letter of each word, including the first. etc: 
-<span style="color:#606">MyClass</span>.
+- <u>**UpperCamelCase**</u> names capitalize the first letter of each word, including the first. etc: `MyClass`
 
-- <u>**lowerCamelCase**</u> names capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: <span style="color:#606">studentList</span>
+- <u>**lowerCamelCase**</u> names capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: `studentList`
 
-- <u>**lowercase_with_underscores**</u> names use only lowercase letters, even for acronyms, and separate words with _. etc: <span style="color:#606">home_screen.dart</span>
+- <u>**lowercase_with_underscores**</u> names use only lowercase letters, even for acronyms, and separate words with _. etc: `home_screen.dart`
 
 
 ### 1. Name of files, packages, directories
