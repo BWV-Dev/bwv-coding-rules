@@ -10,7 +10,7 @@
 
 ## 1. Naming rules 
 
-- ==Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format.==
+ - Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format.
 ```dart
 my_package
 └─ lib
