@@ -127,6 +127,17 @@ class HTTPConnection {} //bad
 
 </td>
 </tr>
+<tr>
+<td> Starting a boolean variable or property with a question words like can, is, should,...</td>
+<td>
+
+```dart
+final isConnected = true;
+final shouldConfirm = true;
+final canResize = true;
+```
+</td>
+</tr>
 </table>
 
 ## 2. Styling
@@ -146,7 +157,7 @@ relative imports (../foo.dart)
 <td>
 
 ```dart
-good
+// good
 import 'dart:a';
 import 'dart:b';
 
@@ -156,7 +167,7 @@ import 'package:b/b.dart';
 import 'a.dart';
 import '../b.dart';
 
-bad
+// bad
 import 'dart:a';
 import 'package:a/a.dart';
 import 'dart:b';
@@ -167,19 +178,57 @@ import 'a.dart';
 </td>
 </tr>
 <tr>
-<td>Use curly braces for all flow control statements.</td>
+<td>
+
+Use curly braces for all flow control statements. <br>
+**Exception**: When you have an if statement with no else clause and the whole if statement fits on one line, you can omit the braces.
+
+</td>
 <td>
 
 ```dart
-good
+// good
 if (isTrue) {
   print('true');
-} 
+}
+if (arg == null) return true;
 
-bad
+// bad
 if (isTrue) 
   print('true');
 ```
 </td>
 </tr>
 </table>
+
+## 3. Comment
+
+Doc comments are especially handy because [dart doc](https://dart.dev/tools/dart-doc) parses them and generates beautiful doc pages from them. <br>
+You don’t have to document every single library, top-level variable, type, and member, but you should document most of them.
+
+<table>
+<tr>
+<td>Format comments like sentences and capitalize the first word.</td>
+<td>
+
+```dart
+// In case no item in list, we do nothing
+if (!hasItems) return false;
+```
+</td>
+</tr>
+<tr>
+<td>Use <b>///</b> to document members and types</td>
+<td>
+
+```dart
+/// The number of item in array.
+int get length => ...
+```
+</td>
+</tr>
+
+</table>
+
+
+## 4. Usage
