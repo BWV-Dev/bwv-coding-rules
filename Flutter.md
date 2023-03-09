@@ -80,11 +80,10 @@ enum MyType {
 
 </td>
 </tr>
-</table>
+<tr>
+<td>Use prefix `_` for private identifiers (classes, variable,...) </td>
+<td>
 
-
-
-- Use prefix `_` for private identifiers (classes, variable,...) 
 ```dart
 class _PrivateClass {...}
 
@@ -98,15 +97,30 @@ futureOfVoid.then((_,__) {
 });
 ```
 
-- DON’T use prefix letters.<br>
+</td>
+</tr>
+<tr>
+<td>DON’T use prefix letters.</td>
+<td>
+
 ```dart
 const defaultTimeout = 10; //good
 const kDefaultTimeout = 10;  //bad
 ```
 
-- DO capitalize acronyms and abbreviations longer than two letters like words.
+</td>
+</tr>
+</tr>
+<td>
+Capitalize acronyms and abbreviations longer than two letters like words.
+</td>
+<td>
+
 ```dart
 class HttpConnection {} //good
 class HTTPConnection {} //bad
 ```
 
+</td>
+</tr>
+</table>
