@@ -2,14 +2,43 @@
 # Flutter Coding Rules
 
 ## Definitions
-- <u>**UpperCamelCase**</u> names capitalize the first letter of each word, including the first. etc: `MyClass`
 
-- <u>**lowerCamelCase**</u> names capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: `studentList`
+<table>
+    <tr>
+        <td> <b>UpperCamelCase</b></td>
+        <td> names capitalize the first letter of each word, including the first. etc: `MyClass` </td>
+    </tr>
+    <tr>
+        <td> <b>lowerCamelCase</b> </td>
+        <td> names capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: `studentList` </td>
+    </tr>
+    <tr>
+        <td> <b>lowercase_with_underscores</b> </td>
+        <td> names use only lowercase letters, even for acronyms, and separate words with _. etc: `home_screen.dart` </td>
+    </tr>
 
-- <u>**lowercase_with_underscores**</u> names use only lowercase letters, even for acronyms, and separate words with _. etc: `home_screen.dart`
+</table>
 
 ## 1. Naming rules 
 
+<table>
+    <tr>
+        <td>
+            Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format
+        </td>
+        <td>
+```dart
+my_package
+└─ lib
+   └─ file_system.dart
+   └─ slider_menu.dart
+
+import 'dart:math' as math;
+```
+
+        </td>
+    </tr>
+</table>
  - Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format.
 ```dart
 my_package
