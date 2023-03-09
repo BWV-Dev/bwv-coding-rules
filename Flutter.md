@@ -19,7 +19,7 @@
 
 </table>
 
-## 1. Naming rules 
+## 1. Naming 
 
 <table>
 <tr>
@@ -125,6 +125,61 @@ class HttpConnection {} //good
 class HTTPConnection {} //bad
 ```
 
+</td>
+</tr>
+</table>
+
+## 2. Styling
+
+<table>
+<tr>
+<td>
+
+Import packages by following order and sort each section by alphabetically.
+
+```dart
+dart: 
+package:
+relative imports (../foo.dart)
+```
+</td>
+<td>
+
+```dart
+good
+import 'dart:a';
+import 'dart:b';
+
+import 'package:a/a.dart';
+import 'package:b/b.dart';
+
+import 'a.dart';
+import '../b.dart';
+
+bad
+import 'dart:a';
+import 'package:a/a.dart';
+import 'dart:b';
+import '../b.dart';
+import 'package:b/b.dart';
+import 'a.dart';
+```
+</td>
+</tr>
+<tr>
+<td>Use curly braces for all flow control statements.</td>
+<td>
+
+```dart
+good
+if (isTrue) {
+  print('true');
+} 
+
+bad
+if (isTrue) 
+  print('true');
+```
 </td>
 </tr>
 </table>
