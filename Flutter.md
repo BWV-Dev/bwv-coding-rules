@@ -27,6 +27,7 @@
             Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format
         </td>
         <td>
+        
 ```dart
 my_package
 └─ lib
