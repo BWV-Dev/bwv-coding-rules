@@ -6,15 +6,15 @@
 <table>
     <tr>
         <td> <b>UpperCamelCase</b></td>
-        <td> names capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
+        <td> Capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
     </tr>
     <tr>
         <td> <b>lowerCamelCase</b> </td>
-        <td> names capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: <b>studentList</b> </td>
+        <td> Capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: <b>studentList</b> </td>
     </tr>
     <tr>
         <td> <b>lowercase_with_underscores</b> </td>
-        <td> names use only lowercase letters, even for acronyms, and separate words with _. etc: <b>home_screen.dart</b> </td>
+        <td> Use only lowercase letters, even for acronyms, and separate words with _. etc: <b>home_screen.dart</b> </td>
     </tr>
 
 </table>
@@ -81,7 +81,7 @@ enum MyType {
 </td>
 </tr>
 <tr>
-<td>Use prefix `_` for private identifiers (classes, variable,...) </td>
+<td>Use prefix <b>_</b> for private identifiers (classes, variable,...) </td>
 <td>
 
 ```dart
@@ -90,7 +90,11 @@ class _PrivateClass {...}
 final _privateVariable = true;
 ```
 
-- Use `_, __, etc.` for unused callback parameters
+</td>
+<tr>
+<td>Use <b>_</b> or <b>__</b>  for unused callback parameters</td>
+<td>
+
 ```dart
 futureOfVoid.then((_,__) {
   print('done.');
