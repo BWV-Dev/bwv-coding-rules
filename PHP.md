@@ -19,7 +19,7 @@ Response
 </td>
 
 <td>
-```json
+<pre lang="json">
   {
     "id": 10,
     "username": "alanpartridge",
@@ -29,7 +29,7 @@ Response
     "created_at": "2015-02-14T20:45:26.433Z",
     "updated_at": "2015-02-14T20:45:26.540Z"
 }
-```
+</pre>
 </td>
 
 </tr>
