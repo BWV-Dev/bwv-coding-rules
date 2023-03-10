@@ -554,7 +554,8 @@ class Urls {
     static const String apiUrl = 'http://localhost';
 }
 
-// You can also use constants to define some repeating layouting numbers
+// You can also use constants 
+// to define some repeating layouting numbers
 class CommonWidgets {
     static const Widget Logo = Text('Hello');
 }
