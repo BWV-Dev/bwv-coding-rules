@@ -208,8 +208,8 @@ You don’t have to document every single library, top-level variable, type, and
 
 <table>
 <tr>
-<td>Format comments like sentences and capitalize the first word.</td>
-<td>
+<td width="40%">Format comments like sentences and capitalize the first word.</td>
+<td width="60%">
 
 ```dart
 // In case no item in list, we do nothing
