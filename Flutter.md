@@ -365,7 +365,7 @@ class Student {
     late String name;
     
     changeName({required String name}){        
-        // Is the name used below function parameter name or class property name?
+        // Is below name function parameter name or class property name?
         // in case they have the same name, use this.name instead
         if(name.isEmpty){}
     }
