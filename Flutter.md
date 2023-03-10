@@ -536,4 +536,60 @@ class Student {
 ```
 </td>
 </tr>
+<tr>
+<td>Use class to define your constants. Define multiple classes to break constants into logical sections.</td>
+<td>
+
+```dart
+class Fonts {
+    static const String spaceGrotesk = 'SpaceGrotesk';
+}
+
+class Urls {
+    static const String apiUrl = 'http://localhost';
+}
+
+// You can also use constants to define some repeating layouting numbers
+class CommonWidgets {
+    static const Widget Logo = Text('Hello');
+}
+
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+**Avoid large functions and widgets**
+- Split large function into smaller functions.
+- Split large widget into multiple (private or reusable) widgets.
+- Use widget class rather than function returning widget!
+</td>
+
+<td>
+
+```dart
+//We split main screen to following structure
+MainScreen
+└─ MainView
+   └─ Tabbar
+   └─ TabContentView
+   
+class MainScreen extends StatefulWidget{
+    final view = MainView();
+}
+
+class MainView extends StatefulWidget{
+    final tabbar = Tabbar();
+    final contentView = TabContentView();
+}
+
+class Tabbar extends StatefulWidget{}
+
+class TabContentView extends StatefulWidget{}
+
+```
+</td>
+</tr>
 </table>
