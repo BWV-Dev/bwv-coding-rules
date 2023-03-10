@@ -278,13 +278,13 @@ For example, say your directory structure looks like this:
 ```dart
 package_a
 └─ lib
-   └─ private_lib.dart
+    └─src
+        └─ private_lib.dart
 
 // private_lib.dart:
 library private_lib;
 
 //we WON'T import private_lib into any our files
-
 ```
 </td>
 </tr>
@@ -333,6 +333,25 @@ import 'stuff.dart';
 //test/api_test.dart:
 import 'package:my_package/api.dart'; 
 import 'test_utils.dart'; 
+```
+</td>
+</tr>
+<tr>
+<td>
+
+**AVOID** late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.</td>
+<td>
+
+```dart
+class Student {
+    late String name;
+
+    Student(){
+        name = "test";//Should init value at constructor
+    }
+
+    bool get isNameEmpty => return name.isEmpty; // Make sure name was initialized at somewhere behind, or this code will throw an exception
+}
 ```
 </td>
 </tr>
