@@ -135,6 +135,25 @@ final canResize = true;
 ```
 </td>
 </tr>
+<tr>
+<td><b>PREFER</b> naming a method as___() if it returns a different representation backed by the original object.</td>
+<td>
+
+```dart
+var map = table.asMap();
+var list = bytes.asFloat32List();
+```
+</td>
+</tr>
+<tr>
+<td><b>DO</b> use mixin to define a mixin type.</td>
+<td>
+
+```dart
+mixin ClickableMixin  {}
+```
+</td>
+</tr>
 </table>
 
 ## 2. Styling
@@ -412,7 +431,7 @@ List<int> singletonList(int value) {
 </tr>
 
 <tr>
-<td>Use final for local variables that are not reassigned (or read-only property) and var for those that are.</td>
+<td>Use <b>final</b> for local variables that are not reassigned (or read-only property) and <b>var</b> for those that are.</td>
 <td>
 
 ```dart
@@ -426,7 +445,7 @@ class Student {
 </td>
 </tr>
 <tr>
-<td><b>CONSIDER</b> using => for simple members.</td>
+<td><b>CONSIDER</b> using <b>=></b> for simple members.</td>
 <td>
 
 ```dart
@@ -451,4 +470,70 @@ final student = new Student();//bad
 
 </tr>
 
+<tr>
+<td><b>Method cascades</b> are a better solution for chaining method calls.</td>
+<td>
+
+```dart
+var buffer = StringBuffer()
+  ..write('one')
+  ..write('two')
+  ..write('three');
+```
+</td>
+</tr>
+
+<tr>
+<td><b>AVOID</b> writing incomplete generic types</td>. The goal of writing a type annotation or type argument is to pin down a complete type, if you write the name of a generic type but omit its type arguments, you haven’t fully specified the type.
+<td>
+
+```dart
+var completer = Completer<Map<String,int>>(); //good
+var completer = Completer<Map>(); //bad
+
+```
+</td>
+</tr>
+<tr>
+<td>
+
+**AVOID** using **dynamic** unless you want to disable static checking. The type **dynamic** not only accepts all objects, but it also permits **all operations**. Any member access on a value of type **dynamic** is allowed at compile time, but may fail and throw an exception at runtime.
+</td>
+
+<td>
+
+```dart
+calculateValue(dynamic value){
+    if(value.isEmpty){
+        // you expect value is string or array
+        // but it can be an int, double or null, 
+        // or even a function
+        // this is so risky.
+    }
+}
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+**DO** override **hashCode** if you override **==**
+</td>
+<td>
+
+```dart
+class Student {
+  final int studentId;
+  Student({required this.studentId});
+  @override
+  int get hashCode => studentId;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Student && hashCode == other.hashCode;
+}
+```
+</td>
+</tr>
 </table>
