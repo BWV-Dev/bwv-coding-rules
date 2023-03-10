@@ -5,8 +5,8 @@
 
 <table>
     <tr>
-        <td> <b>UpperCamelCase</b></td>
-        <td> Capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
+        <td width="40%"> <b>UpperCamelCase</b></td>
+        <td width="60%"> Capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
     </tr>
     <tr>
         <td> <b>lowerCamelCase</b> </td>
@@ -23,12 +23,12 @@
 
 <table>
 <tr>
-<td>
+<td width="40%">
 
 Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format. 
 
 </td>
-<td>
+<td width="60%">
 
 ```dart
 my_package
@@ -144,7 +144,7 @@ final canResize = true;
 
 <table>
 <tr>
-<td>
+<td width="40%">
 
 Import packages by following order and sort each section by alphabetically.
 
@@ -154,7 +154,7 @@ package:
 relative imports (../foo.dart)
 ```
 </td>
-<td>
+<td width="60%">
 
 ```dart
 // good
@@ -252,11 +252,11 @@ It will generate the document like this
 
 <table>
 <tr>
-<td width="50%">
+<td width="40%">
 
 If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name
 </td>
-<td width="50%">
+<td width="60%">
 
 ```dart
 library my_lib;
