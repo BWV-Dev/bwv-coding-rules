@@ -350,7 +350,9 @@ class Student {
         name = "test";//Should init value at constructor
     }
 
-    bool get isNameEmpty => return name.isEmpty; // Make sure name was initialized at somewhere behind, or this code will throw an exception
+    // Make sure name was initialized at somewhere behind,
+    // or this code will throw an exception
+    bool get isNameEmpty => return name.isEmpty; 
 }
 ```
 </td>
