@@ -307,7 +307,7 @@ import 'package:my_package/api.dart'; //good
 </td>
 </tr>
 <tr>
-<td>When an import does not reach across lib, prefer using relative imports. They’re shorter.</td>
+<td>When an import does not reach across lib, <b>Prefer</b> using relative imports. They’re shorter.</td>
 <td>
 For example, say your directory structure looks like this:
 
@@ -337,9 +337,7 @@ import 'test_utils.dart';
 </td>
 </tr>
 <tr>
-<td>
-
-**AVOID** late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.</td>
+<td><b>AVOID</b> late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.</td>
 <td>
 
 ```dart
@@ -353,6 +351,62 @@ class Student {
     // Make sure name was initialized at somewhere behind,
     // or this code will throw an exception
     bool get isNameEmpty => return name.isEmpty; 
+}
+```
+</td>
+</tr>
+
+<tr>
+<td><b>DONT'T</b> use the same name for properties and local variables, the compiler does not know exactly which variable should be used.</td>
+<td>
+
+```dart
+class Student {
+    late String name;
+    
+    changeName({required String name}){        
+        // Is the name used below function parameter name or class property name?
+        // in case they have the same name, use this.name instead
+        if(name.isEmpty){}
+    }
+}
+```
+</td>
+</tr>
+<tr>
+<td><b>PREFER</b> using interpolation to compose strings and values. </td>
+<td>
+
+```dart
+'Hello, $name! You are ${year - birth} years old.'; //good
+'Hello, You are ' + (year - birth).toString() + ' y...'; //bad
+```
+</td>
+</tr>
+<tr>
+<td><b>DO</b> use whereType() to filter a collection by type.</td>
+<td>
+
+```dart
+var objects = [1, 'a', 2, 'b', 3];
+var ints = objects.whereType<int>();//good
+var ints = objects.where((e) => e is int).cast<int>();//bad
+```
+</td>
+</tr>
+
+<tr>
+<td>
+<b>AVOID</b> using cast(). The cast() method returns a lazy collection that checks the element type on every operation. If you perform only a few operations on only a few elements, that laziness can be good. But in many cases, the overhead of lazy validation and of wrapping outweighs the benefits.
+</td>
+<td>
+
+```dart
+List<int> singletonList(int value) {
+  var list = <int>[];//good
+  var list = []; // bad List<dynamic>.
+  list.add(value);
+  return list;
 }
 ```
 </td>
