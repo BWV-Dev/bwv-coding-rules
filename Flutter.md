@@ -357,7 +357,7 @@ class Student {
 </tr>
 
 <tr>
-<td><b>DONT'T</b> use the same name for properties and local variables, the compiler does not know exactly which variable should be used.</td>
+<td><b>DON'T</b> use the same name for properties and local variables, the compiler does not know exactly which variable should be used.</td>
 <td>
 
 ```dart
@@ -410,4 +410,45 @@ List<int> singletonList(int value) {
 ```
 </td>
 </tr>
+
+<tr>
+<td>Use final for local variables that are not reassigned (or read-only property) and var for those that are.</td>
+<td>
+
+```dart
+class Student {
+    final String name;//not reassigned
+    var int? score; //reassigned
+    Student({required this.name, this.score});
+}
+```
+
+</td>
+</tr>
+<tr>
+<td><b>CONSIDER</b> using => for simple members.</td>
+<td>
+
+```dart
+double get area => (right - left) * (bottom - top); //good
+double get area {
+    return (right - left) * (bottom - top); //bad
+} 
+
+```
+
+</td>
+</tr>
+<tr>
+<td><b>DON’T</b> use <b>new</b>. Dart 2 makes the new keyword optional. Even in Dart 1, its meaning was never clear because factory constructors mean a new invocation may still not actually return a new object.</td>
+<td>
+
+```dart
+final student = Student();//good
+final student = new Student();//bad
+```
+</td>
+
+</tr>
+
 </table>
