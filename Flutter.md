@@ -301,7 +301,7 @@ my_package
    └─ api_test.dart
 
 // And say api_test.dart imports api.dart in two ways:
-import '../lib/api.dart'; //bad, don’t use /lib/ in import paths.
+import '../lib/api.dart'; //bad
 import 'package:my_package/api.dart'; //good
 ```
 </td>
@@ -365,8 +365,7 @@ class Student {
     late String name;
     
     changeName({required String name}){        
-        // Is below name function parameter name or class property name?
-        // in case they have the same name, use this.name instead
+        // Below 'name' is parameter or class property?
         if(name.isEmpty){}
     }
 }
@@ -378,8 +377,8 @@ class Student {
 <td>
 
 ```dart
-'Hello, $name! You are ${year - birth} years old.'; //good
-'Hello, You are ' + (year - birth).toString() + ' y...'; //bad
+'You are ${year - birth} years old.'; //good
+'You are ' + (year - birth).toString() + ' y...'; //bad
 ```
 </td>
 </tr>
