@@ -250,13 +250,13 @@ It will generate the document like this
 
 ## 4. Usage
 
-<table style='table-layout:fixed;'>
+<table>
 <tr>
-<td >
+<td width="50%">
 
 If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name
 </td>
-<td style='width="50%"'>
+<td width="50%">
 
 ```dart
 library my_lib;
