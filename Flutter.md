@@ -5,8 +5,8 @@
 
 <table>
     <tr>
-        <td width="40%"> <b>UpperCamelCase</b></td>
-        <td width="60%"> Capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
+        <td width="50%"> <b>UpperCamelCase</b></td>
+        <td width="50%"> Capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
     </tr>
     <tr>
         <td> <b>lowerCamelCase</b> </td>
@@ -23,10 +23,10 @@
 
 <table>
 <tr>
-<td width="40%">
+<td width="50%">
 
 Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format. </td>
-<td width="60%">
+<td width="50%">
 
 ```dart
 my_package
@@ -113,7 +113,7 @@ const kDefaultTimeout = 10;  //bad
 </tr>
 </tr>
 <td>
-Capitalize acronyms and abbreviations longer than two letters like words.
+**Capitalize** acronyms and abbreviations longer than two letters like words.
 </td>
 <td>
 
@@ -125,7 +125,10 @@ class HTTPConnection {} //bad
 </td>
 </tr>
 <tr>
-<td> Starting a boolean variable or property with a question words like can, is, should,...</td>
+<td> 
+
+Starting a boolean variable or property with a question words like *can, is, should*,...
+</td>
 <td>
 
 ```dart
@@ -145,8 +148,14 @@ var list = bytes.asFloat32List();
 ```
 </td>
 </tr>
+
+</table>
+
+## 2. Styling
+
+<table>
 <tr>
-<td><b>DO</b> use mixin to define a mixin type.</td>
+<td><b>DO</b> use *mixin* to define a mixin type.</td>
 <td>
 
 ```dart
@@ -154,13 +163,9 @@ mixin ClickableMixin  {}
 ```
 </td>
 </tr>
-</table>
 
-## 2. Styling
-
-<table>
 <tr>
-<td width="40%">
+<td width="50%">
 
 Import packages by following order and sort each section by alphabetically.
 
@@ -170,7 +175,7 @@ package:
 relative imports (../foo.dart)
 ```
 </td>
-<td width="60%">
+<td width="50%">
 
 ```dart
 // good
@@ -224,8 +229,8 @@ You don’t have to document every single library, top-level variable, type, and
 
 <table>
 <tr>
-<td width="40%">Format comments like sentences and capitalize the first word.</td>
-<td width="60%">
+<td width="50%">Format comments like sentences and capitalize the first word.</td>
+<td width="50%">
 
 ```dart
 // In case no item in list, we do nothing
@@ -268,11 +273,11 @@ It will generate the document like this
 
 <table>
 <tr>
-<td width="40%">
+<td width="50%">
 
 If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name.
 </td>
-<td width="60%">
+<td width="50%">
 
 ```dart
 library my_lib;
