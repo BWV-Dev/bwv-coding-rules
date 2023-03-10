@@ -227,8 +227,48 @@ int get length => ...
 ```
 </td>
 </tr>
+<tr>
+<td>You can use markdown on comments.</td>
+<td>
 
+```dart
+/// This is a test class
+///
+///```dart
+///final a = HelloWorld();
+///```
+class HelloWorld {}
+```
+It will generate the document like this
+
+![Sample markdown comment](./images/flutter/markdown_comment.png)
+
+</td>
+</tr>
 </table>
 
 
 ## 4. Usage
+
+<table style='table-layout:fixed;'>
+<tr>
+<td >
+
+If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name
+</td>
+<td style='width="50%"'>
+
+```dart
+library my_lib;
+part './lib_a.dart';
+
+// The part file should use the library file’s URI:
+part of '../../my_library.dart';//good
+
+// Not the library name:
+part of my_library;//bad
+
+```
+</td>
+</tr>
+</table>
