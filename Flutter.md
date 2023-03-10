@@ -254,7 +254,7 @@ It will generate the document like this
 <tr>
 <td width="40%">
 
-If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name
+If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name.
 </td>
 <td width="60%">
 
@@ -267,6 +267,61 @@ part of '../../my_library.dart';//good
 
 // Not the library name:
 part of my_library;//bad
+```
+</td>
+</tr>
+<tr>
+<td colspan="2">
+
+DON’T import libraries that are inside the src directory of another package.
+The src directory under lib is specified to contain libraries private to the package’s own implementation, they are free to make sweeping changes to code under src without it being a breaking change to the package.
+</td>
+</tr>
+<tr>
+<td>DON’T allow an import path to reach into or out of lib</td>
+<td>
+For example, say your directory structure looks like this:
+
+```dart
+my_package
+└─ lib
+   └─ api.dart
+   test
+   └─ api_test.dart
+
+// And say api_test.dart imports api.dart in two ways:
+import '../lib/api.dart'; //bad, don’t use /lib/ in import paths.
+import 'package:my_package/api.dart'; //good
+```
+</td>
+</tr>
+<tr>
+<td>When an import does not reach across lib, prefer using relative imports. They’re shorter.</td>
+<td>
+For example, say your directory structure looks like this:
+
+```dart
+my_package
+└─ lib
+   ├─ src
+   │  └─ stuff.dart
+   │  └─ utils.dart
+   └─ api.dart
+   test
+   │─ api_test.dart
+   └─ test_utils.dart
+
+// lib/api.dart:
+import 'src/stuff.dart';
+import 'src/utils.dart';
+
+// lib/src/utils.dart:
+import '../api.dart';
+import 'stuff.dart';
+
+//test/api_test.dart:
+import 'package:my_package/api.dart'; 
+import 'test_utils.dart'; 
 
 ```
 </td>
