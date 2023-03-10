@@ -25,9 +25,7 @@
 <tr>
 <td width="40%">
 
-Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format. 
-
-</td>
+Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format. </td>
 <td width="60%">
 
 ```dart
@@ -44,8 +42,7 @@ import 'dart:math' as math;
 <tr>
 <td>
 
-Name of classes, extensions, enum types use [UpperCamelCase](#definitions) format. 
-
+Name of classes, extensions, enum types use [UpperCamelCase](#definitions) format.
 </td>
 <td>
 
@@ -104,7 +101,7 @@ futureOfVoid.then((_,__) {
 </td>
 </tr>
 <tr>
-<td>DON’T use prefix letters.</td>
+<td><b>DON’T</b> use prefix letters.</td>
 <td>
 
 ```dart
@@ -271,14 +268,28 @@ part of my_library;//bad
 </td>
 </tr>
 <tr>
-<td colspan="2">
-
-DON’T import libraries that are inside the src directory of another package.
+<td>
+<b>DON’T</b> import libraries that are inside the src directory of another package.
 The src directory under lib is specified to contain libraries private to the package’s own implementation, they are free to make sweeping changes to code under src without it being a breaking change to the package.
+</td>
+<td>
+For example, say your directory structure looks like this:
+
+```dart
+package_a
+└─ lib
+   └─ private_lib.dart
+
+// private_lib.dart:
+library private_lib;
+
+//we WON'T import private_lib into any our files
+
+```
 </td>
 </tr>
 <tr>
-<td>DON’T allow an import path to reach into or out of lib</td>
+<td><b>DON’T</b> allow an import path to reach into or out of lib</td>
 <td>
 For example, say your directory structure looks like this:
 
@@ -322,7 +333,6 @@ import 'stuff.dart';
 //test/api_test.dart:
 import 'package:my_package/api.dart'; 
 import 'test_utils.dart'; 
-
 ```
 </td>
 </tr>
