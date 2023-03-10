@@ -249,7 +249,7 @@ int get length => ...
 </td>
 </tr>
 <tr>
-<td>You can use markdown on comments.</td>
+<td>You can use markdown on comments. Use it to give usage example of a funtion or class so others can learn quickly.</td>
 <td>
 
 ```dart
@@ -570,7 +570,7 @@ class CommonWidgets {
 **Avoid large functions and widgets**
 - Split large function into smaller functions.
 - Split large widget into multiple (private or reusable) widgets.
-- Use widget class rather than function returning widget!
+- Use widget class rather than function returning widget.
 </td>
 
 <td>
@@ -594,7 +594,25 @@ class MainView extends StatefulWidget{
 class Tabbar extends StatefulWidget{}
 
 class TabContentView extends StatefulWidget{}
+```
+</td>
+</tr>
+<tr>
+<td>When you have to meet certain criteria to continue execution, try to exit early.</td>
+<td>
 
+```dart
+//good
+if (!isTrue) {
+  return;
+}
+
+//bad
+if (isTrue) {
+  //...
+}else {
+    return;
+}
 ```
 </td>
 </tr>
