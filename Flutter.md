@@ -173,6 +173,27 @@ class Data {}
 ## 2. Styling
 
 <table>
+
+<tr>
+<td>
+
+**Prefer a maximum line length of 80 characters**<br>
+Aim for a maximum line length of roughly 80 characters, but prefer going over if breaking the line would make it less readable, or if it would make the line less consistent with other nearby lines. 
+</td>
+<td>
+
+```dart
+//bad
+final names = a.map(element => element.name).toList().sort()......;
+//good
+List<String> names = a.map(element => element.name);
+names.sort();
+names....;
+
+```
+
+</td>
+</tr>
 <tr>
 <td>
 
@@ -320,6 +341,21 @@ It will generate the document like this
 ## 4. Usage
 
 <table>
+
+<tr>
+<td>
+
+Avoid using **as** instead, use **is** operator
+</td>
+<td>
+
+```dart
+(item as Animal).name = 'Lion'; //bad
+
+if (item is Animal)item.name = 'Lion';//good
+```
+</td>
+</tr>
 <tr>
 <td width="50%">
 
@@ -835,7 +871,7 @@ abstract class RequestApi{
     final String method;
 
     request();
-    onSucceess();
+    onSuccessed();
     onFailed();
 }
 
@@ -843,7 +879,7 @@ class LoginApi extends RequestApi{
     UserModel? user;
     LoginApi({this.url = "login",this.url = "method"});
 
-    onSucceess(){
+    onSuccessed(){
         //user = parse responsee
     }
 
