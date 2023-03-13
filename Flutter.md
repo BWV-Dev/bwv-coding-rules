@@ -1,5 +1,11 @@
 
 # Flutter Coding Rules
+
+## Refs
+- https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
+- https://dart.dev/guides/language/effective-dart/style
+- https://www.flutterclutter.dev/flutter/tutorials/create-a-controller-for-a-custom-widget/2021/2149/
+  
 ## 1. Naming 
 
 <table>
@@ -814,18 +820,41 @@ widget.reload();
 <tr>
 <td>
 
-**Avoid interleaving multiple concepts together**
+**Avoid interleaving multiple concepts together**<br>
 Each API should be self-contained and should not know about other features. Interleaving concepts leads to complexity.<br>
 </td>
 <td>
 
 ```dart
-//Many Widgets take a child.
-// Widgets should be entirely agnostic about the type of that child. 
-// Don’t use is or similar checks to act differently based on the type of the child.
-class CustomWidget {
+// LoginApi does not know about request(),
+// it leave that for class RequestApi
+// After success it parse response or show error message
 
+abstract class RequestApi{
+    final String url;
+    final String method;
+
+    request();
+    onSucceess();
+    onFailed();
 }
+
+class LoginApi extends RequestApi{
+    UserModel? user;
+    LoginApi({this.url = "login",this.url = "method"});
+
+    onSucceess(){
+        //user = parse responsee
+    }
+
+    onFailed(){
+        //show message
+    }
+}
+
+final loginApi = LoginApi();
+await loginApi.request();
+
 ```
 </td>
 </tr>
@@ -833,7 +862,7 @@ class CustomWidget {
 <tr>
 <td>
 
-**Be explicit about dispose() and the object lifecycle**
+**Be explicit about dispose() and the object lifecycle**<br>
 
 If your class has a clear "end of life", for example, provide a dispose() method to clean up references such as listeners that would otherwise prevent some objects from getting garbage collected.
 </td>
@@ -845,7 +874,7 @@ class CustomWidget {
     final textController = TextEditingController();
 
     dispose(){
-        // we must dispose TextEditingController after this widget disposed()
+        // dispose TextEditingController when widget disposed
         textController.dispose();
         super.dispose();
     }
