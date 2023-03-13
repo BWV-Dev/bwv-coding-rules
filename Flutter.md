@@ -246,7 +246,8 @@ Write functions that are focused on a single task and keep them short. This can 
 <td>
 
 ```dart
-//for exam: We will download image from url, then scale it and  generate thumbnail
+//for exam: We will download image from url, 
+//then scale it and  generate thumbnail
 cacheImage() async{
     await downloadImage();
     await createThumbnail();
@@ -730,10 +731,15 @@ Use **ListView.builder()** for a long list instead of **ListView()**.
 <td>
 
 ```dart
-final List<Widget> children = List.generate(1000, (index) => Container());
+final List<Widget> children = List.generate(
+    1000, 
+    (index) => Container()
+);
 
 //good
-final listView = ListView.builder(itemBuilder: (_,index)=>children[index]);
+final listView = ListView.builder(
+    itemBuilder: (_,index)=>children[index]
+);
 
 //bad
 final listView = ListView(children: children);
