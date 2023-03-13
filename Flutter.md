@@ -1,31 +1,12 @@
 
 # Flutter Coding Rules
-
-## Definitions
-
-<table>
-    <tr>
-        <td width="50%"> <b>UpperCamelCase</b></td>
-        <td width="50%"> Capitalize the first letter of each word, including the first. etc: <b>MyClass</b> </td>
-    </tr>
-    <tr>
-        <td> <b>lowerCamelCase</b> </td>
-        <td> Capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym. etc: <b>studentList</b> </td>
-    </tr>
-    <tr>
-        <td> <b>lowercase_with_underscores</b> </td>
-        <td> Use only lowercase letters, even for acronyms, and separate words with _. etc: <b>home_screen.dart</b> </td>
-    </tr>
-
-</table>
-
 ## 1. Naming 
 
 <table>
 <tr>
 <td width="50%">
 
-Name of files, packages, directories, import prefixes use [lowercase_with_underscores](#definitions) format. </td>
+Name of files, packages, directories, import prefixes use **lowercase_with_underscores**(use only lowercase letters, even for acronyms, and separate words with _ ) format. </td>
 <td width="50%">
 
 ```dart
@@ -42,7 +23,7 @@ import 'dart:math' as math;
 <tr>
 <td>
 
-Name of classes, extensions, enum types use [UpperCamelCase](#definitions) format.
+Name of classes, extensions, enum types use **UpperCamelCase**(capitalize the first letter of each word, including the first) format.
 </td>
 <td>
 
@@ -59,7 +40,7 @@ enum MyType { ... }
 <tr>
 <td>
 
-Name of constant, variables, enum variables use [lowerCamelCase](#definitions) format.
+Name of constant, variables, enum variables use lowerCamelCase(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
 
 </td>
 <td>
@@ -78,7 +59,9 @@ enum MyType {
 </td>
 </tr>
 <tr>
-<td>Use prefix <b>_</b> for private identifiers (classes, variable,...) </td>
+<td>
+
+Use prefix **_** for private identifiers (classes, variable,...). </td>
 <td>
 
 ```dart
@@ -89,7 +72,9 @@ final _privateVariable = true;
 
 </td>
 <tr>
-<td>Use <b>_</b> or <b>__</b>  for unused callback parameters</td>
+<td>
+
+Use **_** or **__**  for unused callback parameters.</td>
 <td>
 
 ```dart
@@ -101,7 +86,9 @@ futureOfVoid.then((_,__) {
 </td>
 </tr>
 <tr>
-<td><b>DON’T</b> use prefix letters.</td>
+<td>
+
+**DON’T** use prefix letters.</td>
 <td>
 
 ```dart
@@ -113,6 +100,7 @@ const kDefaultTimeout = 10;  //bad
 </tr>
 </tr>
 <td>
+
 **Capitalize** acronyms and abbreviations longer than two letters like words.
 </td>
 <td>
@@ -127,7 +115,7 @@ class HTTPConnection {} //bad
 <tr>
 <td> 
 
-Starting a boolean variable or property with a question words like *can, is, should*,...
+Starting a boolean variable or property with a question words like *can, is, should*,... .
 </td>
 <td>
 
@@ -139,12 +127,37 @@ final canResize = true;
 </td>
 </tr>
 <tr>
-<td><b>PREFER</b> naming a method as___() if it returns a different representation backed by the original object.</td>
+<td>
+
+**PREFER** naming a method **as___()** if it returns a different representation backed by the original object.</td>
 <td>
 
 ```dart
 var map = table.asMap();
 var list = bytes.asFloat32List();
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+When naming any identifiers(variables, functions, classes,constants,...), **MUST** use names that accurately describe the data, function they contain. Avoid using generic names like "value" or "temp" as they do not convey any meaningful information.
+</td>
+<td>
+
+```dart
+//good
+String userName;
+validateInput() {}
+const double pi = 3.14;
+class UserModel {}
+
+//bad
+String value;
+doSomething() {}
+const double constant = 3.14;
+class Data {}
 ```
 </td>
 </tr>
@@ -155,7 +168,9 @@ var list = bytes.asFloat32List();
 
 <table>
 <tr>
-<td><b>DO</b> use *mixin* to define a mixin type.</td>
+<td>
+
+**DO** use *mixin* to define a mixin type.</td>
 <td>
 
 ```dart
@@ -220,6 +235,30 @@ if (isTrue)
 ```
 </td>
 </tr>
+
+<tr>
+<td>
+
+**Keep functions short and focused** <br>
+Write functions that are focused on a single task and keep them short. This can help make your code more modular and easier to read. Avoid writing functions that are too long or that try to do too much. Instead, break complex tasks down into smaller functions that can be easily understood.
+
+</td>
+<td>
+
+```dart
+//for exam: We will download image from url, then scale it and  generate thumbnail
+cacheImage() async{
+    await downloadImage();
+    await createThumbnail();
+}
+
+createThumbnail() async{
+    await resizeImage();
+    await saveThumbnail();
+}
+```
+</td>
+</tr>
 </table>
 
 ## 3. Comment
@@ -239,7 +278,9 @@ if (!hasItems) return false;
 </td>
 </tr>
 <tr>
-<td>Use <b>///</b> to document members and types</td>
+<td>
+
+Use **///** to document members and types.</td>
 <td>
 
 ```dart
@@ -293,7 +334,8 @@ part of my_library;//bad
 </tr>
 <tr>
 <td>
-<b>DON’T</b> import libraries that are inside the src directory of another package.
+
+**DON’T** import libraries that are inside the src directory of another package.
 The src directory under lib is specified to contain libraries private to the package’s own implementation, they are free to make sweeping changes to code under src without it being a breaking change to the package.
 </td>
 <td>
@@ -313,7 +355,10 @@ library private_lib;
 </td>
 </tr>
 <tr>
-<td><b>DON’T</b> allow an import path to reach into or out of lib</td>
+<td>
+
+**DON’T** allow an import path to reach into or out of lib.
+</td>
 <td>
 For example, say your directory structure looks like this:
 
@@ -331,7 +376,10 @@ import 'package:my_package/api.dart'; //good
 </td>
 </tr>
 <tr>
-<td>When an import does not reach across lib, <b>Prefer</b> using relative imports. They’re shorter.</td>
+<td>
+
+When an import does not reach across lib, **Prefer** using relative imports. They’re shorter.
+</td>
 <td>
 For example, say your directory structure looks like this:
 
@@ -361,7 +409,10 @@ import 'test_utils.dart';
 </td>
 </tr>
 <tr>
-<td><b>AVOID</b> late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.</td>
+<td>
+
+**AVOID** late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.
+</td>
 <td>
 
 ```dart
@@ -381,7 +432,10 @@ class Student {
 </tr>
 
 <tr>
-<td><b>DON'T</b> use the same name for properties and local variables, the compiler does not know exactly which variable should be used.</td>
+<td>
+
+**DON'T** use the same name for properties and local variables, the compiler does not know exactly which variable should be used.
+</td>
 <td>
 
 ```dart
@@ -397,7 +451,10 @@ class Student {
 </td>
 </tr>
 <tr>
-<td><b>PREFER</b> using interpolation to compose strings and values. </td>
+<td>
+
+**PREFER** using interpolation to compose strings and values. 
+</td>
 <td>
 
 ```dart
@@ -407,7 +464,10 @@ class Student {
 </td>
 </tr>
 <tr>
-<td><b>DO</b> use whereType() to filter a collection by type.</td>
+<td>
+
+**DO** use whereType() to filter a collection by type.
+</td>
 <td>
 
 ```dart
@@ -420,7 +480,8 @@ var ints = objects.where((e) => e is int).cast<int>();//bad
 
 <tr>
 <td>
-<b>AVOID</b> using cast(). The cast() method returns a lazy collection that checks the element type on every operation. If you perform only a few operations on only a few elements, that laziness can be good. But in many cases, the overhead of lazy validation and of wrapping outweighs the benefits.
+
+**AVOID** using cast(). The cast() method returns a lazy collection that checks the element type on every operation. If you perform only a few operations on only a few elements, that laziness can be good. But in many cases, the overhead of lazy validation and of wrapping outweighs the benefits.
 </td>
 <td>
 
@@ -436,7 +497,9 @@ List<int> singletonList(int value) {
 </tr>
 
 <tr>
-<td>Use <b>final</b> for local variables that are not reassigned (or read-only property) and <b>var</b> for those that are.</td>
+<td>
+
+Use **final** for local variables that are not reassigned (or read-only property) and **var** for those that are.</td>
 <td>
 
 ```dart
@@ -450,7 +513,9 @@ class Student {
 </td>
 </tr>
 <tr>
-<td><b>CONSIDER</b> using <b>=></b> for simple members.</td>
+<td>
+
+**CONSIDER** using **=>** for simple members.</td>
 <td>
 
 ```dart
@@ -464,7 +529,9 @@ double get area {
 </td>
 </tr>
 <tr>
-<td><b>DON’T</b> use <b>new</b>. Dart 2 makes the new keyword optional. Even in Dart 1, its meaning was never clear because factory constructors mean a new invocation may still not actually return a new object.</td>
+<td>
+
+**DON’T** use **new**. Dart 2 makes the new keyword optional. Even in Dart 1, its meaning was never clear because factory constructors mean a new invocation may still not actually return a new object.</td>
 <td>
 
 ```dart
@@ -476,7 +543,9 @@ final student = new Student();//bad
 </tr>
 
 <tr>
-<td><b>Method cascades</b> are a better solution for chaining method calls.</td>
+<td>
+
+**Method cascades** are a better solution for chaining method calls.</td>
 <td>
 
 ```dart
@@ -489,7 +558,9 @@ var buffer = StringBuffer()
 </tr>
 
 <tr>
-<td><b>AVOID</b> writing incomplete generic types</td>. The goal of writing a type annotation or type argument is to pin down a complete type, if you write the name of a generic type but omit its type arguments, you haven’t fully specified the type.
+<td>
+
+**AVOID** writing incomplete generic types. The goal of writing a type annotation or type argument is to pin down a complete type, if you write the name of a generic type but omit its type arguments, you haven’t fully specified the type.
 <td>
 
 ```dart
@@ -523,7 +594,7 @@ calculateValue(dynamic value){
 <tr>
 <td>
 
-**DO** override **hashCode** if you override **==**
+**DO** override **hashCode** if you override **==**.
 </td>
 <td>
 
@@ -613,6 +684,123 @@ if (isTrue) {
 }else {
     return;
 }
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+Use  **??** and **?.** operators.
+</td>
+<td>
+
+```dart
+final flag = a == null ? b : a;//bad
+final flag = a  ?? b;//good
+
+final flag = a == null ? null : a.b;//bad
+final flag = a?.b;
+```
+</td>
+</tr>
+
+<tr>
+<td>Use spread collections.</td>
+<td>
+
+```dart
+//bad
+var y = [4,5,6];
+var x = [1,2];
+x.addAll(y);
+
+//good
+var y = [4,5,6];
+var x = [1,2,...y];
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+Use **ListView.builder()** for a long list instead of **ListView()**.
+</td>
+<td>
+
+```dart
+final List<Widget> children = List.generate(1000, (index) => Container());
+
+//good
+final listView = ListView.builder(itemBuilder: (_,index)=>children[index]);
+
+//bad
+final listView = ListView(children: children);
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+Use **asserts** to detect contract violations and verify invariants.
+</td>
+<td>
+
+```dart
+validateValue(dynamic value){
+    assert(value != null);
+}
+```
+</td>
+</tr>
+
+<tr>
+<td> 
+
+If you want a empty widget when loading data for example, use **SizedBox**, it will create an empty widget with zero width and height. </td>
+<td>
+
+```dart
+
+if(loading)SizedBox() : CustomWidget();
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+If you want to control events or do something with a widget, create a controller to do that instead of calling directly functions inside that widget. <br>
+You can refer [this link](https://www.flutterclutter.dev/flutter/tutorials/create-a-controller-for-a-custom-widget/2021/2149/) about how to create a controller 
+
+</td>
+<td>
+
+```dart
+class MyWidgetController {
+    reloadWidget(){
+        //reload MyWidget
+    }
+}
+
+class MyWidget{
+    final MyWidgetController? controller;
+    reload(){
+
+    }
+}
+
+//good
+final controller = MyWidgetController();
+final widget = MyWidget(controller:controller);
+controller.reloadWidget();
+
+//bad
+final widget = MyWidget();
+widget.reload();
+
 ```
 </td>
 </tr>
