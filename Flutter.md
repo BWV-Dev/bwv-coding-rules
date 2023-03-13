@@ -810,4 +810,47 @@ widget.reload();
 ```
 </td>
 </tr>
+
+<tr>
+<td>
+
+**Avoid interleaving multiple concepts together**
+Each API should be self-contained and should not know about other features. Interleaving concepts leads to complexity.<br>
+</td>
+<td>
+
+```dart
+//Many Widgets take a child.
+// Widgets should be entirely agnostic about the type of that child. 
+// Don’t use is or similar checks to act differently based on the type of the child.
+class CustomWidget {
+
+}
+```
+</td>
+</tr>
+
+<tr>
+<td>
+
+**Be explicit about dispose() and the object lifecycle**
+
+If your class has a clear "end of life", for example, provide a dispose() method to clean up references such as listeners that would otherwise prevent some objects from getting garbage collected.
+</td>
+<td>
+
+```dart
+class CustomWidget {
+
+    final textController = TextEditingController();
+
+    dispose(){
+        // we must dispose TextEditingController after this widget disposed()
+        textController.dispose();
+        super.dispose();
+    }
+}
+```
+</td>
+</tr>
 </table>
