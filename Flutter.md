@@ -10,10 +10,14 @@
 
 <table>
 <tr>
+<td width="5%">
+
+**1.1**
+</td>
 <td width="50%">
 
 Name of files, packages, directories, import prefixes use **lowercase_with_underscores**(use only lowercase letters, even for acronyms, and separate words with _ ) format. </td>
-<td width="50%">
+<td width="45%">
 
 ```dart
 my_package
@@ -27,6 +31,10 @@ import 'dart:math' as math;
 </td>
 </tr>
 <tr>
+<td>
+
+**1.2**
+</td>
 <td>
 
 Name of classes, extensions, enum types use **UpperCamelCase**(capitalize the first letter of each word, including the first) format.
@@ -44,6 +52,10 @@ enum MyType { ... }
 </td>
 </tr>
 <tr>
+<td>
+
+**1.3**
+</td>
 <td>
 
 Name of constant, variables, enum variables use lowerCamelCase(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
@@ -67,6 +79,10 @@ enum MyType {
 <tr>
 <td>
 
+**1.4**
+</td>
+<td>
+
 Use prefix **_** for private identifiers (classes, variable,...). </td>
 <td>
 
@@ -78,6 +94,10 @@ final _privateVariable = true;
 
 </td>
 <tr>
+<td>
+
+**1.5**
+</td>
 <td>
 
 Use **_** or **__**  for unused callback parameters.</td>
@@ -94,6 +114,10 @@ futureOfVoid.then((_,__) {
 <tr>
 <td>
 
+**1.6**
+</td>
+<td>
+
 **DON’T** use prefix letters.</td>
 <td>
 
@@ -104,7 +128,11 @@ const kDefaultTimeout = 10;  //bad
 
 </td>
 </tr>
-</tr>
+<tr>
+<td>
+
+**1.7**
+</td>
 <td>
 
 **Capitalize** acronyms and abbreviations longer than two letters like words.
@@ -119,6 +147,10 @@ class HTTPConnection {} //bad
 </td>
 </tr>
 <tr>
+<td>
+
+**1.8**
+</td>
 <td> 
 
 Starting a boolean variable or property with a question words like *can, is, should*,... .
@@ -135,6 +167,10 @@ final canResize = true;
 <tr>
 <td>
 
+**1.9**
+</td>
+<td>
+
 **PREFER** naming a method **as___()** if it returns a different representation backed by the original object.</td>
 <td>
 
@@ -146,6 +182,10 @@ var list = bytes.asFloat32List();
 </tr>
 
 <tr>
+<td>
+
+**1.10**
+</td>
 <td>
 
 When naming any identifiers(variables, functions, classes,constants,...), **MUST** use names that accurately describe the data, function they contain. Avoid using generic names like "value" or "temp" as they do not convey any meaningful information.
@@ -173,14 +213,17 @@ class Data {}
 ## 2. Styling
 
 <table>
-
 <tr>
-<td>
+<td width="5%">
+
+**2.1**
+</td>
+<td width="50%">
 
 **Prefer a maximum line length of 80 characters**<br>
 Aim for a maximum line length of roughly 80 characters, but prefer going over if breaking the line would make it less readable, or if it would make the line less consistent with other nearby lines. 
 </td>
-<td>
+<td width="45%">
 
 ```dart
 //bad
@@ -191,10 +234,14 @@ names.sort();
 names....;
 
 ```
-
 </td>
 </tr>
+
 <tr>
+<td>
+
+**2.2**
+</td>
 <td>
 
 **DO** use *mixin* to define a mixin type.</td>
@@ -207,7 +254,11 @@ mixin ClickableMixin  {}
 </tr>
 
 <tr>
-<td width="50%">
+<td>
+
+**2.3**
+</td>
+<td>
 
 Import packages by following order and sort each section by alphabetically.
 
@@ -217,7 +268,7 @@ package:
 relative imports (../foo.dart)
 ```
 </td>
-<td width="50%">
+<td>
 
 ```dart
 // good
@@ -240,7 +291,12 @@ import 'a.dart';
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**2.4**
+</td>
 <td>
 
 Use curly braces for all flow control statements. <br>
@@ -264,6 +320,10 @@ if (isTrue)
 </tr>
 
 <tr>
+<td>
+
+**2.5**
+</td>
 <td>
 
 **Keep functions short and focused** <br>
@@ -296,8 +356,12 @@ You don’t have to document every single library, top-level variable, type, and
 
 <table>
 <tr>
+<td width="5%">
+
+**3.1**
+</td>
 <td width="50%">Format comments like sentences and capitalize the first word.</td>
-<td width="50%">
+<td width="45%">
 
 ```dart
 // In case no item in list, we do nothing
@@ -305,7 +369,12 @@ if (!hasItems) return false;
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**3.2**
+</td>
 <td>
 
 Use **///** to document members and types.</td>
@@ -317,7 +386,12 @@ int get length => ...
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**3.3**
+</td>
 <td>You can use markdown on comments. Use it to give usage example of a funtion or class so others can learn quickly.</td>
 <td>
 
@@ -343,11 +417,15 @@ It will generate the document like this
 <table>
 
 <tr>
-<td>
+<td width="5%">
+
+**4.1**
+</td>
+<td width="50%">
 
 Avoid using **as** instead, use **is** operator
 </td>
-<td>
+<td width="45%">
 
 ```dart
 (item as Animal).name = 'Lion'; //bad
@@ -356,12 +434,17 @@ if (item is Animal)item.name = 'Lion';//good
 ```
 </td>
 </tr>
+
 <tr>
-<td width="50%">
+<td>
+
+**4.2**
+</td>
+<td>
 
 If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name.
 </td>
-<td width="50%">
+<td>
 
 ```dart
 library my_lib;
@@ -375,7 +458,12 @@ part of my_library;//bad
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.3**
+</td>
 <td>
 
 **DON’T** import libraries that are inside the src directory of another package.
@@ -397,7 +485,12 @@ library private_lib;
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.4**
+</td>
 <td>
 
 **DON’T** allow an import path to reach into or out of lib.
@@ -418,7 +511,12 @@ import 'package:my_package/api.dart'; //good
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.5**
+</td>
 <td>
 
 When an import does not reach across lib, **Prefer** using relative imports. They’re shorter.
@@ -451,7 +549,12 @@ import 'test_utils.dart';
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.6**
+</td>
 <td>
 
 **AVOID** late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.
@@ -477,6 +580,10 @@ class Student {
 <tr>
 <td>
 
+**4.7**
+</td>
+<td>
+
 **DON'T** use the same name for properties and local variables, the compiler does not know exactly which variable should be used.
 </td>
 <td>
@@ -493,7 +600,12 @@ class Student {
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.8**
+</td>
 <td>
 
 **PREFER** using interpolation to compose strings and values. 
@@ -506,7 +618,12 @@ class Student {
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.9**
+</td>
 <td>
 
 **DO** use whereType() to filter a collection by type.
@@ -522,6 +639,10 @@ var ints = objects.where((e) => e is int).cast<int>();//bad
 </tr>
 
 <tr>
+<td>
+
+**4.10**
+</td>
 <td>
 
 **AVOID** using cast(). The cast() method returns a lazy collection that checks the element type on every operation. If you perform only a few operations on only a few elements, that laziness can be good. But in many cases, the overhead of lazy validation and of wrapping outweighs the benefits.
@@ -542,6 +663,10 @@ List<int> singletonList(int value) {
 <tr>
 <td>
 
+**4.11**
+</td>
+<td>
+
 Use **final** for local variables that are not reassigned (or read-only property) and **var** for those that are.</td>
 <td>
 
@@ -555,7 +680,12 @@ class Student {
 
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.12**
+</td>
 <td>
 
 **CONSIDER** using **=>** for simple members.</td>
@@ -571,7 +701,12 @@ double get area {
 
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.13**
+</td>
 <td>
 
 **DON’T** use **new**. Dart 2 makes the new keyword optional. Even in Dart 1, its meaning was never clear because factory constructors mean a new invocation may still not actually return a new object.</td>
@@ -582,10 +717,13 @@ final student = Student();//good
 final student = new Student();//bad
 ```
 </td>
-
 </tr>
 
 <tr>
+<td>
+
+**4.14**
+</td>
 <td>
 
 **Method cascades** are a better solution for chaining method calls.</td>
@@ -603,6 +741,10 @@ var buffer = StringBuffer()
 <tr>
 <td>
 
+**4.15**
+</td>
+<td>
+
 **AVOID** writing incomplete generic types. The goal of writing a type annotation or type argument is to pin down a complete type, if you write the name of a generic type but omit its type arguments, you haven’t fully specified the type.
 <td>
 
@@ -613,7 +755,12 @@ var completer = Completer<Map>(); //bad
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.16**
+</td>
 <td>
 
 **AVOID** using **dynamic** unless you want to disable static checking. The type **dynamic** not only accepts all objects, but it also permits **all operations**. Any member access on a value of type **dynamic** is allowed at compile time, but may fail and throw an exception at runtime.
@@ -637,6 +784,10 @@ calculateValue(dynamic value){
 <tr>
 <td>
 
+**4.17**
+</td>
+<td>
+
 **DO** override **hashCode** if you override **==**.
 </td>
 <td>
@@ -655,7 +806,12 @@ class Student {
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.18**
+</td>
 <td>Use class to define your constants. Define multiple classes to break constants into logical sections.</td>
 <td>
 
@@ -679,6 +835,10 @@ class CommonWidgets {
 </tr>
 
 <tr>
+<td>
+
+**4.19**
+</td>
 <td>
 
 **Avoid large functions and widgets**
@@ -711,7 +871,12 @@ class TabContentView extends StatefulWidget{}
 ```
 </td>
 </tr>
+
 <tr>
+<td>
+
+**4.20**
+</td>
 <td>When you have to meet certain criteria to continue execution, try to exit early.</td>
 <td>
 
@@ -734,6 +899,10 @@ if (isTrue) {
 <tr>
 <td>
 
+**4.21**
+</td>
+<td>
+
 Use  **??** and **?.** operators.
 </td>
 <td>
@@ -749,6 +918,10 @@ final flag = a?.b;
 </tr>
 
 <tr>
+<td>
+
+**4.22**
+</td>
 <td>Use spread collections.</td>
 <td>
 
@@ -766,6 +939,10 @@ var x = [1,2,...y];
 </tr>
 
 <tr>
+<td>
+
+**4.23**
+</td>
 <td>
 
 Use **ListView.builder()** for a long list instead of **ListView()**.
@@ -792,6 +969,10 @@ final listView = ListView(children: children);
 <tr>
 <td>
 
+**4.24**
+</td>
+<td>
+
 Use **asserts** to detect contract violations and verify invariants.
 </td>
 <td>
@@ -805,6 +986,10 @@ validateValue(dynamic value){
 </tr>
 
 <tr>
+<td>
+
+**4.25**
+</td>
 <td> 
 
 If you want a empty widget when loading data for example, use **SizedBox**, it will create an empty widget with zero width and height. </td>
@@ -818,6 +1003,10 @@ if(loading)SizedBox() : CustomWidget();
 </tr>
 
 <tr>
+<td>
+
+**4.26**
+</td>
 <td>
 
 If you want to control events or do something with a widget, create a controller to do that instead of calling directly functions inside that widget. <br>
@@ -854,6 +1043,10 @@ widget.reload();
 </tr>
 
 <tr>
+<td>
+
+**4.27**
+</td>
 <td>
 
 **Avoid interleaving multiple concepts together**<br>
@@ -896,6 +1089,10 @@ await loginApi.request();
 </tr>
 
 <tr>
+<td>
+
+**4.28**
+</td>
 <td>
 
 **Be explicit about dispose() and the object lifecycle**<br>
