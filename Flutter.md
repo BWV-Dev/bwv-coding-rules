@@ -10,9 +10,10 @@
 
 <table>
 <tr>
+
 <td width="5%">
 
-**1.1**
+#### 1.1
 </td>
 <td width="50%">
 
@@ -33,7 +34,7 @@ import 'dart:math' as math;
 <tr>
 <td>
 
-**1.2**
+#### 1.2
 </td>
 <td>
 
@@ -54,7 +55,7 @@ enum MyType { ... }
 <tr>
 <td>
 
-**1.3**
+#### 1.3
 </td>
 <td>
 
@@ -79,7 +80,7 @@ enum MyType {
 <tr>
 <td>
 
-**1.4**
+#### 1.4
 </td>
 <td>
 
@@ -96,7 +97,7 @@ final _privateVariable = true;
 <tr>
 <td>
 
-**1.5**
+#### 1.5
 </td>
 <td>
 
@@ -114,7 +115,7 @@ futureOfVoid.then((_,__) {
 <tr>
 <td>
 
-**1.6**
+#### 1.6
 </td>
 <td>
 
@@ -131,7 +132,7 @@ const kDefaultTimeout = 10;  //bad
 <tr>
 <td>
 
-**1.7**
+#### 1.7
 </td>
 <td>
 
@@ -149,7 +150,7 @@ class HTTPConnection {} //bad
 <tr>
 <td>
 
-**1.8**
+#### 1.8
 </td>
 <td> 
 
@@ -167,7 +168,7 @@ final canResize = true;
 <tr>
 <td>
 
-**1.9**
+#### 1.9
 </td>
 <td>
 
@@ -184,7 +185,7 @@ var list = bytes.asFloat32List();
 <tr>
 <td>
 
-**1.10**
+#### 1.10
 </td>
 <td>
 
@@ -214,9 +215,9 @@ class Data {}
 
 <table>
 <tr>
-<td width="5%">
+<td width="5%" >
 
-**2.1**
+#### 2.1
 </td>
 <td width="50%">
 
@@ -240,7 +241,7 @@ names....;
 <tr>
 <td>
 
-**2.2**
+#### 2.2
 </td>
 <td>
 
@@ -256,7 +257,7 @@ mixin ClickableMixin  {}
 <tr>
 <td>
 
-**2.3**
+#### 2.3
 </td>
 <td>
 
@@ -295,7 +296,7 @@ import 'a.dart';
 <tr>
 <td>
 
-**2.4**
+#### 2.4
 </td>
 <td>
 
@@ -322,7 +323,7 @@ if (isTrue)
 <tr>
 <td>
 
-**2.5**
+#### 2.5
 </td>
 <td>
 
@@ -358,7 +359,7 @@ You don’t have to document every single library, top-level variable, type, and
 <tr>
 <td width="5%">
 
-**3.1**
+#### 3.1
 </td>
 <td width="50%">Format comments like sentences and capitalize the first word.</td>
 <td width="45%">
@@ -373,7 +374,7 @@ if (!hasItems) return false;
 <tr>
 <td>
 
-**3.2**
+#### 3.2
 </td>
 <td>
 
@@ -390,7 +391,7 @@ int get length => ...
 <tr>
 <td>
 
-**3.3**
+#### 3.3
 </td>
 <td>You can use markdown on comments. Use it to give usage example of a funtion or class so others can learn quickly.</td>
 <td>
@@ -409,6 +410,30 @@ It will generate the document like this
 
 </td>
 </tr>
+
+<tr>
+
+<td>
+
+#### 3.4
+</td>
+<td>
+
+**USE** english for comments.
+</td>
+<td>
+
+```dart
+//good
+final List<Student> students = [];//list of students
+
+//bad
+final List<Student> students = [];//mảng chứa các sinh viên
+```
+</td>
+</tr>
+
+
 </table>
 
 
@@ -419,7 +444,7 @@ It will generate the document like this
 <tr>
 <td width="5%">
 
-**4.1**
+#### 4.1
 </td>
 <td width="50%">
 
@@ -438,7 +463,7 @@ if (item is Animal)item.name = 'Lion';//good
 <tr>
 <td>
 
-**4.2**
+#### 4.2
 </td>
 <td>
 
@@ -462,7 +487,7 @@ part of my_library;//bad
 <tr>
 <td>
 
-**4.3**
+#### 4.3
 </td>
 <td>
 
@@ -489,7 +514,7 @@ library private_lib;
 <tr>
 <td>
 
-**4.4**
+#### 4.4
 </td>
 <td>
 
@@ -515,7 +540,7 @@ import 'package:my_package/api.dart'; //good
 <tr>
 <td>
 
-**4.5**
+#### 4.5
 </td>
 <td>
 
@@ -553,7 +578,7 @@ import 'test_utils.dart';
 <tr>
 <td>
 
-**4.6**
+#### 4.6
 </td>
 <td>
 
@@ -580,7 +605,7 @@ class Student {
 <tr>
 <td>
 
-**4.7**
+#### 4.7
 </td>
 <td>
 
@@ -604,7 +629,7 @@ class Student {
 <tr>
 <td>
 
-**4.8**
+#### 4.8
 </td>
 <td>
 
@@ -622,7 +647,7 @@ class Student {
 <tr>
 <td>
 
-**4.9**
+#### 4.9
 </td>
 <td>
 
@@ -641,7 +666,7 @@ var ints = objects.where((e) => e is int).cast<int>();//bad
 <tr>
 <td>
 
-**4.10**
+#### 4.10
 </td>
 <td>
 
@@ -663,7 +688,7 @@ List<int> singletonList(int value) {
 <tr>
 <td>
 
-**4.11**
+#### 4.11
 </td>
 <td>
 
@@ -684,7 +709,7 @@ class Student {
 <tr>
 <td>
 
-**4.12**
+#### 4.12
 </td>
 <td>
 
@@ -705,7 +730,7 @@ double get area {
 <tr>
 <td>
 
-**4.13**
+#### 4.13
 </td>
 <td>
 
@@ -722,7 +747,7 @@ final student = new Student();//bad
 <tr>
 <td>
 
-**4.14**
+#### 4.14
 </td>
 <td>
 
@@ -741,7 +766,7 @@ var buffer = StringBuffer()
 <tr>
 <td>
 
-**4.15**
+#### 4.15
 </td>
 <td>
 
@@ -759,7 +784,7 @@ var completer = Completer<Map>(); //bad
 <tr>
 <td>
 
-**4.16**
+#### 4.16
 </td>
 <td>
 
@@ -784,7 +809,7 @@ calculateValue(dynamic value){
 <tr>
 <td>
 
-**4.17**
+#### 4.17
 </td>
 <td>
 
@@ -810,7 +835,7 @@ class Student {
 <tr>
 <td>
 
-**4.18**
+#### 4.18
 </td>
 <td>Use class to define your constants. Define multiple classes to break constants into logical sections.</td>
 <td>
@@ -837,7 +862,7 @@ class CommonWidgets {
 <tr>
 <td>
 
-**4.19**
+#### 4.19
 </td>
 <td>
 
@@ -875,7 +900,7 @@ class TabContentView extends StatefulWidget{}
 <tr>
 <td>
 
-**4.20**
+#### 4.20
 </td>
 <td>When you have to meet certain criteria to continue execution, try to exit early.</td>
 <td>
@@ -899,7 +924,7 @@ if (isTrue) {
 <tr>
 <td>
 
-**4.21**
+#### 4.21
 </td>
 <td>
 
@@ -920,7 +945,7 @@ final flag = a?.b;
 <tr>
 <td>
 
-**4.22**
+#### 4.22
 </td>
 <td>Use spread collections.</td>
 <td>
@@ -941,7 +966,7 @@ var x = [1,2,...y];
 <tr>
 <td>
 
-**4.23**
+#### 4.23
 </td>
 <td>
 
@@ -969,7 +994,7 @@ final listView = ListView(children: children);
 <tr>
 <td>
 
-**4.24**
+#### 4.24
 </td>
 <td>
 
@@ -988,7 +1013,7 @@ validateValue(dynamic value){
 <tr>
 <td>
 
-**4.25**
+#### 4.25
 </td>
 <td> 
 
@@ -1005,7 +1030,7 @@ if(loading)SizedBox() : CustomWidget();
 <tr>
 <td>
 
-**4.26**
+#### 4.26
 </td>
 <td>
 
@@ -1045,7 +1070,7 @@ widget.reload();
 <tr>
 <td>
 
-**4.27**
+#### 4.27
 </td>
 <td>
 
@@ -1091,7 +1116,7 @@ await loginApi.request();
 <tr>
 <td>
 
-**4.28**
+#### 4.28
 </td>
 <td>
 
