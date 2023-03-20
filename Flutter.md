@@ -1,19 +1,24 @@
 
 # Flutter Coding Rules
 
-## Refs
-- https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
-- https://dart.dev/guides/language/effective-dart/style
-- https://www.flutterclutter.dev/flutter/tutorials/create-a-controller-for-a-custom-widget/2021/2149/
-  
-## 1. Naming 
+## Table of Contents
+
+[**1. Naming** ](#1-naming)
+- [1.1 Name of files, packages, directories, import prefixes](#1.1)
+- [1.2 Name of files, packages, directories, import prefixes](#1.2)
+- [1.3 Name of files, packages, directories, import prefixes](#1.3)
+[**2. Styling** ](#2-styling)
+[**3. Comment** ](#3-comment)
+[**4. Usage** ](#4-usage)
+
+## 1. Naming
 
 <table>
-<tr>
+<tr id="1.1">
 
 <td width="5%">
 
-#### 1.1
+**1.1**
 </td>
 <td width="50%">
 
@@ -31,10 +36,10 @@ import 'dart:math' as math;
 
 </td>
 </tr>
-<tr>
+<tr id="1.2">
 <td>
 
-#### 1.2
+**1.2**
 </td>
 <td>
 
@@ -52,10 +57,10 @@ enum MyType { ... }
 
 </td>
 </tr>
-<tr>
+<tr id="1.3">
 <td>
 
-#### 1.3
+**1.3**
 </td>
 <td>
 
@@ -1141,3 +1146,8 @@ class CustomWidget {
 </td>
 </tr>
 </table>
+
+## Refs
+- https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
+- https://dart.dev/guides/language/effective-dart/style
+- https://www.flutterclutter.dev/flutter/tutorials/create-a-controller-for-a-custom-widget/2021/2149/
