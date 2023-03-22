@@ -63,6 +63,7 @@
 - [4.28 Be explicit about dispose() and the object lifecycle.](#4.28)
   
 
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
 ## 1. Naming
 
@@ -274,6 +275,8 @@ class Data {}
 
 </table>
 
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
+
 ## 2. Styling
 
 <table>
@@ -413,6 +416,8 @@ createThumbnail() async{
 </tr>
 </table>
 
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
+
 ## 3. Comment
 
 Doc comments are especially handy because [dart doc](https://dart.dev/tools/dart-doc) parses them and generates beautiful doc pages from them. <br>
@@ -495,10 +500,9 @@ final List<Student> students = [];//mảng chứa các sinh viên
 ```
 </td>
 </tr>
-
-
 </table>
 
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
 ## 4. Usage
 
@@ -1204,6 +1208,10 @@ class CustomWidget {
 </td>
 </tr>
 </table>
+
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
+
+
 
 ## Refs
 - https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
