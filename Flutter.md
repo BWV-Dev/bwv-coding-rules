@@ -4,12 +4,65 @@
 ## Table of Contents
 
 [**1. Naming** ](#1-naming)
-- [1.1 Name of files, packages, directories, import prefixes](#1.1)
-- [1.2 Name of files, packages, directories, import prefixes](#1.2)
-- [1.3 Name of files, packages, directories, import prefixes](#1.3)
+- [1.1 Name of files, packages, directories, import prefixes.](#1.1)
+- [1.2 Name of classes, extensions, enum types.](#1.2)
+- [1.3 Name of constant, variables, enum variables.](#1.3)
+- [1.4 Use prefix _ for private identifiers (classes, variable,...).](#1.4)
+- [1.5 Use _ or __ for unused callback parameters.](#1.5)
+- [1.6 DON’T use prefix letters.](#1.6)
+- [1.7 Capitalize acronyms and abbreviations longer than two letters like words.](#1.7)
+- [1.8 Starting a boolean variable or property with a question words like can, is, should,..](#1.8)
+- [1.9 PREFER naming a method as___() if it returns a different representation backed by the original object.](#1.9)
+- [1.10 Note in naming any identifiers(variables, functions, classes,constants,...).](#1.10)
+  <br>
+
 [**2. Styling** ](#2-styling)
+- [2.1 Prefer a maximum line length of 80 characters.](#2.1)
+- [2.2 DO use mixin to define a mixin type.](#2.2)
+- [2.3 Import packages by following order and sort each section by alphabetically.](#2.3)
+- [2.4 Use curly braces for all flow control statements.](#2.4)
+- [2.5 Keep functions short and focused.](#2.5)  
+<br>
+
 [**3. Comment** ](#3-comment)
+- [3.1 Format comments like sentences and capitalize the first word.](#3.1)  
+- [3.2 Use /// to document members and types.](#3.2)  
+- [3.3 Can use markdown on comments.](#3.3)  
+- [3.4 USE english for comments.](#3.4) 
+<br>
+
 [**4. Usage** ](#4-usage)
+
+- [4.1 Avoid using as instead, use is operator.](#4.1) 
+- [4.2 Use library and part of to describe libraries.](#4.2) 
+- [4.3 DON’T import libraries that are inside the src directory of another package.](#4.3) 
+- [4.4 DON’T allow an import path to reach into or out of lib.](#4.4) 
+- [4.5 Prefer using relative imports in local package.](#4.5) 
+- [4.6 AVOID using late variables if you need to check whether they are initialized.](#4.6) 
+- [4.7 DON'T use the same name for properties and local variables.](#4.7) 
+- [4.8 PREFER using interpolation to compose strings and values.](#4.8) 
+- [4.9 DO use whereType() to filter a collection by type.](#4.9) 
+- [4.10 AVOID using cast().](#4.10) 
+- [4.11 Use final and var.](#4.11) 
+- [4.12 CONSIDER using => for simple members.](#4.12) 
+- [4.13 DON’T use new.](#4.13) 
+- [4.14 Method cascades are a better solution for chaining method calls.](#4.14) 
+- [4.15 AVOID writing incomplete generic types.](#4.15) 
+- [4.16 AVOID using dynamic unless you want to disable static checking.](#4.16)
+- [4.17 DO override hashCode if you override ==.](#4.17)
+- [4.18 Use class to define your constants.](#4.18)
+- [4.19 Avoid large functions and widgets.](#4.19)
+- [4.20 Exit when possible.](#4.20)
+- [4.21 Use ?? and ?. operators.](#4.21)
+- [4.22 Use spread collections.](#4.22)
+- [4.23 Use ListView.builder() for a long list instead of ListView().](#4.23)
+- [4.24 Use asserts to detect contract violations and verify invariants.](#4.24)
+- [4.25 USE SizedBox for empty widget.](#4.25)
+- [4.26 Create controller to control widget.](#4.26)
+- [4.27 Avoid interleaving multiple concepts together.](#4.27)
+- [4.28 Be explicit about dispose() and the object lifecycle.](#4.28)
+  
+
 
 ## 1. Naming
 
@@ -82,7 +135,8 @@ enum MyType {
 
 </td>
 </tr>
-<tr>
+
+<tr id="1.4">
 <td>
 
 #### 1.4
@@ -99,7 +153,7 @@ final _privateVariable = true;
 ```
 
 </td>
-<tr>
+<tr id="1.5">
 <td>
 
 #### 1.5
@@ -117,7 +171,8 @@ futureOfVoid.then((_,__) {
 
 </td>
 </tr>
-<tr>
+
+<tr id="1.6">
 <td>
 
 #### 1.6
@@ -134,7 +189,8 @@ const kDefaultTimeout = 10;  //bad
 
 </td>
 </tr>
-<tr>
+
+<tr id="1.7">
 <td>
 
 #### 1.7
@@ -152,7 +208,8 @@ class HTTPConnection {} //bad
 
 </td>
 </tr>
-<tr>
+
+<tr id="1.8">
 <td>
 
 #### 1.8
@@ -170,7 +227,8 @@ final canResize = true;
 ```
 </td>
 </tr>
-<tr>
+
+<tr id="1.9">
 <td>
 
 #### 1.9
@@ -187,7 +245,7 @@ var list = bytes.asFloat32List();
 </td>
 </tr>
 
-<tr>
+<tr id="1.10">
 <td>
 
 #### 1.10
@@ -219,7 +277,7 @@ class Data {}
 ## 2. Styling
 
 <table>
-<tr>
+<tr id="2.1">
 <td width="5%" >
 
 #### 2.1
@@ -243,7 +301,7 @@ names....;
 </td>
 </tr>
 
-<tr>
+<tr id="2.2">
 <td>
 
 #### 2.2
@@ -259,7 +317,7 @@ mixin ClickableMixin  {}
 </td>
 </tr>
 
-<tr>
+<tr id="2.3">
 <td>
 
 #### 2.3
@@ -298,7 +356,7 @@ import 'a.dart';
 </td>
 </tr>
 
-<tr>
+<tr id="2.4">
 <td>
 
 #### 2.4
@@ -325,14 +383,14 @@ if (isTrue)
 </td>
 </tr>
 
-<tr>
+<tr id="2.5">
 <td>
 
 #### 2.5
 </td>
 <td>
 
-**Keep functions short and focused** <br>
+**Keep functions short and focused.** <br>
 Write functions that are focused on a single task and keep them short. This can help make your code more modular and easier to read. Avoid writing functions that are too long or that try to do too much. Instead, break complex tasks down into smaller functions that can be easily understood.
 
 </td>
@@ -361,7 +419,7 @@ Doc comments are especially handy because [dart doc](https://dart.dev/tools/dart
 You don’t have to document every single library, top-level variable, type, and member, but you should document most of them.
 
 <table>
-<tr>
+<tr id="3.1">
 <td width="5%">
 
 #### 3.1
@@ -376,7 +434,7 @@ if (!hasItems) return false;
 </td>
 </tr>
 
-<tr>
+<tr id="3.2">
 <td>
 
 #### 3.2
@@ -393,7 +451,7 @@ int get length => ...
 </td>
 </tr>
 
-<tr>
+<tr id="3.3">
 <td>
 
 #### 3.3
@@ -416,7 +474,7 @@ It will generate the document like this
 </td>
 </tr>
 
-<tr>
+<tr id="3.4">
 
 <td>
 
@@ -446,7 +504,7 @@ final List<Student> students = [];//mảng chứa các sinh viên
 
 <table>
 
-<tr>
+<tr id="4.1">
 <td width="5%">
 
 #### 4.1
@@ -465,14 +523,14 @@ if (item is Animal)item.name = 'Lion';//good
 </td>
 </tr>
 
-<tr>
+<tr id="4.2">
 <td>
 
 #### 4.2
 </td>
 <td>
 
-If you choose to use **library** and **part of** to describe a libraries with related files, with part files you should specify the library by path, not name.
+If you choose to use **library** and **part of** to describe libraries with related files, with part files you should specify the library by path, not name.
 </td>
 <td>
 
@@ -489,7 +547,7 @@ part of my_library;//bad
 </td>
 </tr>
 
-<tr>
+<tr id="4.3">
 <td>
 
 #### 4.3
@@ -516,7 +574,7 @@ library private_lib;
 </td>
 </tr>
 
-<tr>
+<tr id="4.4">
 <td>
 
 #### 4.4
@@ -542,14 +600,14 @@ import 'package:my_package/api.dart'; //good
 </td>
 </tr>
 
-<tr>
+<tr id="4.5">
 <td>
 
 #### 4.5
 </td>
 <td>
 
-When an import does not reach across lib, **Prefer** using relative imports. They’re shorter.
+When an import does not reach across lib, **PREFER** using relative imports. They’re shorter.
 </td>
 <td>
 For example, say your directory structure looks like this:
@@ -580,14 +638,14 @@ import 'test_utils.dart';
 </td>
 </tr>
 
-<tr>
+<tr id="4.6">
 <td>
 
 #### 4.6
 </td>
 <td>
 
-**AVOID** late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.
+**AVOID** using late variables if you need to check whether they are initialized. Dart offers no way to tell if a late variable has been initialized or assigned to. If you access it, it either immediately runs the initializer (if it has one) or throws an exception.
 </td>
 <td>
 
@@ -607,7 +665,7 @@ class Student {
 </td>
 </tr>
 
-<tr>
+<tr id="4.7">
 <td>
 
 #### 4.7
@@ -631,7 +689,7 @@ class Student {
 </td>
 </tr>
 
-<tr>
+<tr id="4.8">
 <td>
 
 #### 4.8
@@ -649,7 +707,7 @@ class Student {
 </td>
 </tr>
 
-<tr>
+<tr id="4.9">
 <td>
 
 #### 4.9
@@ -668,7 +726,7 @@ var ints = objects.where((e) => e is int).cast<int>();//bad
 </td>
 </tr>
 
-<tr>
+<tr id="4.10">
 <td>
 
 #### 4.10
@@ -690,7 +748,7 @@ List<int> singletonList(int value) {
 </td>
 </tr>
 
-<tr>
+<tr id="4.11">
 <td>
 
 #### 4.11
@@ -711,7 +769,7 @@ class Student {
 </td>
 </tr>
 
-<tr>
+<tr id="4.12">
 <td>
 
 #### 4.12
@@ -732,7 +790,7 @@ double get area {
 </td>
 </tr>
 
-<tr>
+<tr id="4.13">
 <td>
 
 #### 4.13
@@ -749,7 +807,7 @@ final student = new Student();//bad
 </td>
 </tr>
 
-<tr>
+<tr id="4.14">
 <td>
 
 #### 4.14
@@ -768,7 +826,7 @@ var buffer = StringBuffer()
 </td>
 </tr>
 
-<tr>
+<tr id="4.15">
 <td>
 
 #### 4.15
@@ -786,7 +844,7 @@ var completer = Completer<Map>(); //bad
 </td>
 </tr>
 
-<tr>
+<tr id="4.16">
 <td>
 
 #### 4.16
@@ -811,7 +869,7 @@ calculateValue(dynamic value){
 </td>
 </tr>
 
-<tr>
+<tr id="4.17">
 <td>
 
 #### 4.17
@@ -837,7 +895,7 @@ class Student {
 </td>
 </tr>
 
-<tr>
+<tr id="4.18">
 <td>
 
 #### 4.18
@@ -864,14 +922,14 @@ class CommonWidgets {
 </td>
 </tr>
 
-<tr>
+<tr id="4.19">
 <td>
 
 #### 4.19
 </td>
 <td>
 
-**Avoid large functions and widgets**
+**Avoid large functions and widgets.**
 - Split large function into smaller functions.
 - Split large widget into multiple (private or reusable) widgets.
 - Use widget class rather than function returning widget.
@@ -902,7 +960,7 @@ class TabContentView extends StatefulWidget{}
 </td>
 </tr>
 
-<tr>
+<tr id="4.20">
 <td>
 
 #### 4.20
@@ -926,7 +984,7 @@ if (isTrue) {
 </td>
 </tr>
 
-<tr>
+<tr id="4.21">
 <td>
 
 #### 4.21
@@ -947,7 +1005,7 @@ final flag = a?.b;
 </td>
 </tr>
 
-<tr>
+<tr id="4.22">
 <td>
 
 #### 4.22
@@ -968,7 +1026,7 @@ var x = [1,2,...y];
 </td>
 </tr>
 
-<tr>
+<tr id="4.23">
 <td>
 
 #### 4.23
@@ -996,7 +1054,7 @@ final listView = ListView(children: children);
 </td>
 </tr>
 
-<tr>
+<tr id="4.24">
 <td>
 
 #### 4.24
@@ -1015,7 +1073,7 @@ validateValue(dynamic value){
 </td>
 </tr>
 
-<tr>
+<tr id="4.25">
 <td>
 
 #### 4.25
@@ -1032,7 +1090,7 @@ if(loading)SizedBox() : CustomWidget();
 </td>
 </tr>
 
-<tr>
+<tr id="4.26">
 <td>
 
 #### 4.26
@@ -1072,14 +1130,14 @@ widget.reload();
 </td>
 </tr>
 
-<tr>
+<tr id="4.27">
 <td>
 
 #### 4.27
 </td>
 <td>
 
-**Avoid interleaving multiple concepts together**<br>
+**Avoid interleaving multiple concepts together.**<br>
 Each API should be self-contained and should not know about other features. Interleaving concepts leads to complexity.<br>
 </td>
 <td>
@@ -1118,14 +1176,14 @@ await loginApi.request();
 </td>
 </tr>
 
-<tr>
+<tr id="4.28">
 <td>
 
 #### 4.28
 </td>
 <td>
 
-**Be explicit about dispose() and the object lifecycle**<br>
+**Be explicit about dispose() and the object lifecycle.**<br>
 
 If your class has a clear "end of life", for example, provide a dispose() method to clean up references such as listeners that would otherwise prevent some objects from getting garbage collected.
 </td>
