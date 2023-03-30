@@ -44,7 +44,7 @@ typealias MoneyAmount = Double
 </td>
 <td>
 
-Name of variables, methods use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
+Name of variables, methods, enum variables use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
 </td>
 
 <td>
@@ -53,6 +53,11 @@ Name of variables, methods use **lowerCamelCase**(capitalize the first letter of
 
 let studentName = "Hello"
 func buttonClicked(_ sender: UIButton?) {}
+
+public enum HTTPStatus: Int {
+  case ok = 200
+  case badRequest = 400
+}
 ```
 </td>
 </tr>
@@ -247,6 +252,60 @@ override func viewWillAppear(_ animated: Bool) {}
 @objc private func shareButtonClicked(_ sender: UIButton?) {}
 
 @objc private func saveButtonClicked(_ sender: UIButton?) {}
+```
+</td>
+</tr>
+
+</table>
+
+## 4. Usage
+<table>
+<tr id="4.1">
+<td width="5%">
+
+**4.1**
+</td>
+<td width="50%">
+If you don't need a variable, use nameless binding.
+</td>
+<td>
+
+```swift
+_ = methodThatReturnsUnusedVariable()
+```
+</td>
+</tr>
+
+<tr id="4.2">
+<td>
+
+**4.2**
+</td>
+<td>
+
+If a function call has multiple closure arguments, all arguments **SHOULD** be labeled.
+</td>
+<td>
+
+```swift
+//good
+UIView.animate(
+  withDuration: 0.5,
+  animations: {
+    // ...
+  },
+  completion: { finished in
+    // ...
+  })
+
+//bad
+UIView.animate(
+  withDuration: 0.5,
+  animations: {
+    // ...
+  }) { finished in
+    // ...
+  }
 ```
 </td>
 </tr>
