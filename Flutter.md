@@ -118,7 +118,7 @@ enum MyType { ... }
 </td>
 <td>
 
-Name of constant, variables, enum variables use lowerCamelCase(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
+Name of constant, variables, enum variables use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
 
 </td>
 <td>
