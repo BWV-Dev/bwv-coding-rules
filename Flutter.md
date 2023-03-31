@@ -65,6 +65,8 @@
 
 <p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
+[**5. Format code** ](#5-format)
+
 ## 1. Naming
 
 <table>
@@ -1212,8 +1214,23 @@ class CustomWidget {
 <p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
 
+## 5. Format
+
+In Visual studio code (VSCode), make sure you already installed **Flutter** extensions <br>
+<img src="./images/flutter/vscode_flutter_ext.png"   height="300"/>
+
+You can format code manually by right click on .dart file then choose **Format Document** option.<br>
+<img src="./images/flutter/format_code.png"   height="400"/>
+
+Or if you want to format code automatically after saved a file, you can enable this option in VSCode in **Settings**. <br>
+Search using keyword **format** in search bar then you will see 2 options:
+- Editor: Format On Save (enable it)
+- Editor: Format On Save Mode (choose **file**)
+  
+<img src="./images/flutter/format_on_save.png"   height="400" />
 
 ## Refs
 - https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
 - https://dart.dev/guides/language/effective-dart/style
 - https://www.flutterclutter.dev/flutter/tutorials/create-a-controller-for-a-custom-widget/2021/2149/
+
