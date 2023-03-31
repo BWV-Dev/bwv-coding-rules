@@ -160,6 +160,70 @@ protocol TableDataSource{}
 </td>
 </tr>
 
+<tr id="1.7">
+<td>
+
+**1.7**
+</td>
+<td>
+Restricted access control (internal, fileprivate, or private) is preferred for the purposes of hiding information from clients, rather than naming conventions.
+</td>
+<td>
+
+```swift
+
+private let name:String //good
+private let _name:String //bad
+
+```
+</td>
+</tr>
+
+<tr id="1.8">
+<td>
+
+**1.8**
+</td>
+<td>
+
+When the operation is **naturally described by a verb**, use the verb’s imperative for the mutating method and apply the “ed” or “ing” suffix to name its nonmutating counterpart.
+</td>
+<td>
+
+```swift
+//Mutating
+x.sort()
+x.append(y)
+
+//Nonmutating
+z = x.sorted()
+z = x.appending(y)
+```
+</td>
+</tr>
+
+<tr id="1.9">
+<td>
+
+**1.9**
+</td>
+<td>
+
+When the operation is **naturally described by a noun**, use the noun for the nonmutating method and apply the “form” prefix to name its mutating counterpart.
+</td>
+<td>
+
+```swift
+//Nonmutating
+x = y.union(z)	
+j = c.successor(i)	
+
+//Mutating
+y.formUnion(z)
+c.formSuccessor(&i)
+```
+</td>
+</tr>
 </table>
 
 ## 2. Styling
@@ -309,4 +373,32 @@ UIView.animate(
 ```
 </td>
 </tr>
+
+<tr id="4.3">
+<td>
+
+**4.3**
+</td>
+<td>
+
+**Take advantage of defaulted parameters** when it simplifies common uses. Any parameter with a single commonly-used value is a candidate for a default.
+</td>
+<td>
+
+```swift
+//bad
+let order = lastName.compare(
+  royalFamilyName, options: [], range: nil, locale: nil)
+
+//good
+let order = lastName.compare(royalFamilyName)
+```
+</td>
+</tr>
 </table>
+
+
+## Refs
+- https://www.swift.org/documentation/api-design-guidelines/
+- https://google.github.io/swift
+- 

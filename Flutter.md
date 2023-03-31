@@ -28,7 +28,7 @@
 - [3.1 Format comments like sentences and capitalize the first word.](#3.1)  
 - [3.2 Use /// to document members and types.](#3.2)  
 - [3.3 Can use markdown on comments.](#3.3)  
-- [3.4 USE english for comments.](#3.4) 
+- [3.4 USE english for comments.](#3.4)
 <br>
 
 [**4. Usage** ](#4-usage)
@@ -65,7 +65,8 @@
 
 <p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
-[**5. Format code** ](#5-format)
+[**5. Lint rules** ](#5-lint-rules)
+
 
 ## 1. Naming
 
@@ -1213,21 +1214,46 @@ class CustomWidget {
 
 <p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
+## 5. Lint rules
 
-## 5. Format
+To make sure all developers follow the above rules, we will take advantage of **Dart Analyzer** of Visual Studio Code(VSCode) to treat any violations as errors. <br>
+In file **analysis_options.yaml** of each packages, add the following rules:
 
-In Visual studio code (VSCode), make sure you already installed **Flutter** extensions <br>
-<img src="./images/flutter/vscode_flutter_ext.png"   height="300"/>
+```yaml
+include: package:flutter_lints/flutter.yaml
+# refs: https://dart-lang.github.io/linter/lints/index.html
 
-You can format code manually by right click on .dart file then choose **Format Document** option.<br>
-<img src="./images/flutter/format_code.png"   height="400"/>
+analyzer:
+  errors:
+    avoid_print: error
+    avoid_dynamic_calls: error
+    cancel_subscriptions: error
+    close_sinks: error
+    collection_methods_unrelated_type: error
+    empty_statements: error
+    prefer_relative_imports: error
+    unnecessary_statements: error
+    use_key_in_widget_constructors: error
+    always_declare_return_types: error
+    always_specify_types: error
+    annotate_overrides: error
+    avoid_as: error
+    camel_case_extensions: error
+    camel_case_types: error
+    file_names: error
+    implementation_imports: error
+    library_names: error
+    library_prefixes: error
+    prefer_is_empty: error
+    prefer_is_not_empty: error
+    prefer_mixin: error
+    sort_constructors_first: error
+    package_names: error
+    use_to_and_as_if_applicable: error
+```
+This will make sure the build **CAN'T** occur if there is any violation.
+![Warnings as errors](./images/flutter/warnings_as_errors.png)
 
-Or if you want to format code automatically after saved a file, you can enable this option in VSCode in **Settings**. <br>
-Search using keyword **format** in search bar then you will see 2 options:
-- Editor: Format On Save (enable it)
-- Editor: Format On Save Mode (choose **file**)
-  
-<img src="./images/flutter/format_on_save.png"   height="400" />
 
 ## Refs
 - https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
