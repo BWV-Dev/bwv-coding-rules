@@ -2,6 +2,51 @@
 
 ## Table of Contents
 
+[**1. Naming** ](#1-naming)
+- [1.1 Name of files, classes, protocol, type aliases.](#1.1)
+- [1.2 Name of variables, methods, enum variables.](#1.2)
+- [1.3 Name of constants.](#1.3)
+- [1.4 Generic types.](#1.4)
+- [1.5 Name should be redundant.](#1.5)
+- [1.6 Protocols.](#1.6)
+- [1.7 Restricted access control.](#1.7)
+- [1.8 The operation is described by a verb.](#1.8)
+- [1.9 The operation is described by a noun.](#1.9)
+- [1.10 Omit needless words.](#1.10)
+- [1.11 Names should describe their roles.](#1.11)
+- [1.12 Boolean methods and properties.](#1.12)
+- [1.13 Instances of the declaring type.](#1.13)
+  
+[**2. Styling** ](#2-styling)
+- [2.1 Do not use semicolons.](#2.1)
+- [2.2 Get block for a read-only computed property.](#2.2)
+- [2.3 Trailing commas.](#2.3)
+- [2.4 Parameterized attributes.](#2.4)
+
+
+[**3. Comment** ](#3-comment)
+- [3.1 Documentation comments' format.](#3.1)
+- [3.2 Comment should be in brief single-sentence summary.](#3.2)
+- [3.3 Use // MARK to group you functions.](#3.3)
+  
+[**4. Usage** ](#4-usage)
+- [4.1 Nameless binding for unnecessary variables.](#4.1)
+- [4.2 Closure arguments should all be labeled.](#4.2)
+- [4.3 Take advantage of defaulted parameters.](#4.3)
+- [4.4 Give properties names for tuple.](#4.4)
+- [4.5 Use optional binding to find out whether an optional contains a value.](#4.5)
+- [4.6 Exit early.](#4.6)
+- [4.7 Representing and Throwing Errors.](#4.7)
+- [4.8 Assertions and preconditions.](#4.8)
+- [4.9 Memory Safety.](#4.9)
+- [4.10 Access Levels.](#4.10)
+- [4.11 Define multiple same type variables.](#4.11)
+- [4.12 Initializer's arguments.](#4.12)
+- [4.13 Avoid sentinel values.](#4.13)
+
+[**5. Zero warnings** ](#5-zero-warnings)
+
+[**6. Format code** ](#6-format-code)
 
 ## 1. Naming
 
@@ -186,7 +231,7 @@ private let _name:String //bad
 </td>
 <td>
 
-When the operation is **described by a verb**, use the verb’s imperative for the mutating method and apply the “ed” or “ing” suffix to name its nonmutating counterpart.
+When the operation is **described by a verb**, use the verb’s imperative for the mutating method and apply the "ed" or "ing" suffix to name its nonmutating counterpart.
 </td>
 <td>
 
@@ -209,7 +254,7 @@ z = x.appending(y)
 </td>
 <td>
 
-When the operation is **described by a noun**, use the noun for the nonmutating method and apply the “form” prefix to name its mutating counterpart.
+When the operation is **described by a noun**, use the noun for the nonmutating method and apply the "form" prefix to name its mutating counterpart.
 </td>
 <td>
 
@@ -322,7 +367,6 @@ public class UIColor {
 
 <table>
 <tr id="2.1">
-
 <td width="5%">
 
 **2.1**
@@ -338,6 +382,81 @@ let name = "hello" //good
 ```
 </td>
 
+<tr id="2.2">
+<td>
+
+**2.2**
+</td>
+<td>
+The get block for a read-only computed property is omitted and its body is directly nested inside the property declaration.
+</td>
+<td>
+
+```swift
+//good
+var totalCost: Int {
+  return items.sum { $0.cost }
+}
+
+//bad
+var totalCost: Int {
+  get {
+    return items.sum { $0.cost }
+  }
+}
+
+
+```
+</td>
+</tr>
+
+<tr id="2.3">
+<td>
+
+**2.3**
+</td>
+<td>
+
+Trailing commas in array and dictionary literals are required when each element is placed on its own line.
+</td>
+<td>
+
+```swift
+let configurationKeys = [
+  "bufferSize",
+  "compression",
+  "encoding",//good
+]
+
+let configurationKeys = [
+  "bufferSize",
+  "compression",
+  "encoding"//bad
+]
+```
+</td>
+</tr>
+
+<tr id="2.4">
+<td>
+
+**2.4**
+</td>
+<td>
+Parameterized attributes (such as @availability(...) or @objc(...)) are each written on their own line immediately before the declaration to which they apply.
+</td>
+<td>
+
+```swift
+//good
+@available(iOS 9.0, *)
+public func coolNewFeature() {}
+
+//bad
+@available(iOS 9.0, *) public func coolNewFeature() {}
+```
+</td>
+</tr>
 </table>
 
 
@@ -607,7 +726,9 @@ do {
 </td>
 <td>
 
-**Assertions** and **preconditions** are checks that happen at runtime. You use them to make sure an essential condition is satisfied before executing any further code. If the Boolean condition in the assertion or precondition evaluates to true, code execution continues as usual. If the condition evaluates to false, the current state of the program is invalid; code execution ends, and your app is terminated so use it with your **risks**.<br>
+**Assertions** and **preconditions** are checks that happen at runtime.<br>
+You use them to make sure an essential condition is satisfied before executing any further code. If the Boolean condition in the assertion or precondition evaluates to true, code execution continues as usual. <br><br>
+If the condition evaluates to false, the current state of the program is invalid; code execution ends, and your app is terminated so use it with your **risks**.<br><br>
 The difference between assertions and preconditions is in when they’re checked: Assertions are checked only in **debug** builds, but preconditions are checked in both **debug** and **production** builds. In production builds, the condition inside an assertion isn’t evaluated.
 
 </td>
@@ -773,12 +894,12 @@ if index != -1 {
 
 </table>
 
-## Zero warnings
+## 5. Zero warnings
 Code should compile without warnings when feasible. Any warnings are able to be removed easily by the author must be removed.<br>
 In Xcode, enable **Treat Warnings as Errors** in Build-Settings.
 ![Warnings as errors](./images/swift/warnings_as_errors.png)
 
-## Format code
+## 6. Format code
 Install **SwiftFormat** for Xcode. Run the below commands:
 
 ```bash
