@@ -186,7 +186,7 @@ private let _name:String //bad
 </td>
 <td>
 
-When the operation is **naturally described by a verb**, use the verb’s imperative for the mutating method and apply the “ed” or “ing” suffix to name its nonmutating counterpart.
+When the operation is **described by a verb**, use the verb’s imperative for the mutating method and apply the “ed” or “ing” suffix to name its nonmutating counterpart.
 </td>
 <td>
 
@@ -209,7 +209,7 @@ z = x.appending(y)
 </td>
 <td>
 
-When the operation is **naturally described by a noun**, use the noun for the nonmutating method and apply the “form” prefix to name its mutating counterpart.
+When the operation is **described by a noun**, use the noun for the nonmutating method and apply the “form” prefix to name its mutating counterpart.
 </td>
 <td>
 
@@ -221,6 +221,98 @@ j = c.successor(i)
 //Mutating
 y.formUnion(z)
 c.formSuccessor(&i)
+```
+</td>
+</tr>
+
+<tr id="1.10">
+<td>
+
+**1.10**
+</td>
+<td>
+
+**Omit needless words.**<br>
+Every word in a name should convey salient information at the use site.
+</td>
+<td>
+
+```swift
+//bad
+func removeElement(_ member: Element) -> Element?
+allViews.removeElement(cancelButton)
+
+//good
+func remove(_ member: Element) -> Element?
+allViews.remove(cancelButton) 
+
+```
+</td>
+</tr>
+
+<tr id="1.11">
+<td>
+
+**1.11**
+</td>
+<td>
+
+**Name variables, parameters, and associated types according to their roles**, rather than their type constraints.
+</td>
+<td>
+
+```swift
+var string = "Hello" //bad
+var name = "Hello" //good
+protocol ViewController {
+  associatedtype ViewType : View //bad
+  associatedtype ContentView : View //good
+}
+
+class ProductionLine {
+  func restock(from widgetFactory: WidgetFactory)//bad
+  func restock(from supplier: WidgetFactory)//good
+}
+
+```
+</td>
+</tr>
+
+<tr id="1.12">
+<td>
+
+**1.12**
+</td>
+<td>
+
+Uses of Boolean methods and properties should read as assertions about the receiver.
+</td>
+<td>
+
+```swift
+var isEmpty:Boolean
+func contains(subString:String):Boolean{}
+
+```
+</td>
+</tr>
+
+<tr id="1.13">
+<td>
+
+**1.13**
+</td>
+<td>
+
+Static and class properties that return instances of the declaring type are **not suffixed** with the name of the type.
+</td>
+<td>
+
+```swift
+public class UIColor {
+  public class var redColor: UIColor {}//bad
+  public class var red: UIColor {}//bad
+}
 ```
 </td>
 </tr>
@@ -395,7 +487,313 @@ let order = lastName.compare(royalFamilyName)
 ```
 </td>
 </tr>
+
+<tr id="4.4">
+<td>
+
+**4.4**
+</td>
+<td>
+
+When using **tuple**, we should give properties names for visualization.
+</td>
+<td>
+
+```swift
+//bad
+let company = ("Programiz App", 2.1)
+let product = company.0 //need to explain what index 0 stand for
+
+//good
+let company = (product: "Programiz App", version: 2.1)
+company.product //no need more explaination
+```
+</td>
+</tr>
+
+<tr id="4.5">
+<td>
+
+**4.5**
+</td>
+<td>
+
+You use **optional binding** to find out whether an optional contains a value, and if so, to make that value available as a temporary constant or variable.
+</td>
+<td>
+
+```swift
+let name:String? = nil
+if let name {}
+```
+</td>
+</tr>
+
+<tr id="4.6">
+<td>
+
+**4.6**
+</td>
+<td>When you have to meet certain criteria to continue execution, try to exit early.</td>
+<td>
+
+```swift
+let flag = true
+//bad
+if flag {
+  // long code for true
+}
+else {
+  // long code for false
+}
+
+//good
+if !flag {
+  // long code for false
+  return
+}
+// long code for true
+```
+</td>
+</tr>
+
+<tr id="4.7">
+<td>
+
+**4.7**
+</td>
+<td>
+
+**Representing and Throwing Errors**<br>
+Throwing an error lets you indicate that something unexpected happened and the normal flow of execution can’t continue. You use a throw statement to throw an error.
+</td>
+<td>
+
+```swift
+enum SandwichError: Error {
+  case invalidSelection
+  case missingIngredients(ingredients: Int)
+  case outOfCleanDishes
+}
+
+func makeASandwich(){
+  guard let cleanDishes == 0 else {
+    throw SandwichError.outOfCleanDishes
+  }
+
+  let requiredIngredients = 10
+  guard let ingredients < requiredIngredients else {
+    let missingIngredients = requiredIngredients - ingredients
+    throw SandwichError.missingIngredients(missingIngredients)
+  }
+
+}
+
+do {
+    try makeASandwich()
+} catch SandwichError.outOfCleanDishes {
+    washDishes()
+} catch SandwichError.missingIngredients(let ingredients) {
+    buyGroceries(ingredients)
+}
+```
+</td>
+</tr>
+
+<tr id="4.8">
+<td>
+
+**4.8**
+</td>
+<td>
+
+**Assertions** and **preconditions** are checks that happen at runtime. You use them to make sure an essential condition is satisfied before executing any further code. If the Boolean condition in the assertion or precondition evaluates to true, code execution continues as usual. If the condition evaluates to false, the current state of the program is invalid; code execution ends, and your app is terminated so use it with your **risks**.<br>
+The difference between assertions and preconditions is in when they’re checked: Assertions are checked only in **debug** builds, but preconditions are checked in both **debug** and **production** builds. In production builds, the condition inside an assertion isn’t evaluated.
+
+</td>
+<td>
+
+```swift
+let age = -3
+// This assertion fails because -3 isn't >= 0.
+assert(age >= 0, "A person's age can't be less than zero.")
+
+// In the implementation of a subscript...
+precondition(index > 0, "Index must be greater than zero.")
+```
+</td>
+</tr>
+
+<tr id="4.9">
+<td>
+
+**4.9**
+</td>
+<td>
+
+**Memory Safety**<br>
+A conflicting access to memory can occur when different parts of your code are trying to access the same location in memory at the same time. Multiple accesses to a location in memory at the same time can produce unpredictable or inconsistent behavior.
+
+
+</td>
+<td>
+
+```swift
+//for exam
+var stepSize = 1
+func increment(_ number: inout Int) {
+    number += stepSize
+}
+
+increment(&stepSize)
+// Error: conflicting accesses to stepSize
+// stepSize is a global variable, 
+// and it’s normally accessible from within increment(_:)
+// Solving this by making an explicit copy of stepSize:
+var copyOfStepSize = stepSize
+increment(&copyOfStepSize)
+stepSize = copyOfStepSize // stepSize is now 2
+```
+</td>
+</tr>
+
+<tr id="4.10">
+<td>
+
+**4.10**
+</td>
+<td>
+
+**Access Levels**<br>
+Swift provides five different access levels for entities within your code.
+- **Open** or **public** access enable entities to be used within any source file from their defining module.
+- **Internal** access enables entities to be used within any source file from their defining module, but not in any source file outside of that module.
+- **File-private** access restricts the use of an entity to its own defining source file.
+- **Private** access restricts the use of an entity to the enclosing declaration, and to extensions of that declaration that are in the same file.
+</td>
+<td>
+
+```swift
+public class SomePublicClass {}
+internal class SomeInternalClass {}
+fileprivate class SomeFilePrivateClass {}
+private class SomePrivateClass {}
+```
+</td>
+
+<tr id="4.11">
+<td>
+
+**4.11**
+</td>
+<td>
+
+You should define multiple related variables of the same type on a single line, separated by commas, with a single type annotation after the final variable name;
+</td>
+<td>
+
+```swift
+//bad
+var red: Double
+var green: Double
+var blue: Double
+
+//good
+var red, green, blue: Double
+```
+</td>
+</tr>
+
+<tr id="4.12">
+<td>
+
+**4.12**
+</td>
+<td>
+For clarity, initializer arguments that correspond directly to a stored property have the same name as the property. Explicit self. is used during assignment to disambiguate them.
+</td>
+<td>
+
+```swift
+public struct Person {
+  public let name: String
+  public let phoneNumber: String
+
+  //good
+  public init(name: String, phoneNumber: String) {
+    self.name = name
+    self.phoneNumber = phoneNumber
+  }
+
+  //bad
+  public init(name _name: String, phoneNumber _phoneNumber: String) {
+    name = _name
+    phoneNumber = _phoneNumber
+  }
+}
+```
+</td>
+</tr>
+
+<tr id="4.13">
+<td>
+
+**4.13**
+</td>
+<td>
+Sentinel values are avoided when designing algorithms (for example, an “index” of −1 when an element was not found in a collection).
+</td>
+<td>
+
+```swift
+//good
+func index(of thing: Thing) -> Int? {
+  // ...
+}
+if let index = index(of: thing) {
+  // Found it.
+} else {
+  // Didn't find it.
+}
+
+//bad
+func index(of thing: Thing) -> Int {
+  // ...
+}
+
+let index = index(of: thing)
+if index != -1 {
+  // Found it.
+} else {
+  // Didn't find it.
+}
+```
+</td>
+</tr>
+
 </table>
+
+## Zero warnings
+Code should compile without warnings when feasible. Any warnings are able to be removed easily by the author must be removed.<br>
+In Xcode, enable **Treat Warnings as Errors** in Build-Settings.
+![Warnings as errors](./images/swift/warnings_as_errors.png)
+
+## Autoformat code
+Install SwiftFormat for Xcode. Run the below commands:
+
+```bash
+brew install swiftformat
+brew install --cask swiftformat-for-xcode
+open "/Applications/SwiftFormat For Xcode.app"
+```
+
+After restart Xcode, we will see the menu **Editor** -> **SwiftFormat**.
+
+![Swift Format](./images/swift/swift_format.png)
+
+Add hot key to format file in **Xcode** -> **Settings** -> **Key Bindings**. Search **swiftformat** in search bar then chose the key combination you want to format file, in following is **Option + P**
+
+![Swift Format Hot Key](./images/swift/swift_format_hot_key.png)
 
 
 ## Refs
