@@ -778,8 +778,8 @@ Code should compile without warnings when feasible. Any warnings are able to be 
 In Xcode, enable **Treat Warnings as Errors** in Build-Settings.
 ![Warnings as errors](./images/swift/warnings_as_errors.png)
 
-## Autoformat code
-Install SwiftFormat for Xcode. Run the below commands:
+## Format code
+Install **SwiftFormat** for Xcode. Run the below commands:
 
 ```bash
 brew install swiftformat
@@ -787,16 +787,34 @@ brew install --cask swiftformat-for-xcode
 open "/Applications/SwiftFormat For Xcode.app"
 ```
 
-After restart Xcode, we will see the menu **Editor** -> **SwiftFormat**.
+- Open **Automator** app, and and create a **Quick Action** with **Workflow receives** is no input, in **Xcode.app**.
+- Add **Run AppleScript**,  and pastes following code:
+```bash
+on run {input, parameters}
+	tell application "System Events"
+		tell process "Xcode"
+			set frontmost to true
+			if menu item "Format File" of menu of menu item "SwiftFormat" of menu "Editor" of menu bar 1 exists then
+				click menu item "Format File" of menu of menu item "SwiftFormat" of menu "Editor" of menu bar 1
+			end if
+			click menu item "Save" of menu "File" of menu bar 1
+		end tell
+	end tell
+	return input
+end run
+```
+- Run then save script as name **XcodeFormatAndSave**.
+- Open **System Preferences** app, choose **Keyboard** and pick the **Shortcuts** tab. On the sidebar, select **App Shortcuts**.
+- Add a new shortcut, the **Application** is **XCode**, the **Menu Title** is the name of our Quick Action (**XcodeFormatAndSave**), and the **Keyboard Shortcut** is **Cmd+S**.
 
-![Swift Format](./images/swift/swift_format.png)
+![XcodeFormatAndSave](./images/swift/XcodeFormatAndSave.png)
 
-Add hot key to format file in **Xcode** -> **Settings** -> **Key Bindings**. Search **swiftformat** in search bar then chose the key combination you want to format file, in following is **Option + P**
+- Actually, it will probably throw an error. This action needs **Accessibility** permissions, so you will need to navigate to **System Preferences** > **Security & Privacy** and give permission to Xcode.
 
-![Swift Format Hot Key](./images/swift/swift_format_hot_key.png)
+![security permissions](./images/swift/security_permissions.png)
 
+Refs: https://luisramos.dev/xcode-format-and-save
 
 ## Refs
 - https://www.swift.org/documentation/api-design-guidelines/
 - https://google.github.io/swift
-- 
