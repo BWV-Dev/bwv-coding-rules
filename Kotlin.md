@@ -3,6 +3,28 @@
 
 
 ## Table of Contents
+[**1. Naming** ](#1-naming)
+- [1.1 Name of files, classes, interfaces.](#1.1)
+- [1.2 Names of packages.](#1.2)
+- [1.3 Names of functions, properties and local variables.](#1.3)
+- [1.4 Names of constants, enum variables.](#1.4)
+
+[**2. Styling** ](#2-styling)
+- [2.1 Class layout.](#2.1)
+- [2.2 Interface implementation layout.](#2.2)
+- [2.3 Class headers.](#2.3)
+- [2.4 Named argument.](#2.4)
+- [2.5 Expression function.](#2.5)
+- [2.6 DONT use semicolons.](#2.6)
+
+[**3. Comment** ](#3-comment)
+- [3.1 Documentation comments.](#3.1)
+
+[**5. Auto format on save** ](#5-auto-format-on-save)
+
+[**6. Treat warnings as errors** ](#6-treat-warnings-as-errors)
+
+[**Refs** ](#refs)
 
 
 ## 1. Naming
@@ -69,12 +91,14 @@ var declarationCount = 1
 </td>
 <td>
 
-Names of constants use **UPPER_CASE_UNDERSCORE**(upper case all letters and separate words with _) format.
+Names of constants, enum variables use **UPPER_CASE_UNDERSCORE**(upper case all letters and separate words with _) format.
 </td>
 <td>
 
 ```kotlin
 const val MAX_COUNT = 8
+
+enum class Answer { YES, NO, MAYBE }
 ```
 </td>
 </tr>
@@ -199,7 +223,7 @@ class Person(
 
 </td>
 <td>
-Use the named argument syntax when a method takes multiple parameters.
+Use the named arguments syntax when a method takes multiple parameters.
 </td>
 <td>
 
@@ -207,6 +231,50 @@ Use the named argument syntax when a method takes multiple parameters.
 fun test(x:Int, y:Int, width:Int, height:Int){}
 
 test(x=10, y=10, width= 100, height = 100)
+```
+</td>
+</tr>
+
+<tr id="2.5">
+<td>
+
+**2.5**
+
+</td>
+<td>
+
+When a function contains only a single expression it can be represented as an **expression function**.
+</td>
+<td>
+
+```kotlin
+//bad
+fun toString(): String {
+    return "Hey"
+}
+
+//good
+fun toString(): String = "Hey"
+
+//Read-only properties can use this format
+val defaultExtension: String get() = "kt"
+```
+</td>
+</tr>
+
+<tr id="2.6">
+<td>
+
+**2.6**
+</td>
+<td>
+Semicolons are dead to us should be avoided wherever possible in Kotlin.
+</td>
+<td>
+
+```kotlin
+val name = "hello";//bad
+val name = "hello"//good
 ```
 </td>
 </tr>
@@ -238,3 +306,52 @@ Short comments can be placed on a single line.
 </td>
 </tr>
 </table>
+
+
+## 4. Usage
+
+<table>
+<tr id="4.1">
+<td width="5%">
+
+**4.1**
+</td>
+<td width="50%">
+
+If you have a functional type or a type with type parameters which is used multiple times in a codebase, prefer defining a **type alias** for it.
+</td>
+<td>
+
+```kotlin
+typealias MouseClickHandler = (Any, MouseEvent) -> Unit
+```
+</td>
+</tr>
+</table>
+
+## 5. Auto format on save
+
+Download plugin **Save Actions** then install it in Android Studio.
+
+![Install plugin](./images/kotlin/install_plugin.png)
+
+Restart Android Studio, then active following fields.
+
+![Enable fields](./images/kotlin/save_action_fields.png)
+
+## 6. Treat warnings as errors
+To make sure all warnings are treated as errors, add below code to app/build.gradle inside key **android** -> **buildTypes** -> **debug**
+
+```bash
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        kotlinOptions.allWarningsAsErrors = true
+    }
+}
+```
+![Enable fields](./images/kotlin/warnings_as_errors.png)
+
+## Refs
+- https://kotlinlang.org/docs/coding-conventions.html
+- https://developer.android.com/kotlin/style-guide?authuser=1
+  
