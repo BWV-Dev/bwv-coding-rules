@@ -15,9 +15,21 @@
 - [2.4 Named argument.](#2.4)
 - [2.5 Expression function.](#2.5)
 - [2.6 DONT use semicolons.](#2.6)
+- [2.7 Visibility modifiers.](#2.7)
 
 [**3. Comment** ](#3-comment)
 - [3.1 Documentation comments.](#3.1)
+
+
+[**4. Usage** ](#4-usage)
+
+- [4.1 Type alias.](#4.1)
+- [4.2 Immutablility.](#4.2)
+- [4.3 try, if, and when.](#4.3)
+- [4.4 Scope functions.](#4.4)
+- [4.5 Non-null values execution.](#4.5)
+- [4.6 Data class.](#4.6)
+
 
 [**5. Zero warnings** ](#5-zero-warnings)
 
@@ -25,6 +37,8 @@
 
 [**Refs** ](#refs)
 
+
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
 
 ## 1. Naming
 
@@ -102,6 +116,8 @@ enum class Answer { YES, NO, MAYBE }
 </td>
 </tr>
 </table>
+
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
 
 ## 2. Styling
 
@@ -278,8 +294,26 @@ val name = "hello"//good
 </td>
 </tr>
 
+<tr id="2.7">
+<td>
 
+**2.7**
+</td>
+<td>
+Default visibility is public so only include visibility modifiers if you need something other than the default of public.
+</td>
+<td>
+
+```kotlin
+public val wideOpenProperty = 1 //bad
+val wideOpenProperty = 1 //good
+private val wideOpenProperty = 1 //good
+```
+</td>
+</tr>
 </table>
+
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
 
 ## 3. Comment
 <table>
@@ -308,6 +342,7 @@ Short comments can be placed on a single line.
 </tr>
 </table>
 
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
 
 ## 4. Usage
 
@@ -380,6 +415,9 @@ return when(x) {
 <td>
 
 **4.4**
+</td>
+<td>
+
 When you call such a function on an object with a lambda expression provided, it forms a temporary scope. In this scope, you can access the object without its name. Such functions are called **scope functions**. There are five of them: **let**, **run**, **with**, **apply**, and **also**. <br>
 Scope functions don't introduce any new technical capabilities, but they can make your code more concise and readable. <br>
 
@@ -446,7 +484,26 @@ val length = str?.let {
 ```
 </td>
 </tr>
+
+<tr id="4.6">
+<td>
+
+**4.6**
+</td>
+<td>
+
+It is not unusual to create classes whose main purpose is to hold data. In such classes, some standard functionality and some utility functions are often mechanically derivable from the data. In Kotlin, these are called data classes and are marked with **data**.
+</td>
+<td>
+
+```kotlin
+data class User(val name: String, val age: Int);
+```
+</td>
+</tr>
 </table>
+
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
 
 ## 5. Zero warnings
 To make sure all warnings are treated as errors, add below code to app/build.gradle inside key **android** -> **buildTypes** -> **debug**
@@ -459,6 +516,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 ```
 ![Enable fields](./images/kotlin/warnings_as_errors.png)
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
+
 ## 6. Format code
 
 Download plugin **Save Actions** then install it in Android Studio.
@@ -469,9 +528,11 @@ Restart Android Studio, then active following fields.
 
 ![Enable fields](./images/kotlin/save_action_fields.png)
 
-
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>
 
 ## Refs
 - https://kotlinlang.org/docs/coding-conventions.html
 - https://developer.android.com/kotlin/style-guide?authuser=1
+- https://github.com/kodecocodes/kotlin-style-guide
   
+<p align="right">(<a href="#kotlin-coding-rules">back to top</a>)</p>

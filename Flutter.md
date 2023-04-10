@@ -67,6 +67,7 @@
 
 [**5. Lint rules** ](#5-lint-rules)
 
+[**Refs** ](#refs)
 
 ## 1. Naming
 

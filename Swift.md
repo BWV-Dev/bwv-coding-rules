@@ -48,6 +48,10 @@
 
 [**6. Format code** ](#6-format-code)
 
+[**Refs** ](#refs)
+
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
+
 ## 1. Naming
 
 <table>
@@ -363,6 +367,8 @@ public class UIColor {
 </tr>
 </table>
 
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
+
 ## 2. Styling
 
 <table>
@@ -459,6 +465,7 @@ public func coolNewFeature() {}
 </tr>
 </table>
 
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
 
 ## 3. Comment
 
@@ -532,6 +539,8 @@ override func viewWillAppear(_ animated: Bool) {}
 </tr>
 
 </table>
+
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
 
 ## 4. Usage
 <table>
@@ -894,10 +903,14 @@ if index != -1 {
 
 </table>
 
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
+
 ## 5. Zero warnings
 Code should compile without warnings when feasible. Any warnings are able to be removed easily by the author must be removed.<br>
 In Xcode, enable **Treat Warnings as Errors** in Build-Settings.
 ![Warnings as errors](./images/swift/warnings_as_errors.png)
+
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
 
 ## 6. Format code
 Install **SwiftFormat** for Xcode. Run the below commands:
@@ -936,6 +949,10 @@ end run
 
 Refs: https://luisramos.dev/xcode-format-and-save
 
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
+
 ## Refs
 - https://www.swift.org/documentation/api-design-guidelines/
 - https://google.github.io/swift
+
+<p align="right">(<a href="#swift-coding-rules">back to top</a>)</p>
