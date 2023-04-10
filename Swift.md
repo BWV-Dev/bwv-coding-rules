@@ -1,4 +1,4 @@
-# Flutter Coding Rules
+# Swift Coding Rules
 
 ## Table of Contents
 

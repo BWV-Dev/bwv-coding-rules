@@ -1,7 +1,6 @@
 
 # Kotlin Coding Rules
 
-
 ## Table of Contents
 [**1. Naming** ](#1-naming)
 - [1.1 Name of files, classes, interfaces.](#1.1)
@@ -20,9 +19,9 @@
 [**3. Comment** ](#3-comment)
 - [3.1 Documentation comments.](#3.1)
 
-[**5. Auto format on save** ](#5-auto-format-on-save)
+[**5. Zero warnings** ](#5-zero-warnings)
 
-[**6. Treat warnings as errors** ](#6-treat-warnings-as-errors)
+[**6. Format code** ](#6-format-code)
 
 [**Refs** ](#refs)
 
@@ -278,6 +277,8 @@ val name = "hello"//good
 ```
 </td>
 </tr>
+
+
 </table>
 
 ## 3. Comment
@@ -327,19 +328,127 @@ typealias MouseClickHandler = (Any, MouseEvent) -> Unit
 ```
 </td>
 </tr>
+
+<tr id="4.2">
+<td>
+
+**4.2**
+</td>
+<td>
+
+Prefer using immutable data to mutable. Always declare local variables and properties as **val** rather than **var** if they are not modified after initialization.
+</td>
+<td>
+
+```kotlin
+class ItemPlaceHolder(val bind: RecyclerNoteItemBinding);//good
+
+class ItemPlaceHolder(var bind: RecyclerNoteItemBinding);//bad
+```
+</td>
+</tr>
+
+<tr id="4.3">
+<td>
+
+**4.3**
+</td>
+<td>
+
+Prefer using the expression form of **try**, **if**, and **when**.
+</td>
+<td>
+
+```kotlin
+return if (x) foo() else bar()
+
+if (x)
+    return foo()
+else
+    return bar()
+
+return when(x) {
+    0 -> "zero"
+    else -> "nonzero"
+}
+
+```
+</td>
+</tr>
+
+<tr id="4.4">
+<td>
+
+**4.4**
+When you call such a function on an object with a lambda expression provided, it forms a temporary scope. In this scope, you can access the object without its name. Such functions are called **scope functions**. There are five of them: **let**, **run**, **with**, **apply**, and **also**. <br>
+Scope functions don't introduce any new technical capabilities, but they can make your code more concise and readable. <br>
+
+Scope functions differ by the result they return:
+- **apply** and **also** return the context object.
+
+- **let**, **run**, and **with** return the lambda result.
+</td>
+<td>
+
+```kotlin
+val alice = Person("Alice", 20, "Amsterdam").let {
+    it.moveTo("London")
+}
+
+val alice = Person("Alice").apply {    
+    city = 20 // same as this.city = 20
+}
+
+val numbers = mutableListOf("one", "two", "three")
+val countEndsWithE = numbers.run { 
+    add("four")
+    add("five")
+    count { it.endsWith("e") }
+}
+//return  number of elements that end with e
+
+with(numbers) {
+    val firstItem = first()
+    val lastItem = last()        
+    println("First item: $firstItem, last item: $lastItem")
+}
+
+val numbers = mutableListOf("one", "two", "three")
+val string = with(numbers) {
+    val firstItem = first()
+    val lastItem = last()
+    "First item: $firstItem, last item: $lastItem"
+}
+println(string)//First item: one, last item: three
+```
+</td>
+</tr>
+
+<tr id="4.5">
+<td>
+
+**4.5**
+</td>
+<td>
+
+Use **let** to execute a code block containing non-null values.
+</td>
+<td>
+
+```kotlin
+val str: String? = "Hello"   
+processNonNullString(str)// compilation error: str can be null
+val length = str?.let { 
+    println("let() called on $it")        
+    processNonNullString(it) // OK: 'it' is not null inside '?.let { }'
+    it.length
+}
+```
+</td>
+</tr>
 </table>
 
-## 5. Auto format on save
-
-Download plugin **Save Actions** then install it in Android Studio.
-
-![Install plugin](./images/kotlin/install_plugin.png)
-
-Restart Android Studio, then active following fields.
-
-![Enable fields](./images/kotlin/save_action_fields.png)
-
-## 6. Treat warnings as errors
+## 5. Zero warnings
 To make sure all warnings are treated as errors, add below code to app/build.gradle inside key **android** -> **buildTypes** -> **debug**
 
 ```bash
@@ -350,6 +459,17 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 ```
 ![Enable fields](./images/kotlin/warnings_as_errors.png)
+## 6. Format code
+
+Download plugin **Save Actions** then install it in Android Studio.
+
+![Install plugin](./images/kotlin/install_plugin.png)
+
+Restart Android Studio, then active following fields.
+
+![Enable fields](./images/kotlin/save_action_fields.png)
+
+
 
 ## Refs
 - https://kotlinlang.org/docs/coding-conventions.html
