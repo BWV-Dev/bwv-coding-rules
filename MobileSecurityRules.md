@@ -3,13 +3,35 @@
 
 ## Table of Contents
 
+[**1. Ensure data storage is secured**](#1-ensure-data-storage-is-secured)
+
+[**2. Use only necessary permissions**](#2-use-only-necessary-permissions)
+
+[**3. Secure network communication**](#3-secure-network-communication)
+
+[**4. User Privacy and Data Use**](#4-user-privacy-and-data-use)
+
+[**5. Secure your source code**](#5-secure-your-source-code)
+
+[**6. Secure API calling**](#6-secure-api-calling)
+
+[**7. Secure API keys**](#7-secure-api-keys)
+
+[**8. Data storage location**](#8-data-storage-location)
+
+[**9. Jailbreak detection**](#9-jailbreak-detection)
+
+[**10. Keep services and dependencies up to date**](#10-keep-services-and-dependencies-up-to-date)
+
+[**Refs**](#refs)
+
 ### 1. Ensure data storage is secured
 
 Where your app’s data is stored and processed will factor into your app’s ability to comply with user data regulations and overall security. When possible, best practice dictates that confidential user data should never be stored on the user’s mobile device or your servers.
 
-  - [Encryption in Flutter] (https://pub.dev/packages/encrypt)
-  - [Encryption in iOS] (https://riptutorial.com/swift/example/23651/aes-encryption-in-cbc-mode-with-a-random-iv--swift-3-0-)
-  - [Encryption in Android] (https://developer.android.com/guide/topics/security/cryptography?authuser=1)
+  - [Encryption in Flutter](https://pub.dev/packages/encrypt)
+  - [Encryption in iOS](https://riptutorial.com/swift/example/23651/aes-encryption-in-cbc-mode-with-a-random-iv--swift-3-0-)
+  - [Encryption in Android](https://developer.android.com/guide/topics/security/cryptography?authuser=1)
   
 ### 2. Use only necessary permissions
 
@@ -41,12 +63,10 @@ In Android you can configure [network network security](https://developer.androi
 
 Mobile applications should respect user privacy and handle personal information with care. Developers should provide users with clear and concise privacy policies, obtain user consent before collecting data, and avoid collecting unnecessary data.
 
-- Store data in external storage based on use case
-  - Use external storage for large, non-sensitive files that are specific to your app as well as files that your app shares with other apps. The specific APIs that you use depend on whether your app is designed to access app-specific files or access shared files.
-  - If your app interacts with a removable external storage device, keep in mind that the user might remove the storage device while your app is trying to access it. Include logic to verify that the storage device is available.
+When using third-party libraries, they also use other privacies (e.g Google Admods use advertising ID), so you need to check them carefully.
 
-- Keep updating SDK (Flutter), Editor (Xcode, Android studio)
-  - You may miss out on important security updates if you are using non-updated versions. Such versions may not include security fixes usually found in the current versions.
+Should use third-party libraries are high-rated or from big companies like Google, they may have clear documents about their SDK,( e.g [Google admob](https://developers.google.com/admob/ios/data-disclosure))
+
 
 ### 5. Secure your source code
 It is possible to reverse-engineer the source code. So we should obfuscate the source code.
@@ -68,7 +88,21 @@ That approach will make sure although your api keys are leak, they are expired a
 ### 7. Secure API keys
 Shouldn’t store API keys (Google map api key for example) in applications, instead we recommend fetching them dynamically from your application’s back end and make sure they are encrypted also.
 
-### 8. Keep services and dependencies up to date 
+### 8. Data storage location
+- If the data is structured (e.g. data records), you may want to consider using a relational database such as Sqlite or NoSQL.
+- When choosing a folder to save user files, consider the privacy and security implications of each option. If you are saving sensitive data, the Documents directory (iOS) or internal Storage (Android)  may be the best choice. 
+- In iOS, if you need to save files that should be accessible across multiple devices, iCloud may be the best choice.
+- In Android, if you need to save files that should be accessible to other apps or users, shared storage may be the best choice.
+  - If your app interacts with a removable external storage device, keep in mind that the user might remove the storage device while your app is trying to access it. Include logic to verify that the storage device is available.
+
+### 9. Jailbreak detection
+
+If you app handle with high-security data (e.g credit card, banking,...), you need to check check installed device is jailbreaked to enable those functions or give a warning to user.
+- [Flutter](https://pub.dev/packages/flutter_jailbreak_detection)
+- [iOS](https://cocoapods.org/pods/IOSSecuritySuite)
+- [Android](https://github.com/scottyab/rootbeer)
+
+### 10. Keep services and dependencies up to date 
 
 Most apps use external libraries and device system information to complete specialized tasks. By keeping your app's dependencies up to date, you make these points of communication more secure.
 
