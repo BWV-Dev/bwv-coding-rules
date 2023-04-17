@@ -980,3 +980,76 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 <br>
+
+## 6. Implement
+
+Here is an example of how to implement Eslint into a Node.js TypeScript project. <br>
+Ref: https://eslint.org/docs/latest/use/getting-started <br>
+
+**Step 1: Install package**
+```typescript
+npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
+npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
+```
+
+**Step 2: Create .eslintrc.json (or .js or .yml)**
+
+```json
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended",
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "prettier"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-non-null-assertion": "error",
+      "@typescript-eslint/no-explicit-any": "error",
+      "no-console": "warn"
+    }
+}
+```
+
+**Step 3: Create .prettierrc**
+
+```json
+{
+  "arrowParens": "always",
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "overrides": [{
+    "files": "*.ts",
+    "options": {
+      "parser": "typescript"
+    }
+  }]
+}
+
+```
+
+**Step 4: Add script (package.json)**
+
+```json
+"scripts": {
+  "lint": "eslint . --ext .ts",
+  "lint-and-fix": "eslint . --ext .ts --fix",
+},
+```
+
+## Explain: 
+**lint** Command to check and show error. <br>
+**lint-and-fix** Command to fix and replace some rules (**). Some rules are automatically fixable by this command. Ref here: https://eslint.org/docs/latest/rules/
