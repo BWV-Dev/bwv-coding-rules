@@ -896,9 +896,12 @@ const ejs = require('ejs');
 const escapeHtml = require('escape-html');
 
 // Render the template
-const html = ejs.render('<%= escapeHtml(data) %>', { data: '<script>alert("XSS attack!")</script>' });
+const html = ejs.render('<%= escapeHtml(data) %>', 
+{ data: '<script>alert("XSS attack!")</script>' }
+);
 
-console.log(html); // Output: &lt;script&gt;alert(&quot;XSS attack!&quot;)&lt;/script&gt;
+// Output: &lt;script&gt;alert(&quot;XSS attack!&quot;)&lt;/script&gt;
+console.log(html); 
 ```
 </td>
 </tr>
@@ -941,12 +944,18 @@ res.redirect(redirectUrl);
 <td>
 
 ```typescript
-- Go to the AWS Management Console and open the Amazon RDS console.
-- Select the RDS instance for which you want to limit IP access.
-- In the "Details" tab, locate the "Security group rules" section and click the name of the security group.
+Example setting with AWS services:
+- Go to the AWS Management Console 
+and open the Amazon RDS console.
+- Select the RDS instance for which 
+you want to limit IP access.
+- In the "Details" tab, locate the "Security group rules" section 
+and click the name of the security group.
 - In the "Inbound rules" tab, click "Edit inbound rules".
-- Under "Type", select "MySQL/Aurora" (or the appropriate database engine).
-- Under "Source", select "Custom" and enter the IP address or range that you want to allow access from.
+- Under "Type", select "MySQL/Aurora" 
+(or the appropriate database engine).
+- Under "Source", select "Custom" and enter the IP address \
+or range that you want to allow access from.
 - Click "Save rules".
 
 ```
@@ -979,7 +988,6 @@ export const hashPassword = async (password: string): Promise<string> => {
 ```
 </td>
 </tr>
-<td>
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
@@ -1059,6 +1067,8 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
 ```
 
 **Explain:** 
+<br>
+
 **lint** Command to check and show error. <br>
 **lint-and-fix** Command to fix and replace some rules (**). Some rules are automatically fixable by this command. <br>
 Ref here: https://eslint.org/docs/latest/rules/
