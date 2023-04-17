@@ -1,7 +1,7 @@
 
 # NodeJs Coding Rules (BWV)
 ## Table of Contents
-[**1. Naming** ](#common)
+[**Common** ](#common)
 <br>
 
 [**1. Naming** ](#1-naming)
@@ -713,7 +713,8 @@ let age = 10;
 <td>
 
 ```typescript
-// This rule ensures that all import statements are sorted alphabetically and separated by an empty line.
+// This rule ensures that all import statements are sorted
+// alphabetically and separated by an empty line.
 
 // No error
 import a from 'foo.js';
