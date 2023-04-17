@@ -1,6 +1,8 @@
 
 # NodeJs Coding Rules (BWV)
 ## Table of Contents
+[**1. Naming** ](#common)
+<br>
 
 [**1. Naming** ](#1-naming)
 - [1.1 Typescript normally use convention camelCase for variable](#1.1)
@@ -54,6 +56,8 @@
 - [5.7 Should limit IP access to the database](#5.7) 
 - [5.8 Should encrypt sensitive information if it is necessary to store them in a database](#5.8) 
 <br>
+
+[**6. Implement Lint** ](#6-implement-lint)
 
 ## Common 
 - Always check wiki on redmine
@@ -817,7 +821,7 @@ app.get("/search", (req, res) => {
   //perform search operation
 });
 
-// Good example: implementing rate limiting
+// Good example: implementing rate limiting 👍
 const rateLimit = require("express-rate-limit");
 const searchLimiter = rateLimit({
   windowMs: 60 * 1000, //1 minute
@@ -848,7 +852,7 @@ app.post("/data", (req, res) => {
   //store data in database
 });
 
-// Good example: implementing logging and monitoring
+// Good example: implementing logging and monitoring 👍
 const winston = require("winston");
 const logger = winston.createLogger({
   level: "info",
@@ -953,6 +957,7 @@ res.redirect(redirectUrl);
 
 **5.8**
 </td>
+
 <td>
 
 **Should** encrypt sensitive information if it is necessary to store them in a database.<br>
@@ -973,15 +978,13 @@ export const hashPassword = async (password: string): Promise<string> => {
 ```
 </td>
 </tr>
-
-<tr>
 <td>
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 <br>
 
-## 6. Implement
+## 6. Implement Lint
 
 Here is an example of how to implement Eslint into a Node.js TypeScript project. <br>
 Ref: https://eslint.org/docs/latest/use/getting-started <br>
@@ -990,6 +993,7 @@ Ref: https://eslint.org/docs/latest/use/getting-started <br>
 ```typescript
 npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
 npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
+npm install prettier eslint-plugin-simple-import-sort --save-dev
 ```
 
 **Step 2: Create .eslintrc.json (or .js or .yml)**
@@ -1012,13 +1016,16 @@ npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
     },
     "plugins": [
       "@typescript-eslint",
-      "prettier"
+      "prettier",
+      "simple-import-sort"
     ],
     "rules": {
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/no-explicit-any": "error",
-      "no-console": "warn"
+      "no-console": "warn",
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error"
     }
 }
 ```
@@ -1050,6 +1057,9 @@ npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
 },
 ```
 
-## Explain: 
+**Explain:** 
 **lint** Command to check and show error. <br>
-**lint-and-fix** Command to fix and replace some rules (**). Some rules are automatically fixable by this command. Ref here: https://eslint.org/docs/latest/rules/
+**lint-and-fix** Command to fix and replace some rules (**). Some rules are automatically fixable by this command. <br>
+Ref here: https://eslint.org/docs/latest/rules/
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
+
