@@ -746,9 +746,6 @@ const age: any = 'seventeen'; // <-- Bad
 const age: number = 17; // <-- Good 👍
 ```
 </td>
-</tr>
-
-<tr>
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
@@ -1032,7 +1029,7 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/no-explicit-any": "error",
-      "no-console": "warn",
+      "no-console": "error",
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error"
     }
@@ -1072,5 +1069,12 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
 **lint** Command to check and show error. <br>
 **lint-and-fix** Command to fix and replace some rules (**). Some rules are automatically fixable by this command. <br>
 Ref here: https://eslint.org/docs/latest/rules/
+<br>
+
+**There are some rules that don't necessarily have to produce an error all the time. For example, in special situations where we need to use the 'any' type, we can disable these rules with the following command:**
+
+```javascript
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+```
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
