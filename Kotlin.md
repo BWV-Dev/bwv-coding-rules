@@ -50,7 +50,7 @@
 </td>
 <td width="50%">
 
-Name of files, classes, interfaces use **UpperCamelCase**(capitalize the first letter of each word, including the first) format.
+Name of files, classes, interfaces use **UpperCamelCase** format.
 </td>
 <td>
 
@@ -67,7 +67,7 @@ MainActivity.kt
 </td>
 <td>
 
-Names of packages are always lowercase and do not use underscores. Using multi-word names is generally discouraged, but if you do need to use multiple words, you can either just concatenate them together or use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
+Names of packages are always lowercase and do not use underscores. Using multi-word names is generally discouraged, but if you do need to use multiple words, you can either just concatenate them together or use **lowerCamelCase** format.
 </td>
 <td>
 
@@ -86,7 +86,7 @@ org.example.myProject
 </td>
 <td>
 
-Names of functions, properties and local variables use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
+Names of functions, properties and local variables use **lowerCamelCase** format.
 </td>
 <td>
 
@@ -104,7 +104,7 @@ var declarationCount = 1
 </td>
 <td>
 
-Names of constants, enum variables use **UPPER_CASE_UNDERSCORE**(upper case all letters and separate words with _) format.
+Names of constants, enum variables use **UPPER_CASE_UNDERSCORE** format.
 </td>
 <td>
 
@@ -190,11 +190,11 @@ interface TestInterface {
 }
 
 class TestClass: TestInterface{
-    //good
+    // Good 👍
     override fun hello() {}
     override fun test() {}
 
-    //bad
+    // Bad
     override fun test() {}
     override fun hello() {}
 }
@@ -263,13 +263,14 @@ When a function contains only a single expression it can be represented as an **
 <td>
 
 ```kotlin
-//bad
+
+// Good 👍
+fun toString(): String = "Hey"
+
+// Bad
 fun toString(): String {
     return "Hey"
 }
-
-//good
-fun toString(): String = "Hey"
 
 //Read-only properties can use this format
 val defaultExtension: String get() = "kt"
@@ -288,8 +289,8 @@ Semicolons are dead to us should be avoided wherever possible in Kotlin.
 <td>
 
 ```kotlin
-val name = "hello";//bad
-val name = "hello"//good
+val name = "hello"// Good 👍
+val name = "hello";// Bad
 ```
 </td>
 </tr>
@@ -305,9 +306,9 @@ Default visibility is public so only include visibility modifiers if you need so
 <td>
 
 ```kotlin
-public val wideOpenProperty = 1 //bad
-val wideOpenProperty = 1 //good
-private val wideOpenProperty = 1 //good
+val wideOpenProperty = 1 // Good 👍
+private val wideOpenProperty = 1 // Good 👍
+public val wideOpenProperty = 1 // Bad
 ```
 </td>
 </tr>
@@ -376,9 +377,9 @@ Prefer using immutable data to mutable. Always declare local variables and prope
 <td>
 
 ```kotlin
-class ItemPlaceHolder(val bind: RecyclerNoteItemBinding);//good
+class ItemPlaceHolder(val bind: RecyclerNoteItemBinding);// Good 👍
 
-class ItemPlaceHolder(var bind: RecyclerNoteItemBinding);//bad
+class ItemPlaceHolder(var bind: RecyclerNoteItemBinding);// Bad
 ```
 </td>
 </tr>

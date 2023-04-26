@@ -63,7 +63,7 @@
 </td>
 <td width="50%">
 
-Name of files, classes, protocol, type aliases use **UpperCamelCase**(capitalize the first letter of each word, including the first) format.
+Name of files, classes, protocol, type aliases use **UpperCamelCase** format.
 </td>
 
 <td>
@@ -93,7 +93,7 @@ typealias MoneyAmount = Double
 </td>
 <td>
 
-Name of variables, methods, enum variables use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
+Name of variables, methods, enum variables use **lowerCamelCase** format.
 </td>
 
 <td>
@@ -118,7 +118,7 @@ public enum HTTPStatus: Int {
 </td>
 <td>
 
-Name of constants **SHOULD** use **UPPER_CASE_UNDERSCORE**(upper case all letters and separate words with _) format.
+Name of constants **SHOULD** use **UPPER_CASE_UNDERSCORE** format.
 </td>
 
 <td>
@@ -168,12 +168,11 @@ Names should be short and meaningful, **DON'T** use the misunderstanding names.
 <td>
 
 ```swift
+let maximumItemsCount = 3;// Good 👍
+let max = 3;// Bad
 
-let max = 3;//bad
-let maximumItemsCount = 3;//good
-
-let i = 0;//bad
-let studentIndex = 0;//good
+let studentIndex = 0;// Good 👍
+let i = 0;// Bad
 ```
 </td>
 </tr>
@@ -221,8 +220,8 @@ Restricted access control (internal, fileprivate, or private) is preferred for t
 
 ```swift
 
-private let name:String //good
-private let _name:String //bad
+private let name:String // Good 👍
+private let _name:String // Bad
 
 ```
 </td>
@@ -287,13 +286,13 @@ Every word in a name should convey salient information at the use site.
 <td>
 
 ```swift
-//bad
-func removeElement(_ member: Element) -> Element?
-allViews.removeElement(cancelButton)
-
-//good
+// Good 👍
 func remove(_ member: Element) -> Element?
 allViews.remove(cancelButton) 
+
+// Bad
+func removeElement(_ member: Element) -> Element?
+allViews.removeElement(cancelButton)
 
 ```
 </td>
@@ -311,16 +310,17 @@ allViews.remove(cancelButton)
 <td>
 
 ```swift
-var string = "Hello" //bad
-var name = "Hello" //good
+var name = "Hello" // Good 👍
+var string = "Hello" // Bad
+
 protocol ViewController {
-  associatedtype ViewType : View //bad
-  associatedtype ContentView : View //good
+  associatedtype ContentView : View // Good 👍
+  associatedtype ViewType : View // Bad  
 }
 
 class ProductionLine {
-  func restock(from widgetFactory: WidgetFactory)//bad
-  func restock(from supplier: WidgetFactory)//good
+  func restock(from supplier: WidgetFactory)// Good 👍
+  func restock(from widgetFactory: WidgetFactory)// Bad  
 }
 
 ```
@@ -359,8 +359,8 @@ Static and class properties that return instances of the declaring type are **no
 
 ```swift
 public class UIColor {
-  public class var redColor: UIColor {}//bad
-  public class var red: UIColor {}//bad
+  public class var redColor: UIColor {}// Bad
+  public class var red: UIColor {}// Bad
 }
 ```
 </td>
@@ -383,8 +383,8 @@ Do not use semicolons at end of the line.
 <td>
 
 ```swift
-let name = "hello"; //bad
-let name = "hello" //good
+let name = "hello" // Good 👍
+let name = "hello"; // Bad
 ```
 </td>
 
@@ -399,12 +399,12 @@ The get block for a read-only computed property is omitted and its body is direc
 <td>
 
 ```swift
-//good
+// Good 👍
 var totalCost: Int {
   return items.sum { $0.cost }
 }
 
-//bad
+// Bad
 var totalCost: Int {
   get {
     return items.sum { $0.cost }
@@ -431,14 +431,15 @@ Trailing commas in array and dictionary literals are required when each element 
 let configurationKeys = [
   "bufferSize",
   "compression",
-  "encoding",//good
+  "encoding"// Bad
 ]
 
 let configurationKeys = [
   "bufferSize",
   "compression",
-  "encoding"//bad
+  "encoding",// Good 👍
 ]
+
 ```
 </td>
 </tr>
@@ -454,11 +455,11 @@ Parameterized attributes (such as @availability(...) or @objc(...)) are each wri
 <td>
 
 ```swift
-//good
+// Good 👍
 @available(iOS 9.0, *)
 public func coolNewFeature() {}
 
-//bad
+// Bad
 @available(iOS 9.0, *) public func coolNewFeature() {}
 ```
 </td>
@@ -501,11 +502,11 @@ Comments begin with a brief single-sentence summary that describes the declarati
 <td>
 
 ```swift
-//good
+// Good 👍
 /// The background color of the view.
 var backgroundColor: UIColor
 
-//bad
+// Bad
 /// This property is the background color of the view.
 var backgroundColor: UIColor
 ```
@@ -572,7 +573,7 @@ If a function call has multiple closure arguments, all arguments **SHOULD** be l
 <td>
 
 ```swift
-//good
+// Good 👍
 UIView.animate(
   withDuration: 0.5,
   animations: {
@@ -582,7 +583,7 @@ UIView.animate(
     // ...
   })
 
-//bad
+// Bad
 UIView.animate(
   withDuration: 0.5,
   animations: {
@@ -606,12 +607,12 @@ UIView.animate(
 <td>
 
 ```swift
-//bad
+// Good 👍
+let order = lastName.compare(royalFamilyName)
+
+// Bad
 let order = lastName.compare(
   royalFamilyName, options: [], range: nil, locale: nil)
-
-//good
-let order = lastName.compare(royalFamilyName)
 ```
 </td>
 </tr>
@@ -628,13 +629,13 @@ When using **tuple**, we should give properties names for visualization.
 <td>
 
 ```swift
-//bad
-let company = ("Programiz App", 2.1)
-let product = company.0 //need to explain what index 0 stand for
-
-//good
+// Good 👍
 let company = (product: "Programiz App", version: 2.1)
 company.product //no need more explaination
+
+// Bad
+let company = ("Programiz App", 2.1)
+let product = company.0 //need to explain what index 0 stand for
 ```
 </td>
 </tr>
@@ -667,7 +668,15 @@ if let name {}
 
 ```swift
 let flag = true
-//bad
+
+// Good 👍
+if !flag {
+  // long code for false
+  return
+}
+// long code for true
+
+// Bad
 if flag {
   // long code for true
 }
@@ -675,12 +684,6 @@ else {
   // long code for false
 }
 
-//good
-if !flag {
-  // long code for false
-  return
-}
-// long code for true
 ```
 </td>
 </tr>
@@ -823,13 +826,13 @@ You should define multiple related variables of the same type on a single line, 
 <td>
 
 ```swift
-//bad
+// Good 👍
+var red, green, blue: Double
+
+// Bad
 var red: Double
 var green: Double
 var blue: Double
-
-//good
-var red, green, blue: Double
 ```
 </td>
 </tr>
@@ -849,13 +852,13 @@ public struct Person {
   public let name: String
   public let phoneNumber: String
 
-  //good
+  // Good 👍
   public init(name: String, phoneNumber: String) {
     self.name = name
     self.phoneNumber = phoneNumber
   }
 
-  //bad
+  // Bad
   public init(name _name: String, phoneNumber _phoneNumber: String) {
     name = _name
     phoneNumber = _phoneNumber
@@ -876,7 +879,7 @@ Sentinel values are avoided when designing algorithms (for example, an “index�
 <td>
 
 ```swift
-//good
+// Good 👍
 func index(of thing: Thing) -> Int? {
   // ...
 }
@@ -886,7 +889,7 @@ if let index = index(of: thing) {
   // Didn't find it.
 }
 
-//bad
+// Bad
 func index(of thing: Thing) -> Int {
   // ...
 }

@@ -80,7 +80,7 @@
 </td>
 <td width="50%">
 
-Name of files, packages, directories, import prefixes use **lowercase_with_underscores**(use only lowercase letters, even for acronyms, and separate words with _ ) format. </td>
+Name of files, packages, directories, import prefixes use **lowercase_with_underscores** format. </td>
 <td width="45%">
 
 ```dart
@@ -101,7 +101,7 @@ import 'dart:math' as math;
 </td>
 <td>
 
-Name of classes, extensions, enum types use **UpperCamelCase**(capitalize the first letter of each word, including the first) format.
+Name of classes, extensions, enum types use **UpperCamelCase** format.
 </td>
 <td>
 
@@ -122,7 +122,7 @@ enum MyType { ... }
 </td>
 <td>
 
-Name of constant, variables, enum variables use **lowerCamelCase**(capitalize the first letter of each word, except the first which is always lowercase, even if it’s an acronym) format.
+Name of constant, variables, enum variables use **lowerCamelCase** format.
 
 </td>
 <td>
@@ -188,8 +188,8 @@ futureOfVoid.then((_,__) {
 <td>
 
 ```dart
-const defaultTimeout = 10; //good
-const kDefaultTimeout = 10;  //bad
+const defaultTimeout = 10; // Good 👍
+const kDefaultTimeout = 10;  // Bad
 ```
 
 </td>
@@ -207,8 +207,8 @@ const kDefaultTimeout = 10;  //bad
 <td>
 
 ```dart
-class HttpConnection {} //good
-class HTTPConnection {} //bad
+class HttpConnection {} // Good 👍
+class HTTPConnection {} // Bad
 ```
 
 </td>
@@ -262,13 +262,13 @@ When naming any identifiers(variables, functions, classes,constants,...), **MUST
 <td>
 
 ```dart
-//good
+// Good 👍
 String userName;
 validateInput() {}
 const double pi = 3.14;
 class UserModel {}
 
-//bad
+// Bad
 String value;
 doSomething() {}
 const double constant = 3.14;
@@ -297,12 +297,13 @@ Aim for a maximum line length of roughly 80 characters, but prefer going over if
 <td width="45%">
 
 ```dart
-//bad
-final names = a.map(element => element.name).toList().sort()......;
-//good
+// Good 👍
 List<String> names = a.map(element => element.name);
 names.sort();
 names....;
+
+// Bad
+final names = a.map(element => element.name).toList().sort()......;
 
 ```
 </td>
@@ -342,7 +343,7 @@ relative imports (../foo.dart)
 <td>
 
 ```dart
-// good
+// Good  👍
 import 'dart:a';
 import 'dart:b';
 
@@ -352,7 +353,7 @@ import 'package:b/b.dart';
 import 'a.dart';
 import '../b.dart';
 
-// bad
+// Bad
 import 'dart:a';
 import 'package:a/a.dart';
 import 'dart:b';
@@ -377,13 +378,13 @@ Use curly braces for all flow control statements. <br>
 <td>
 
 ```dart
-// good
+// Good  👍
 if (isTrue) {
   print('true');
 }
 if (arg == null) return true;
 
-// bad
+// Bad
 if (isTrue) 
   print('true');
 ```
@@ -496,10 +497,10 @@ It will generate the document like this
 <td>
 
 ```dart
-//good
+// Good 👍
 final List<Student> students = [];//list of students
 
-//bad
+// Bad
 final List<Student> students = [];//mảng chứa các sinh viên
 ```
 </td>
@@ -524,9 +525,9 @@ Avoid using **as** instead, use **is** operator
 <td width="45%">
 
 ```dart
-(item as Animal).name = 'Lion'; //bad
+if (item is Animal)item.name = 'Lion';// Good 👍
 
-if (item is Animal)item.name = 'Lion';//good
+(item as Animal).name = 'Lion'; // Bad
 ```
 </td>
 </tr>
@@ -547,10 +548,10 @@ library my_lib;
 part './lib_a.dart';
 
 // The part file should use the library file’s URI:
-part of '../../my_library.dart';//good
+part of '../../my_library.dart';// Good 👍
 
 // Not the library name:
-part of my_library;//bad
+part of my_library;// Bad
 ```
 </td>
 </tr>
@@ -602,8 +603,9 @@ my_package
    └─ api_test.dart
 
 // And say api_test.dart imports api.dart in two ways:
-import '../lib/api.dart'; //bad
-import 'package:my_package/api.dart'; //good
+import 'package:my_package/api.dart'; // Good 👍
+
+import '../lib/api.dart'; // Bad
 ```
 </td>
 </tr>
@@ -709,8 +711,8 @@ class Student {
 <td>
 
 ```dart
-'You are ${year - birth} years old.'; //good
-'You are ' + (year - birth).toString() + ' y...'; //bad
+'You are ${year - birth} years old.'; // Good 👍
+'You are ' + (year - birth).toString() + ' y...'; // Bad
 ```
 </td>
 </tr>
@@ -728,8 +730,8 @@ class Student {
 
 ```dart
 var objects = [1, 'a', 2, 'b', 3];
-var ints = objects.whereType<int>();//good
-var ints = objects.where((e) => e is int).cast<int>();//bad
+var ints = objects.whereType<int>();// Good 👍
+var ints = objects.where((e) => e is int).cast<int>();// Bad
 ```
 </td>
 </tr>
@@ -747,8 +749,8 @@ var ints = objects.where((e) => e is int).cast<int>();//bad
 
 ```dart
 List<int> singletonList(int value) {
-  var list = <int>[];//good
-  var list = []; // bad List<dynamic>.
+  var list = <int>[];// Good 👍
+  var list = []; // Bad List<dynamic>.
   list.add(value);
   return list;
 }
@@ -788,9 +790,9 @@ class Student {
 <td>
 
 ```dart
-double get area => (right - left) * (bottom - top); //good
+double get area => (right - left) * (bottom - top); // Good 👍
 double get area {
-    return (right - left) * (bottom - top); //bad
+    return (right - left) * (bottom - top); // Bad
 } 
 
 ```
@@ -809,8 +811,8 @@ double get area {
 <td>
 
 ```dart
-final student = Student();//good
-final student = new Student();//bad
+final student = Student();// Good 👍
+final student = new Student();// Bad
 ```
 </td>
 </tr>
@@ -845,8 +847,8 @@ var buffer = StringBuffer()
 <td>
 
 ```dart
-var completer = Completer<Map<String,int>>(); //good
-var completer = Completer<Map>(); //bad
+var completer = Completer<Map<String,int>>(); // Good 👍
+var completer = Completer<Map>(); // Bad
 
 ```
 </td>
@@ -977,12 +979,12 @@ class TabContentView extends StatefulWidget{}
 <td>
 
 ```dart
-//good
+// Good 👍
 if (!isTrue) {
   return;
 }
 
-//bad
+// Bad
 if (isTrue) {
   //...
 }else {
@@ -1004,11 +1006,11 @@ Use  **??** and **?.** operators.
 <td>
 
 ```dart
-final flag = a == null ? b : a;//bad
-final flag = a  ?? b;//good
+final flag = a  ?? b;// Good 👍
+final flag = a == null ? b : a;// Bad
 
-final flag = a == null ? null : a.b;//bad
-final flag = a?.b;
+final flag = a?.b;// Good 👍
+final flag = a == null ? null : a.b;// Bad
 ```
 </td>
 </tr>
@@ -1022,14 +1024,14 @@ final flag = a?.b;
 <td>
 
 ```dart
-//bad
+// Good 👍
+var y = [4,5,6];
+var x = [1,2,...y];
+
+// Bad
 var y = [4,5,6];
 var x = [1,2];
 x.addAll(y);
-
-//good
-var y = [4,5,6];
-var x = [1,2,...y];
 ```
 </td>
 </tr>
@@ -1051,12 +1053,12 @@ final List<Widget> children = List.generate(
     (index) => Container()
 );
 
-//good
+// Good 👍
 final listView = ListView.builder(
     itemBuilder: (_,index)=>children[index]
 );
 
-//bad
+// Bad
 final listView = ListView(children: children);
 ```
 </td>
@@ -1125,12 +1127,12 @@ class MyWidget{
     }
 }
 
-//good
+// Good 👍
 final controller = MyWidgetController();
 final widget = MyWidget(controller:controller);
 controller.reloadWidget();
 
-//bad
+// Bad
 final widget = MyWidget();
 widget.reload();
 
@@ -1255,9 +1257,11 @@ analyzer:
 This will make sure the build **CAN'T** occur if there is any violation.
 ![Warnings as errors](./images/flutter/warnings_as_errors.png)
 
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
 ## Refs
 - https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#write-test-find-bug
 - https://dart.dev/guides/language/effective-dart/style
 - https://www.flutterclutter.dev/flutter/tutorials/create-a-controller-for-a-custom-widget/2021/2149/
 
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
