@@ -188,10 +188,9 @@ futureOfVoid.then((_,__) {
 <td>
 
 ```dart
-const defaultTimeout = 10; // Good 👍
 const kDefaultTimeout = 10;  // Bad
+const defaultTimeout = 10; // Good 👍
 ```
-
 </td>
 </tr>
 
@@ -207,10 +206,9 @@ const kDefaultTimeout = 10;  // Bad
 <td>
 
 ```dart
-class HttpConnection {} // Good 👍
 class HTTPConnection {} // Bad
+class HttpConnection {} // Good 👍
 ```
-
 </td>
 </tr>
 
@@ -262,17 +260,17 @@ When naming any identifiers(variables, functions, classes,constants,...), **MUST
 <td>
 
 ```dart
-// Good 👍
-String userName;
-validateInput() {}
-const double pi = 3.14;
-class UserModel {}
-
 // Bad
 String value;
 doSomething() {}
 const double constant = 3.14;
 class Data {}
+
+// Good 👍
+String userName;
+validateInput() {}
+const double pi = 3.14;
+class UserModel {}
 ```
 </td>
 </tr>
@@ -297,14 +295,13 @@ Aim for a maximum line length of roughly 80 characters, but prefer going over if
 <td width="45%">
 
 ```dart
+// Bad
+final names = a.map(element => element.name).toList().sort()......;
+
 // Good 👍
 List<String> names = a.map(element => element.name);
 names.sort();
 names....;
-
-// Bad
-final names = a.map(element => element.name).toList().sort()......;
-
 ```
 </td>
 </tr>
@@ -343,6 +340,14 @@ relative imports (../foo.dart)
 <td>
 
 ```dart
+// Bad
+import 'dart:a';
+import 'package:a/a.dart';
+import 'dart:b';
+import '../b.dart';
+import 'package:b/b.dart';
+import 'a.dart';
+
 // Good  👍
 import 'dart:a';
 import 'dart:b';
@@ -352,14 +357,6 @@ import 'package:b/b.dart';
 
 import 'a.dart';
 import '../b.dart';
-
-// Bad
-import 'dart:a';
-import 'package:a/a.dart';
-import 'dart:b';
-import '../b.dart';
-import 'package:b/b.dart';
-import 'a.dart';
 ```
 </td>
 </tr>
@@ -378,15 +375,16 @@ Use curly braces for all flow control statements. <br>
 <td>
 
 ```dart
+// Bad
+if (isTrue) 
+  print('true');
+
 // Good  👍
 if (isTrue) {
   print('true');
 }
-if (arg == null) return true;
 
-// Bad
-if (isTrue) 
-  print('true');
+if (arg == null) return true;
 ```
 </td>
 </tr>
@@ -497,11 +495,11 @@ It will generate the document like this
 <td>
 
 ```dart
-// Good 👍
-final List<Student> students = [];//list of students
-
 // Bad
 final List<Student> students = [];//mảng chứa các sinh viên
+
+// Good 👍
+final List<Student> students = [];//list of students
 ```
 </td>
 </tr>
@@ -525,9 +523,9 @@ Avoid using **as** instead, use **is** operator
 <td width="45%">
 
 ```dart
-if (item is Animal)item.name = 'Lion';// Good 👍
-
 (item as Animal).name = 'Lion'; // Bad
+
+if (item is Animal)item.name = 'Lion';// Good 👍
 ```
 </td>
 </tr>
@@ -547,11 +545,11 @@ If you choose to use **library** and **part of** to describe libraries with rela
 library my_lib;
 part './lib_a.dart';
 
-// The part file should use the library file’s URI:
-part of '../../my_library.dart';// Good 👍
-
 // Not the library name:
 part of my_library;// Bad
+
+// The part file should use the library file’s URI:
+part of '../../my_library.dart';// Good 👍
 ```
 </td>
 </tr>
@@ -602,10 +600,10 @@ my_package
    test
    └─ api_test.dart
 
+import '../lib/api.dart'; // Bad
+
 // And say api_test.dart imports api.dart in two ways:
 import 'package:my_package/api.dart'; // Good 👍
-
-import '../lib/api.dart'; // Bad
 ```
 </td>
 </tr>
@@ -711,8 +709,8 @@ class Student {
 <td>
 
 ```dart
-'You are ${year - birth} years old.'; // Good 👍
 'You are ' + (year - birth).toString() + ' y...'; // Bad
+'You are ${year - birth} years old.'; // Good 👍
 ```
 </td>
 </tr>
@@ -730,8 +728,8 @@ class Student {
 
 ```dart
 var objects = [1, 'a', 2, 'b', 3];
-var ints = objects.whereType<int>();// Good 👍
 var ints = objects.where((e) => e is int).cast<int>();// Bad
+var ints = objects.whereType<int>();// Good 👍
 ```
 </td>
 </tr>
@@ -749,8 +747,8 @@ var ints = objects.where((e) => e is int).cast<int>();// Bad
 
 ```dart
 List<int> singletonList(int value) {
-  var list = <int>[];// Good 👍
   var list = []; // Bad List<dynamic>.
+  var list = <int>[];// Good 👍  
   list.add(value);
   return list;
 }
@@ -790,11 +788,11 @@ class Student {
 <td>
 
 ```dart
-double get area => (right - left) * (bottom - top); // Good 👍
 double get area {
     return (right - left) * (bottom - top); // Bad
 } 
 
+double get area => (right - left) * (bottom - top); // Good 👍
 ```
 
 </td>
@@ -811,8 +809,8 @@ double get area {
 <td>
 
 ```dart
-final student = Student();// Good 👍
 final student = new Student();// Bad
+final student = Student();// Good 👍
 ```
 </td>
 </tr>
@@ -847,9 +845,8 @@ var buffer = StringBuffer()
 <td>
 
 ```dart
-var completer = Completer<Map<String,int>>(); // Good 👍
 var completer = Completer<Map>(); // Bad
-
+var completer = Completer<Map<String,int>>(); // Good 👍
 ```
 </td>
 </tr>
@@ -979,16 +976,16 @@ class TabContentView extends StatefulWidget{}
 <td>
 
 ```dart
-// Good 👍
-if (!isTrue) {
-  return;
-}
-
 // Bad
 if (isTrue) {
   //...
 }else {
     return;
+}
+
+// Good 👍
+if (!isTrue) {
+  return;
 }
 ```
 </td>
@@ -1006,11 +1003,11 @@ Use  **??** and **?.** operators.
 <td>
 
 ```dart
-final flag = a  ?? b;// Good 👍
 final flag = a == null ? b : a;// Bad
+final flag = a  ?? b;// Good 👍
 
-final flag = a?.b;// Good 👍
 final flag = a == null ? null : a.b;// Bad
+final flag = a?.b;// Good 👍
 ```
 </td>
 </tr>
@@ -1024,14 +1021,14 @@ final flag = a == null ? null : a.b;// Bad
 <td>
 
 ```dart
-// Good 👍
-var y = [4,5,6];
-var x = [1,2,...y];
-
 // Bad
 var y = [4,5,6];
 var x = [1,2];
 x.addAll(y);
+
+// Good 👍
+var y = [4,5,6];
+var x = [1,2,...y];
 ```
 </td>
 </tr>
@@ -1053,13 +1050,13 @@ final List<Widget> children = List.generate(
     (index) => Container()
 );
 
+// Bad
+final listView = ListView(children: children);
+
 // Good 👍
 final listView = ListView.builder(
     itemBuilder: (_,index)=>children[index]
 );
-
-// Bad
-final listView = ListView(children: children);
 ```
 </td>
 </tr>
@@ -1127,14 +1124,14 @@ class MyWidget{
     }
 }
 
+// Bad
+final widget = MyWidget();
+widget.reload();
+
 // Good 👍
 final controller = MyWidgetController();
 final widget = MyWidget(controller:controller);
 controller.reloadWidget();
-
-// Bad
-final widget = MyWidget();
-widget.reload();
 
 ```
 </td>

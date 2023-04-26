@@ -190,13 +190,13 @@ interface TestInterface {
 }
 
 class TestClass: TestInterface{
-    // Good 👍
-    override fun hello() {}
-    override fun test() {}
-
     // Bad
     override fun test() {}
     override fun hello() {}
+
+    // Good 👍
+    override fun hello() {}
+    override fun test() {}
 }
 ```
 </td>
@@ -263,14 +263,13 @@ When a function contains only a single expression it can be represented as an **
 <td>
 
 ```kotlin
-
-// Good 👍
-fun toString(): String = "Hey"
-
 // Bad
 fun toString(): String {
     return "Hey"
 }
+
+// Good 👍
+fun toString(): String = "Hey"
 
 //Read-only properties can use this format
 val defaultExtension: String get() = "kt"
@@ -289,8 +288,8 @@ Semicolons are dead to us should be avoided wherever possible in Kotlin.
 <td>
 
 ```kotlin
-val name = "hello"// Good 👍
 val name = "hello";// Bad
+val name = "hello"// Good 👍
 ```
 </td>
 </tr>
@@ -306,9 +305,9 @@ Default visibility is public so only include visibility modifiers if you need so
 <td>
 
 ```kotlin
+public val wideOpenProperty = 1 // Bad
 val wideOpenProperty = 1 // Good 👍
 private val wideOpenProperty = 1 // Good 👍
-public val wideOpenProperty = 1 // Bad
 ```
 </td>
 </tr>
@@ -377,9 +376,10 @@ Prefer using immutable data to mutable. Always declare local variables and prope
 <td>
 
 ```kotlin
+class ItemPlaceHolder(var bind: RecyclerNoteItemBinding);// Bad
+
 class ItemPlaceHolder(val bind: RecyclerNoteItemBinding);// Good 👍
 
-class ItemPlaceHolder(var bind: RecyclerNoteItemBinding);// Bad
 ```
 </td>
 </tr>

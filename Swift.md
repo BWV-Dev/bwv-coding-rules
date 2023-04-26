@@ -168,11 +168,11 @@ Names should be short and meaningful, **DON'T** use the misunderstanding names.
 <td>
 
 ```swift
-let maximumItemsCount = 3;// Good 👍
 let max = 3;// Bad
+let maximumItemsCount = 3;// Good 👍
 
-let studentIndex = 0;// Good 👍
 let i = 0;// Bad
+let studentIndex = 0;// Good 👍
 ```
 </td>
 </tr>
@@ -219,10 +219,8 @@ Restricted access control (internal, fileprivate, or private) is preferred for t
 <td>
 
 ```swift
-
-private let name:String // Good 👍
 private let _name:String // Bad
-
+private let name:String // Good 👍
 ```
 </td>
 </tr>
@@ -286,14 +284,13 @@ Every word in a name should convey salient information at the use site.
 <td>
 
 ```swift
-// Good 👍
-func remove(_ member: Element) -> Element?
-allViews.remove(cancelButton) 
-
 // Bad
 func removeElement(_ member: Element) -> Element?
 allViews.removeElement(cancelButton)
 
+// Good 👍
+func remove(_ member: Element) -> Element?
+allViews.remove(cancelButton) 
 ```
 </td>
 </tr>
@@ -310,17 +307,17 @@ allViews.removeElement(cancelButton)
 <td>
 
 ```swift
-var name = "Hello" // Good 👍
 var string = "Hello" // Bad
+var name = "Hello" // Good 👍
 
 protocol ViewController {
-  associatedtype ContentView : View // Good 👍
   associatedtype ViewType : View // Bad  
+  associatedtype ContentView : View // Good 👍 
 }
 
 class ProductionLine {
-  func restock(from supplier: WidgetFactory)// Good 👍
   func restock(from widgetFactory: WidgetFactory)// Bad  
+  func restock(from supplier: WidgetFactory)// Good 👍 
 }
 
 ```
@@ -383,8 +380,8 @@ Do not use semicolons at end of the line.
 <td>
 
 ```swift
-let name = "hello" // Good 👍
 let name = "hello"; // Bad
+let name = "hello" // Good 👍
 ```
 </td>
 
@@ -399,11 +396,6 @@ The get block for a read-only computed property is omitted and its body is direc
 <td>
 
 ```swift
-// Good 👍
-var totalCost: Int {
-  return items.sum { $0.cost }
-}
-
 // Bad
 var totalCost: Int {
   get {
@@ -411,7 +403,10 @@ var totalCost: Int {
   }
 }
 
-
+// Good 👍
+var totalCost: Int {
+  return items.sum { $0.cost }
+}
 ```
 </td>
 </tr>
@@ -455,12 +450,12 @@ Parameterized attributes (such as @availability(...) or @objc(...)) are each wri
 <td>
 
 ```swift
+// Bad
+@available(iOS 9.0, *) public func coolNewFeature() {}
+
 // Good 👍
 @available(iOS 9.0, *)
 public func coolNewFeature() {}
-
-// Bad
-@available(iOS 9.0, *) public func coolNewFeature() {}
 ```
 </td>
 </tr>
@@ -502,12 +497,12 @@ Comments begin with a brief single-sentence summary that describes the declarati
 <td>
 
 ```swift
-// Good 👍
-/// The background color of the view.
-var backgroundColor: UIColor
-
 // Bad
 /// This property is the background color of the view.
+var backgroundColor: UIColor
+
+// Good 👍
+/// The background color of the view.
 var backgroundColor: UIColor
 ```
 </td>
@@ -573,6 +568,15 @@ If a function call has multiple closure arguments, all arguments **SHOULD** be l
 <td>
 
 ```swift
+// Bad
+UIView.animate(
+  withDuration: 0.5,
+  animations: {
+    // ...
+  }) { finished in
+    // ...
+  }
+
 // Good 👍
 UIView.animate(
   withDuration: 0.5,
@@ -582,15 +586,6 @@ UIView.animate(
   completion: { finished in
     // ...
   })
-
-// Bad
-UIView.animate(
-  withDuration: 0.5,
-  animations: {
-    // ...
-  }) { finished in
-    // ...
-  }
 ```
 </td>
 </tr>
@@ -607,12 +602,12 @@ UIView.animate(
 <td>
 
 ```swift
-// Good 👍
-let order = lastName.compare(royalFamilyName)
-
 // Bad
 let order = lastName.compare(
   royalFamilyName, options: [], range: nil, locale: nil)
+
+// Good 👍
+let order = lastName.compare(royalFamilyName)
 ```
 </td>
 </tr>
@@ -629,13 +624,13 @@ When using **tuple**, we should give properties names for visualization.
 <td>
 
 ```swift
-// Good 👍
-let company = (product: "Programiz App", version: 2.1)
-company.product //no need more explaination
-
 // Bad
 let company = ("Programiz App", 2.1)
 let product = company.0 //need to explain what index 0 stand for
+
+// Good 👍
+let company = (product: "Programiz App", version: 2.1)
+company.product //no need more explaination
 ```
 </td>
 </tr>
@@ -669,13 +664,6 @@ if let name {}
 ```swift
 let flag = true
 
-// Good 👍
-if !flag {
-  // long code for false
-  return
-}
-// long code for true
-
 // Bad
 if flag {
   // long code for true
@@ -684,6 +672,12 @@ else {
   // long code for false
 }
 
+// Good 👍
+if !flag {
+  // long code for false
+  return
+}
+// long code for true
 ```
 </td>
 </tr>
@@ -826,13 +820,13 @@ You should define multiple related variables of the same type on a single line, 
 <td>
 
 ```swift
-// Good 👍
-var red, green, blue: Double
-
 // Bad
 var red: Double
 var green: Double
 var blue: Double
+
+// Good 👍
+var red, green, blue: Double
 ```
 </td>
 </tr>
@@ -852,17 +846,17 @@ public struct Person {
   public let name: String
   public let phoneNumber: String
 
-  // Good 👍
-  public init(name: String, phoneNumber: String) {
-    self.name = name
-    self.phoneNumber = phoneNumber
-  }
-
   // Bad
   public init(name _name: String, phoneNumber _phoneNumber: String) {
     name = _name
     phoneNumber = _phoneNumber
   }
+
+  // Good 👍
+  public init(name: String, phoneNumber: String) {
+    self.name = name
+    self.phoneNumber = phoneNumber
+  }  
 }
 ```
 </td>
@@ -879,16 +873,6 @@ Sentinel values are avoided when designing algorithms (for example, an “index�
 <td>
 
 ```swift
-// Good 👍
-func index(of thing: Thing) -> Int? {
-  // ...
-}
-if let index = index(of: thing) {
-  // Found it.
-} else {
-  // Didn't find it.
-}
-
 // Bad
 func index(of thing: Thing) -> Int {
   // ...
@@ -896,6 +880,16 @@ func index(of thing: Thing) -> Int {
 
 let index = index(of: thing)
 if index != -1 {
+  // Found it.
+} else {
+  // Didn't find it.
+}
+
+// Good 👍
+func index(of thing: Thing) -> Int? {
+  // ...
+}
+if let index = index(of: thing) {
   // Found it.
 } else {
   // Didn't find it.
