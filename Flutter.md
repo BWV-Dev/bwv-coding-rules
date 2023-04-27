@@ -62,12 +62,11 @@
 - [4.27 Avoid interleaving multiple concepts together.](#4.27)
 - [4.28 Be explicit about dispose() and the object lifecycle.](#4.28)
   
-
-<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
-
 [**5. Lint rules** ](#5-lint-rules)
 
 [**Refs** ](#refs)
+
+<p align="right">(<a href="#flutter-coding-rules">back to top</a>)</p>
 
 ## 1. Naming
 
