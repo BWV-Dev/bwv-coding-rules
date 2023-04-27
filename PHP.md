@@ -36,12 +36,15 @@
 - [4.5 Need to distinguish between `isset()` and `!empty()`](#4.5)
 - [4.6 Converts simple usages of `array_push($x, $y);` to `$x[] = $y;`](#4.6)
 - [4.7 Logical NOT operators (!) should have one trailing whitespace](#4.7)
-- [4.8 There MUST be group use for the same namespaces](#4.8)
+- [4.8 The same namespaces must be grouped](#4.8)
 
 [**5. Security**](#5-security)
 
 - [5.1 Use parameterized queries](#5.1)
-- [5.2 Escape data HTML](#5.2)
+- [5.2 Use libraries with a good security track record](#5.2)
+- [5.3 Implement rate limiting](#5.3)
+- [5.4 Escape data HTML](#5.4)
+- [5.5 Validating input both client-side and server-side](#5.5)
 
 [**6. Implement Lint**](#6-implement-lint)
 
@@ -68,35 +71,29 @@ Name of files, namespaces, classes, interfaces, enums and traits use **UpperCame
 <td>
 
 ```php
-// File
 UserController.php
 
-// Namespace
 namespace App\Http\Controllers;
 
-// Class
 class UserController
 {
-    ...
+    // ...
 }
 
-// Interface
 interface Rule
 {
-    ...
+    // ...
 }
 
-// Enum
 enum UserType
 {
     case Admin;
     case Support;
 }
 
-// Trait
 trait CommonTrait
 {
-    ...
+    // ...
 }
 ```
 
@@ -119,12 +116,10 @@ Names of functions, properties and variables use **lowerCamelCase** format.
 <td>
 
 ```php
-// Function
 function redirectTo($request) {
-    ...
+    // ...
 }
 
-// Variables
 $routeName = 'abc';
 ```
 
@@ -147,7 +142,6 @@ Names of constants use **UPPER_CASE_UNDERSCORE** format.
 <td>
 
 ```php
-// Class constants
 const TABLE_NAME = 'users';
 ```
 
@@ -393,7 +387,7 @@ function foo(
     $x,
     $y,
 ) {
-    ...
+    // ...
 }
 
 // Match expressions
@@ -545,7 +539,7 @@ $age = 30;
  * @return string|null
  */
 protected function redirectTo($request) {
-    ...
+    // ...
 }
 ```
 
@@ -567,12 +561,10 @@ protected function redirectTo($request) {
 
 ```php
 // Bad
-
 // Mảng chứa các sinh viên
 $students = [];
 
 // Good 👍
-
 // Array of students
 $students = [];
 ```
@@ -681,7 +673,7 @@ When we have to meet certain criteria to continue execution, try to exit early.
 ```php
 // Bad
 if ($isTrue) {
-    ...
+    // ...
 }else {
     return;
 }
@@ -767,12 +759,12 @@ Logical NOT operators (!) should have one trailing whitespace.
 ```php
 // Bad
 if (!$bar) {
-    echo "Help!";
+    echo 'Help!';
 }
 
 // Good 👍
 if (! $bar) {
-    echo "Help!";
+    echo 'Help!';
 }
 ```
 </td>
@@ -786,7 +778,7 @@ if (! $bar) {
 </td>
 <td>
 
-There MUST be group use for the same namespaces.
+The same namespaces must be grouped.
 
 </td>
 <td>
@@ -845,6 +837,59 @@ $query = $this->query()->whereRaw('user.name LIKE ?', [$nameInput]);
 </td>
 <td>
 
+**Use libraries with a good security track record.**
+You can check rating star on Github or user downloaded, should choose libraries with high ratings to use.
+
+</td>
+<td>
+
+```php
+// No example
+```
+</td>
+</tr>
+
+<tr>
+<td id='5.3'>
+
+**5.3**
+
+</td>
+<td>
+
+**Implement rate limiting.**
+Implement rate limiting to prevent brute force attacks and other forms of abuse.
+However, depend on your project large and the original design, you can choose apply this spec or not.
+</br>
+
+</td>
+<td>
+
+```php
+// Config Rate limit for all /api route
+
+// app\Providers\RouteServiceProvider.php
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+public function boot(): void {
+    RateLimiter::for('api', function (Request $request) {
+        return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+    });
+    // ...
+}
+```
+</td>
+</tr>
+
+<tr>
+<td id='5.4'>
+
+**5.4**
+
+</td>
+<td>
+
 **Escape data HTML**<br />
 In Laravel, use Blade `{{ }}` statements to automatically sent through PHP's htmlspecialchars function to prevent XSS attacks.<br />
 In CakePHP, it does not automatically escape output so we have to manual escape with the `h()` function.
@@ -852,20 +897,20 @@ In CakePHP, it does not automatically escape output so we have to manual escape 
 </td>
 <td>
 
-```php
-// Laravel
+Laravel
 
+```php
 // Bad
 <?= $userName; ?>
 {!! $userName !!}
 
 // Good 👍
 {{ $userName }}
+```
 
-// ---------------------
+CakePHP
 
-// CakePHP
-
+```php
 // Bad
 <?= $userName; ?>
 
@@ -875,6 +920,60 @@ In CakePHP, it does not automatically escape output so we have to manual escape 
 
 </td>
 </tr>
+
+<tr>
+<td id='5.5'>
+
+**5.5**
+
+</td>
+<td>
+
+**Validating input both client-side and server-side**<br />
+Client-side validation can be bypassed by attackers and may not catch all issues.<br />
+Server-side validation is more reliable as it's performed on the server and can catch potential issues missed by client-side validation.<br />
+By validating input on both the client-side and server-side, we can ensure data submitted by users is safe, complete, and accurate.
+</td>
+<td>
+
+In Laravel use [Form Request Validation](https://laravel.com/docs/10.x/validation#form-request-validation)
+
+```php
+/**
+ * Get the validation rules that apply to the request.
+ *
+ * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+ */
+public function rules(): array {
+    return [
+        'title' => 'required|unique:posts|max:255',
+        'body' => 'required',
+    ];
+}
+```
+
+In CakePHP use [Validation Set](https://book.cakephp.org/4/en/orm/validation.html#using-a-different-validation-set)
+
+```php
+class ArticlesTable extends Table
+{
+    public function validationUpdate($validator) {
+        $validator
+            ->notEmptyString('title', __('You need to provide a title'))
+            ->notEmptyString('body', __('A body is required'));
+        return $validator;
+    }
+}
+
+$article = $this->Articles->newEntity(
+    $this->request->getData(),
+    ['validate' => 'update'],
+);
+```
+
+</td>
+</tr>
+
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
@@ -882,7 +981,7 @@ In CakePHP, it does not automatically escape output so we have to manual escape 
 
 ## 6. Implement Lint
 
-We will implement PHP lint using PHP Coding Standards Fixer.
+We will implement PHP lint using PHP Coding Standards Fixer.<br />
 Ref: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 
 #### Step 1
