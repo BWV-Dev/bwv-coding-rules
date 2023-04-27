@@ -1,5 +1,5 @@
 
-# NodeJs Coding Rules (BWV)
+# NodeJs Coding Rules & Security (BWV)
 ## Table of Contents
 [**Common** ](#common)
 <br>
@@ -21,7 +21,7 @@
 [**2. Styling** ](#2-styling)
 - [2.1 Use single quotes for string literals unless you need to include a single quote within the string](#2.1)
 - [2.2 Use type annotations whenever possible to help with code readability and maintainability](#2.2)
-- [2.3 Use two spaces for indentation instead of tabs](#2.3)
+- [2.3 Use tab with 2 spaces indentation](#2.3)
 - [2.4 Use async/await instead of callbacks wherever possible](#2.4)
 - [2.5 Use null checks and defensive programming techniques to avoid errors caused by undefined variables](#2.5)  
 - [2.6 Should use interfaces to define object shapes](#2.6)  
@@ -43,6 +43,7 @@
 - [4.7 no-var](#4.7) 
 - [4.8 sort-import](#4.8) 
 - [4.9 no-explicit-any](#4.9) 
+- [4.10 Importing specific functions](#4.10) 
 
 <br>
 
@@ -67,7 +68,7 @@
 
 
 ## 1. Naming
-The good way to name folder,class,type and variabble in Typescript.
+The good way to name folder,class,type and variable in Typescript.
 
 <table>
 <tr>
@@ -374,7 +375,7 @@ function calculateDiscount(price: number, discountPercentage: number): number {
 </td>
 <td>
 
-Use two spaces for indentation instead of tabs
+Use tab with 2 spaces indentation
 
 </td>
 <td>
@@ -569,7 +570,7 @@ Should use library such as lodash to work with Object , Array and more to avoid 
 const expensiveProducts = products.filter((product) => product.price > 100);
 
 // Good 👍
-import _ from "lodash";
+import { filter } from "lodash/filter";
 
 const expensiveProducts = _.filter(products, (product) => product.price > 100);
 
@@ -744,6 +745,29 @@ import a from 'baz.js';
 const age: any = 'seventeen'; // <-- Bad
 
 const age: number = 17; // <-- Good 👍
+```
+</td>
+
+
+<tr>
+<td id='4.10'>
+
+**4.10**
+</td>
+<td>
+
+**Importing specific functions**
+</td>
+<td>
+
+```typescript
+// This way can help reduce the overall size of your bundle
+
+import * as _ from 'lodash'; // <-- Bad
+
+import { get , set } from 'lodash' // <-- Good 👍
+
+import get from 'lodash/get' // <-- Best way but may not always be practical 👍
 ```
 </td>
 </table>
@@ -1031,7 +1055,8 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": "error",
       "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error"
+      "simple-import-sort/exports": "error",
+      "no-duplicate-imports": "error"
     }
 }
 ```
@@ -1077,4 +1102,3 @@ Ref here: https://eslint.org/docs/latest/rules/
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ```
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-
