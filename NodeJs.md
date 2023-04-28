@@ -25,13 +25,11 @@
 - [2.4 Use async/await instead of callbacks wherever possible](#2.4)
 - [2.5 Use null checks and defensive programming techniques to avoid errors caused by undefined variables](#2.5)  
 - [2.6 Should use interfaces to define object shapes](#2.6)  
-<br>
 
 [**3. Comment** ](#3-comment)
 - [3.1 Single-line comment. Format comments like sentences and capitalize the first word](#3.1)  
 - [3.2 Multi-line comments](#3.2)  
 - [3.3 JSDoc comments](#3.3) 
-<br>
 
 [**4. Usage** ](#4-usage)
 - [4.1 Should use library such as lodash to work with Object , Array and more to avoid some exception errors](#4.1) 
@@ -45,8 +43,6 @@
 - [4.9 no-explicit-any](#4.9) 
 - [4.10 Importing specific functions](#4.10) 
 
-<br>
-
 [**5. Security** ](#5-security)
 - [5.1 Use parameterized queries](#5.1) 
 - [5.2 Use libraries with a good security track record](#5.2) 
@@ -56,16 +52,21 @@
 - [5.6 Avoid using input from user to handle files / redirect url etc...](#5.6) 
 - [5.7 Should limit IP access to the database](#5.7) 
 - [5.8 Should encrypt sensitive information if it is necessary to store them in a database](#5.8) 
-<br>
 
 [**6. Implement Lint** ](#6-implement-lint)
+- [Step 1: Install package](#step-1)
+- [Step 2: Create .eslintrc.json (or .js or .yml)](#step-2)
+- [Step 3: Create .prettierrc](#step-3)
+- [Step 4: Add script (package.json)](#step-4)
+
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ## Common 
 - Always check wiki on redmine
 - Always prioritize the coding rules of the project, follow the conventions of your project
 - The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
  
-
+<br>
 
 ## 1. Naming
 The good way to name folder,class,type and variable in Typescript.
@@ -1019,14 +1020,18 @@ export const hashPassword = async (password: string): Promise<string> => {
 Here is an example of how to implement Eslint into a Node.js TypeScript project. <br>
 Ref: https://eslint.org/docs/latest/use/getting-started <br>
 
-**Step 1: Install package**
+#### Step 1
+
+**Install package**
 ```typescript
 npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
 npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
 npm install prettier eslint-plugin-simple-import-sort --save-dev
 ```
 
-**Step 2: Create .eslintrc.json (or .js or .yml)**
+#### Step 2
+
+**Create .eslintrc.json (or .js or .yml)**
 
 ```json
 {
@@ -1061,7 +1066,9 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
 }
 ```
 
-**Step 3: Create .prettierrc**
+#### Step 3
+
+**Create .prettierrc**
 
 ```json
 {
@@ -1079,7 +1086,9 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
 
 ```
 
-**Step 4: Add script (package.json)**
+#### Step 4
+
+**Add script (package.json)**
 
 ```json
 "scripts": {
