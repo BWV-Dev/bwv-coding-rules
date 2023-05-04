@@ -30,6 +30,7 @@
 - [3.1 Single-line comment. Format comments like sentences and capitalize the first word](#3.1)  
 - [3.2 Multi-line comments](#3.2)  
 - [3.3 JSDoc comments](#3.3) 
+- [3.4 Other comments](#3.4) 
 
 [**4. Usage** ](#4-usage)
 - [4.1 Should use library such as lodash to work with Object , Array and more to avoid some exception errors](#4.1) 
@@ -541,6 +542,36 @@ const age = 30;
 */
 function add(a: number, b: number): number {
     return a + b;
+}
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='3.4'>
+
+**3.4**
+</td>
+<td>Other comments <br> We should comment Screen name or API url before doing something</td>
+<td>
+
+```typescript
+
+/**
+ * S306_1 締め処理
+ */
+export const add = async (req: Request, res: Response, next: NextFunction) => {
+  // do add
+};
+
+/**
+ * api/customer
+ * @param {ParamsCustomerSearch} params Parameter search
+ * @returns {ICustomer} - Return customer
+ */
+export const apiSearchCustomer = async (params: ParamsCustomerSearch) => {
+  // do search
 }
 ```
 
