@@ -43,8 +43,11 @@
 - [5.1 Use parameterized queries](#5.1)
 - [5.2 Use libraries with a good security track record](#5.2)
 - [5.3 Implement rate limiting](#5.3)
-- [5.4 Escape data HTML](#5.4)
-- [5.5 Validating input both client-side and server-side](#5.5)
+- [5.4 Use logging and monitoring](#5.4)
+- [5.5 Escape data HTML](#5.5)
+- [5.6 Avoid using input from user to handle files / redirect url etc...](#5.5)
+- [5.7 Validating input both client-side and server-side](#5.7)
+- [5.8 Should encrypt sensitive information if it is necessary to store them in a database](#5.8)
 
 [**6. Implement Lint**](#6-implement-lint)
 
@@ -52,6 +55,8 @@
 - [Step 2: Create .php-cs-fixer.dist.php put in the root directory](#step-2)
 - [Step 3: Add scripts to composer.json](#step-3)
 - [Step 4: Run composer commands](#step-4)
+
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ## 1. Naming
 <table>
@@ -890,6 +895,39 @@ public function boot(): void {
 </td>
 <td>
 
+**Use logging and monitoring.**
+Best way to know if any error on your server.
+</td>
+<td>
+
+```php
+// Bad example: no logging or monitoring
+use Illuminate\Http\Request;
+
+public function handleData(Request $request) {
+    // Store data in database
+}
+
+// Good example: implementing logging and monitoring 👍
+use Illuminate\Http\Request;
+
+public function handleData(Request $request) {
+    Log::info("Data received");
+    Log::info($request->all());
+    // Store data in database
+}
+```
+</td>
+</tr>
+
+<tr>
+<td id='5.5'>
+
+**5.5**
+
+</td>
+<td>
+
 **Escape data HTML**<br />
 In Laravel, use Blade `{{ }}` statements to automatically sent through PHP's htmlspecialchars function to prevent XSS attacks.<br />
 In CakePHP, it does not automatically escape output so we have to manual escape with the `h()` function.
@@ -922,9 +960,36 @@ CakePHP
 </tr>
 
 <tr>
-<td id='5.5'>
+<td id='5.6'>
 
-**5.5**
+**5.6**
+
+</td>
+<td>
+
+**Avoid** using input from user to handle files / redirect url etc... <br>
+Can use ID for finding specific file or url.
+</td>
+<td>
+
+```php
+// Bad
+return redirect($request->input('hiddenInputUrl'));
+
+// Bad
+$dataFileDetail = Storage::get($request->input('filePath'));
+
+// Good 👍
+$redirectUrl = getUrlFromInputId($request->input('hiddenInputUrlId'));
+return redirect($redirectUrl);
+```
+</td>
+</tr>
+
+<tr>
+<td id='5.7'>
+
+**5.7**
 
 </td>
 <td>
@@ -969,6 +1034,43 @@ $article = $this->Articles->newEntity(
     $this->request->getData(),
     ['validate' => 'update'],
 );
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='5.8'>
+
+**5.8**
+
+</td>
+
+<td>
+
+**Should** encrypt sensitive information if it is necessary to store them in a database.<br>
+Such as using Bcrypt to encrypt password.<br>
+Both Laravel and CakePHP support Bcrypt out of the box.
+</td>
+<td>
+
+Laravel
+
+```php
+use Illuminate\Support\Facades\Hash;
+
+$password = "Your Password";
+$hashedPassword = Hash::make($password);
+```
+
+CakePHP
+
+```php
+use Cake\Auth\DefaultPasswordHasher;
+
+$password = "Your Password";
+$hasher = new DefaultPasswordHasher();
+$hashedPassword = $hasher->hash($password);
 ```
 
 </td>
@@ -1098,7 +1200,8 @@ return (new PhpCsFixer\Config())
         'semicolon_after_instruction' => true,
         'simple_to_complex_string_variable' => true,
         'single_class_element_per_statement' => true,
-        'single_import_per_statement' => ['group_to_single_imports' => true],
+        'single_import_per_statement' => false,
+        'group_import' => true,
         'single_line_comment_spacing' => true,
         'single_line_comment_style' => ['comment_types' => ['hash']],
         'single_quote' => true,
