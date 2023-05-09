@@ -9,6 +9,7 @@
 - [1.3 Names of constants](#1.3)
 - [1.4 Use meaningful variable names](#1.4)
 - [1.5 Starting a boolean variable or property with a question words](#1.5)
+- [1.6 Can use prefix variable names to indicate the data type](#1.6)
 
 [**2. Styling**](#2-styling)
 
@@ -19,6 +20,8 @@
 - [2.5 Multi-line arrays, arguments list, parameters list and match expressions must have a trailing comma](#2.5)
 - [2.6 There must not be more than one statement per line](#2.6)
 - [2.7 Use curly braces for all flow control statements](#2.7)
+- [2.8 In function line break rules](#2.8)
+- [2.9 Use `===` instead of `==`, `!==` instead of `!=`](#2.9)
 
 [**3. Comment**](#3-comment)
 
@@ -37,6 +40,10 @@
 - [4.6 Converts simple usages of `array_push($x, $y);` to `$x[] = $y;`](#4.6)
 - [4.7 Logical NOT operators (!) should have one trailing whitespace](#4.7)
 - [4.8 The same namespaces must be grouped](#4.8)
+- [4.9 Named Arguments](#4.9)
+- [4.10 Nullsafe operator](#4.10)
+- [4.11 Null coalescing operator](#4.11)
+- [4.12 Avoid handling nested logic](#4.12)
 
 [**5. Security**](#5-security)
 
@@ -69,8 +76,8 @@
 
 <td>
 
-Name of files, namespaces, classes, interfaces, enums and traits use **UpperCamelCase** format.
-
+Name of files, namespaces, classes, interfaces, enums and traits use **UpperCamelCase** format. </br>
+And should be a **noun**.
 </td>
 
 <td>
@@ -114,8 +121,8 @@ trait CommonTrait
 
 <td>
 
-Names of functions, properties and variables use **lowerCamelCase** format.
-
+Names of functions, properties and variables use **lowerCamelCase** format. </br>
+And should be a **verb**.
 </td>
 
 <td>
@@ -201,6 +208,29 @@ $canResize = true;
 
 </td>
 </tr>
+
+<tr>
+<td id='1.6'>
+
+**1.6**
+
+</td>
+<td> 
+
+Can use prefix variable names to indicate the data type.
+
+</td>
+<td>
+
+```php
+// Better can do
+$strName = 'John';
+$arrAnimals = [];
+```
+
+</td>
+</tr>
+
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 <br />
@@ -461,6 +491,89 @@ if ($arg === null) {
 
 </td>
 </tr>
+
+<tr>
+<td id='2.8'>
+
+**2.8**
+
+</td>
+<td>
+
+**In function line break rules** <br />
+Add 1 line break **after** each if statement, and loop statement. <br />
+Add 1 line break **before** `return` keyword. <br />
+
+</td>
+<td>
+
+```php
+// Bad
+if ($condition) {
+    // ...
+}
+for ($index = 0; $index < $count; $i++) {
+    // ...
+}
+while ($a <= 10) {
+    // ...
+}
+return true;
+
+// Good 👍
+if ($condition) {
+    // ...
+}
+// 1 line break
+for ($index = 0; $index < $count; $i++) {
+    // ...
+}
+// 1 line break
+while ($a <= 10) {
+    // ...
+}
+// 1 line break
+return true;
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='2.9'>
+
+**2.9**
+
+</td>
+<td>
+
+Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.
+
+</td>
+<td>
+
+```php
+// Example: check NULL column data from database
+
+// Bad
+$userFlag = $this->User->getUserFlag();
+// When $userFlag = 0, it also early return
+if ($userFlag == null) {
+    return;
+}
+// ...
+
+// Good 👍
+$userFlag = $this->User->getUserFlag();
+if ($userFlag === null) {
+    return;
+}
+// ...
+```
+
+</td>
+</tr>
+
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 <br />
@@ -799,6 +912,147 @@ use Foo\{Bar, Baz};
 </td>
 </tr>
 
+<tr>
+<td id='4.9'>
+
+**4.9**
+
+</td>
+<td>
+
+**Named Arguments** <br />
+Use Named Arguments instead of Positional arguments when you want to ignore default values.<br />
+For projects using PHP 8 or higher.
+
+</td>
+<td>
+
+```php
+// Bad
+htmlspecialchars($string, default, default, false);
+
+// Good 👍
+htmlspecialchars($string, double_encode: false);
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.10'>
+
+**4.10**
+
+</td>
+<td>
+
+**Nullsafe operator** <br />
+Nullsafe operator makes it simpler to handle values if the object we access can be `null`.<br />
+For projects using PHP 8 or higher.
+
+</td>
+<td>
+
+```php
+// Bad
+$user = null;
+
+if ($user !== null) {
+    $address = $user->address;
+
+    if ($address !== null) {
+        $city = $address->getCity();
+ 
+        if ($city !== null) {
+            $country = $city->country;
+        }
+    }
+}
+
+// Good 👍
+$country = $user?->address?->getCity()?->country;
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.11'>
+
+**4.11**
+
+</td>
+<td>
+
+**Null coalescing operator** <br />
+Use for the common case of needing to use a ternary in conjunction with `isset()`.<br />
+For projects using PHP 7 or higher.
+
+</td>
+<td>
+
+```php
+// Bad
+$foo = isset($bar) ? $bar : 'something';
+
+// Good 👍
+$foo = $bar ?? 'something';
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.12'>
+
+**4.12**
+
+</td>
+<td>
+
+Avoid handling nested logic, instead look for built-in functions to handle.
+
+</td>
+<td>
+
+```php
+// Bad
+if ($day) {
+    if (is_string($day)) {
+        $day = strtolower($day);
+        if ($day === 'friday') {
+            return true;
+        } elseif ($day === 'saturday') {
+            return true;
+        } elseif ($day === 'sunday') {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+} else {
+    return false;
+}
+
+// Good 👍
+if (empty($day)) {
+    return false;
+}
+
+$openingDays = [
+    'friday',
+    'saturday',
+    'sunday',
+];
+
+return in_array(strtolower($day), $openingDays, true);
+```
+
+</td>
+</tr>
+
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
@@ -842,7 +1096,7 @@ $query = $this->query()->whereRaw('user.name LIKE ?', [$nameInput]);
 </td>
 <td>
 
-**Use libraries with a good security track record.**
+**Use libraries with a good security track record**
 You can check rating star on Github or user downloaded, should choose libraries with high ratings to use.
 
 </td>
@@ -862,7 +1116,7 @@ You can check rating star on Github or user downloaded, should choose libraries 
 </td>
 <td>
 
-**Implement rate limiting.**
+**Implement rate limiting**
 Implement rate limiting to prevent brute force attacks and other forms of abuse.
 However, depend on your project large and the original design, you can choose apply this spec or not.
 </br>
@@ -895,7 +1149,7 @@ public function boot(): void {
 </td>
 <td>
 
-**Use logging and monitoring.**
+**Use logging and monitoring**
 Best way to know if any error on your server.
 </td>
 <td>
