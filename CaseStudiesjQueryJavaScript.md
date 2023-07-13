@@ -9,6 +9,8 @@
 
 [**3. Error when use event document.ready() and window.onload()**](#3)
 
+[**4. Use jQuery.fn.extend namespace**](#4)
+
 <br>
 
 ## 1. The event does not load jQuery in HTML
@@ -186,6 +188,74 @@ $(document).ready(function() {
 // Good 👍
 $(window).on('load', function(){
   $('input[name=leasePublishRequestFlg]').val($('input[name=defaultLeasePublishRequestFlg]').val());
+});
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+</tr>
+</tr>
+
+</table>
+
+<br>
+
+## 4. Use jQuery.fn.extend namespace
+
+<table>
+<tr id="4">
+<td width="5%" >
+
+**4.1**
+</td>
+<td width="50%">
+
+Should use jQuery.fn.extend namespace to avoid calling functions with the same name in different javascript file </td>
+<td width="45%">
+
+```dart
+// Bad
+// file test1.js
+function test() {
+  return 'test1';
+}
+
+// file test2.js
+function test() {
+  return 'test2';
+}
+
+// file test3.js
+$(document).ready(function() {
+   test(); // 'test2'
+});
+
+// Good 👍 
+// file test1.js
+jQuery.fn.extend({
+  test1: {
+    test: function () {
+      return 'test1';
+    }
+  }
+});
+
+// file test2.js
+jQuery.fn.extend({
+  test2: {
+    test: function () {
+      return 'test2';
+    }
+  }
+});
+
+// file test3.js
+$(document).ready(function() {
+  $.fn.test1.test(); // 'test1'
+  $.fn.test2.test(); // 'test2'
 });
 ```
 
