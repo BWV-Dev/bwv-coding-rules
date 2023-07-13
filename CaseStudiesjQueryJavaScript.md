@@ -152,3 +152,49 @@ Check if the class you are using is affected by any events
 </tr>
 
 </table>
+
+<br>
+
+## 3. Error when use event document.ready() and window.onload()
+
+<table>
+<tr id="3">
+<td width="5%" >
+
+**3.1**
+</td>
+<td width="50%">
+
+Only one event document.ready() or window.onload() should be used </td>
+<td width="45%">
+
+```dart
+// Bad
+$(document).ready(function() {
+  $.fn.common.defaultLeasePublishRequestFlg = $('input[name=defaultLeasePublishRequestFlg]').val();
+});
+
+$(window).on('load', function(){
+  $('input[name=leasePublishRequestFlg]').val($.fn.common.defaultLeasePublishRequestFlg);
+});
+
+// Good 👍 
+$(document).ready(function() {
+   $('input[name=leasePublishRequestFlg]').val($('input[name=defaultLeasePublishRequestFlg]').val());
+});
+
+// Good 👍
+$(window).on('load', function(){
+  $('input[name=leasePublishRequestFlg]').val($('input[name=defaultLeasePublishRequestFlg]').val());
+});
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+</tr>
+</tr>
+
+</table>
