@@ -3,13 +3,13 @@
 
 ## Table of Contents
 
-[**1. The event does not load jQuery in HTML** ](#1)
+[**1. The event does not load jQuery in HTML** ](#1-the-event-does-not-load-jquery-in-html)
 
-[**2. Use CSS class define styles to handle events in javascript**](#2)
+[**2. Use CSS class define styles to handle events in javascript**](#2-use-css-class-define-styles-to-handle-events-in-javascript)
 
-[**3. Error when use event document.ready() and window.onload()**](#3)
+[**3. Error when use event document.ready() and window.onload()**](#3-error-when-use-event-documentready-and-windowonload)
 
-[**4. Use jQuery.fn.extend namespace**](#4)
+[**4. Use jQuery.fn.extend namespace**](#4-use-jqueryfnextend-namespace)
 
 <br>
 
@@ -24,7 +24,7 @@
 </td>
 <td width="50%">
 
-Inline Javascript should not be used in HTML. </td>
+Inline event should not be used in HTML </td>
 <td width="45%">
 
 ```dart
@@ -45,53 +45,11 @@ Inline Javascript should not be used in HTML. </td>
 
 //file .js
 $('#imgLogo').on('load', function() {
-  document.getElementById('#title').show();
-  or
   $('#title').show();
 });
 ```
 
 </td>
-</tr>
-<tr>
-<td>
-
-**1.2**
-</td>
-<td>
-
-jQuery should not be used in HTML
-</td>
-<td>
-
-```dart
-// Bad
-<img id="imgLogo" src="imageUrl" onload="$('#title').show()" width="300px">
-<h1 id="title" style="display: none;">
-  Show on the title image
-</h1>
-
-// Good 👍 
-//file .html
-<img id="imgLogo" src="imageUrl" width="300px">
-<h1 id="title" style="display: none;">
-  Show on the title image
-</h1>
-
-//file .js
-$('#imgLogo').on('load', function() {
-  $('#title').show();
-});
-
-or
-
-$(document).ready(function() {
-  $('#title').show();
-});
-```
-
-</td>
-</tr>
 </tr>
 
 </table>
