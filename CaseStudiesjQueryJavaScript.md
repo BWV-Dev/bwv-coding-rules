@@ -66,49 +66,22 @@ $('#imgLogo').on('load', function() {
 </td>
 <td width="50%">
 
-Class names should be given meaning and clarity when used </td>
+Can use some other selector to declare event if necessary, such as: data-* , class, id. However, if this class also has an event assignment in the javascript file then you must name such as: 'js-{{class}}' </td>
 <td width="45%">
 
 ```dart
-// Bad
-<img class="abc" src="imageUrl">
-
-// Good 👍 
-<img class="img-logo" src="imageUrl">
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-**2.2**
-</td>
-<td>
-
-When using an existing class, test it again
-</td>
-<td>
-
-```dart
 // file .html
-<img class="pointer-item" src="image" width="300px">
+<img class="js-pointer-item" src="image" width="300px">
 <h1 class="pointer-item">pointer item test</h1>
 
 // file .js
-$('.pointer-item').click(function() {
+$('.js-pointer-item').click(function() {
   window.open('https://www.google.com/', '_blank');
 });
-
-// Bad
-Use and do not check again
-
-// Good 👍 
-Check if the class you are using is affected by any events
 ```
 
+
 </td>
-</tr>
 </tr>
 
 </table>
@@ -125,36 +98,18 @@ Check if the class you are using is affected by any events
 </td>
 <td width="50%">
 
-Only one event document.ready() or window.onload() should be used </td>
+Only one event type document.ready() or window.onload() can be used in a page. If the case loads all the content, use window.onload(). However, it is recommended to use a document.ready method because this method can be used in many js files embedded in a page. If you need to wait for an element to finish loading, you can use the following </td>
 <td width="45%">
 
 ```dart
-// Bad
-$(document).ready(function() {
-  $.fn.common.defaultLeasePublishRequestFlg = $('input[name=defaultLeasePublishRequestFlg]').val();
-});
-
-$(window).on('load', function(){
-  $('input[name=leasePublishRequestFlg]').val($.fn.common.defaultLeasePublishRequestFlg);
-});
-
-// Good 👍 
-$(document).ready(function() {
-   $('input[name=leasePublishRequestFlg]').val($('input[name=defaultLeasePublishRequestFlg]').val());
-});
-
-// Good 👍
-$(window).on('load', function(){
-  $('input[name=leasePublishRequestFlg]').val($('input[name=defaultLeasePublishRequestFlg]').val());
-});
+  $(document).ready(function() {
+      $('img').on('load', function() {
+        $('#title').show();
+      })
+  });
 ```
 
 </td>
-</tr>
-<tr>
-<td>
-
-</tr>
 </tr>
 
 </table>
@@ -218,11 +173,6 @@ $(document).ready(function() {
 ```
 
 </td>
-</tr>
-<tr>
-<td>
-
-</tr>
 </tr>
 
 </table>
