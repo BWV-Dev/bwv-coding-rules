@@ -30,7 +30,7 @@ Inline event should not be used in HTML </td>
 ```dart
 // Bad
 <img id="imgLogo" width="300px"
-  src="imageUrl" onload="document.getElementById('#title').show()" >
+  src="imageUrl" onload="$('#title').show()" >
 
 <h1 id="title" style="display: none;">
   Show on the title image
