@@ -11,4 +11,5 @@
 ## 2. Web
 - [**NodeJS**](./NodeJs.md)
 - [**PHP**](./PHP.md)
+- [**Python**](./Python.md)
 - [**Case Studies jQuery & JavaScript**](./CaseStudiesjQueryJavaScript.md)
