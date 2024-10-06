@@ -11,6 +11,8 @@
 
 [**4. Use jQuery.fn.extend namespace**](#4-use-jqueryfnextend-namespace)
 
+[**5. Check new HTML class/ID effect**](#5-check-new-html-classid-effect)
+
 <br>
 
 ## 1. The event does not load jQuery in HTML
@@ -175,4 +177,63 @@ $(document).ready(function() {
 </td>
 </tr>
 
+</table>
+<br>
+
+## 5. Check new HTML class/ID effect
+
+<table>
+<tr id="5">
+<td width="5%" >
+
+**5.1**
+
+</td>
+<td width="50%">
+The new HTML class/ID is not used in another HTML tag.
+</td>
+
+<td width="45%">
+
+```html
+// File .html
+
+<button class="btn-change-time" width="300px">
+
+// Good 👍 
+// Search results for the keyword 'btn-change-time' in all project files: 0 results
+```
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr id="5">
+<td width="5%" >
+
+**5.2**
+
+</td>
+<td width="50%">
+The new HTML class/ID is used in another HTML tag but does not affect any of the existing logic.
+</td>
+
+<td width="45%">
+
+```html
+// Existing code: file .html
+<script>
+$('#upload-document').on('click', function() {
+  formValidate();
+})
+</script>
+<button id="upload-document" class="form-submit" width="30px">
+
+// No problem 👍
+<button id="choose-file" class="form-submit" width="30px">
+```
+
+</td>
+</tr>
 </table>
