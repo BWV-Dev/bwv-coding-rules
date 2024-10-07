@@ -11,6 +11,8 @@
 
 [**4. Use jQuery.fn.extend namespace**](#4-use-jqueryfnextend-namespace)
 
+[**5. Should avoid using duplicate class/ID html attribute**](#5-should-avoid-using-duplicate-classid-html-attribute)
+
 <br>
 
 ## 1. The event does not load jQuery in HTML
@@ -175,4 +177,125 @@ $(document).ready(function() {
 </td>
 </tr>
 
+</table>
+<br>
+
+## 5. Should avoid using duplicate class/ID html attribute
+
+<table>
+<tr id="5.1">
+<td width="5%" >
+
+**5.1**
+
+</td>
+<td width="50%">
+Use class names carefully to avoid conflicts with existing JavaScript events.
+</td>
+
+<td width="45%">
+
+```dart
+// File .html
+
+// Bad
+<!-- Existing button -->
+<button class="btn-change-time" width="50px">
+  Change delivery time
+</button>
+
+<!-- New button -->
+<button class="btn-change-time" width="30px">
+  Change order time
+</button>
+
+// Good 👍
+<!-- Existing button -->
+<button class="btn-change-time" width="50px">
+  Change delivery time
+</button>
+
+<!-- New button -->
+<button class="btn-change-order-time" width="30px">
+  Change order time
+</button>
+
+// File .js
+
+// Existing JS event
+$('.btn-change-time').on('click', function() {
+  openCalendarPopup();
+})
+```
+
+</td>
+</tr>
+<tr id="5.2">
+<td width="5%" >
+
+**5.2**
+
+</td>
+<td width="50%">
+Use unique IDs for event bindings to ensure distinct functionality and avoid conflicts.
+</td>
+
+<td width="45%">
+
+```dart
+// Example 1
+
+// File .html
+
+// Bad
+
+<!-- Existing button -->
+<button id="btn-submit-order" class="btn-submit">
+  Submit order
+</button>
+
+<!-- New button -->
+<button id="btn-cancel-order" class="btn-submit">
+  Cancel order
+</button>
+
+<script>
+// Existing JS event
+$('.btn-submit').on('click', function() {
+  formValidate();
+})
+</script>
+
+// Good 👍
+<!-- Existing button -->
+<button id="btn-submit-order" class="btn-submit">
+  Submit order
+</button>
+
+<!-- New button -->
+<button id="btn-cancel-order" class="btn-submit">
+  Cancel order
+</button>
+
+<script>
+// Existing JS event
+$('#btn-submit-order').on('click', function() {
+  formValidate();
+})
+</script>
+
+// Example 2
+
+// Bad
+<input type="text" id="customer-name" value="Jane"><br>
+<input type="text" id="customer-name" value="David"><br>
+
+<script>
+  console.log($('#customer-name').val());
+  // => Result: Jane
+</script>
+```
+
+</td>
+</tr>
 </table>
