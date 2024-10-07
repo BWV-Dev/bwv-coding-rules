@@ -190,22 +190,15 @@ $(document).ready(function() {
 
 </td>
 <td width="50%">
-Ensure that each button has a unique class to avoid conflicts with existing functionality and event handling in the JavaScript code.
+Use class names carefully to avoid conflicts with existing JavaScript events.
 </td>
 
 <td width="45%">
 
-```html
+```dart
 // File .html
 
 // Bad
-<script>
-// Existing JS event
-$('.btn-change-time').on('click', function() {
-  openCalendarPopup();
-})
-</script>
-
 <!-- Existing button -->
 <button class="btn-change-time" width="50px">
   Change delivery time
@@ -217,13 +210,6 @@ $('.btn-change-time').on('click', function() {
 </button>
 
 // Good 👍
-<script>
-// Existing JS event
-$('.btn-change-time').on('click', function() {
-  openCalendarPopup();
-})
-</script>
-
 <!-- Existing button -->
 <button class="btn-change-time" width="50px">
   Change delivery time
@@ -233,13 +219,17 @@ $('.btn-change-time').on('click', function() {
 <button class="btn-change-order-time" width="30px">
   Change order time
 </button>
+
+// File .js
+
+// Existing JS event
+$('.btn-change-time').on('click', function() {
+  openCalendarPopup();
+})
 ```
 
 </td>
 </tr>
-</table>
-
-<table>
 <tr id="5.2">
 <td width="5%" >
 
@@ -252,10 +242,23 @@ Use unique IDs for event bindings to ensure distinct functionality and avoid con
 
 <td width="45%">
 
-```html
+```dart
+// Example 1
+
 // File .html
 
 // Bad
+
+<!-- Existing button -->
+<button id="btn-submit-order" class="btn-submit">
+  Submit order
+</button>
+
+<!-- New button -->
+<button id="btn-cancel-order" class="btn-submit">
+  Cancel order
+</button>
+
 <script>
 // Existing JS event
 $('.btn-submit').on('click', function() {
@@ -263,6 +266,7 @@ $('.btn-submit').on('click', function() {
 })
 </script>
 
+// Good 👍
 <!-- Existing button -->
 <button id="btn-submit-order" class="btn-submit">
   Submit order
@@ -273,7 +277,6 @@ $('.btn-submit').on('click', function() {
   Cancel order
 </button>
 
-// Good 👍
 <script>
 // Existing JS event
 $('#btn-submit-order').on('click', function() {
@@ -281,15 +284,16 @@ $('#btn-submit-order').on('click', function() {
 })
 </script>
 
-<!-- Existing button -->
-<button id="btn-submit-order" class="btn-submit">
-  Submit order
-</button>
+// Example 2
 
-<!-- New button -->
-<button id="btn-cancel-order" class="btn-submit">
-  Cancel order
-</button>
+// Bad
+<input type="text" id="customer-name" value="Jane"><br>
+<input type="text" id="customer-name" value="David"><br>
+
+<script>
+  console.log($('#customer-name').val());
+  // => Result: Jane
+</script>
 ```
 
 </td>
