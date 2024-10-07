@@ -190,7 +190,7 @@ $(document).ready(function() {
 
 </td>
 <td width="50%">
-The new HTML class/ID is not used in another HTML tag.
+Ensure that each button has a unique class to avoid conflicts with existing functionality and event handling in the JavaScript code.
 </td>
 
 <td width="45%">
@@ -213,7 +213,7 @@ $('.btn-change-time').on('click', function() {
 
 <!-- New button -->
 <button class="btn-change-time" width="30px">
-  Cancel order
+  Change order time
 </button>
 
 // Good 👍
@@ -230,8 +230,8 @@ $('.btn-change-time').on('click', function() {
 </button>
 
 <!-- New button -->
-<button class="btn-cancel-order" width="30px">
-  Cancel order
+<button class="btn-change-order-time" width="30px">
+  Change order time
 </button>
 ```
 
@@ -247,7 +247,7 @@ $('.btn-change-time').on('click', function() {
 
 </td>
 <td width="50%">
-The new HTML class/ID is used in another HTML tag but does not affect any of the existing logic.
+Use unique IDs for event bindings to ensure distinct functionality and avoid conflicts.
 </td>
 
 <td width="45%">
