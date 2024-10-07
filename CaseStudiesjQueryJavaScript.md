@@ -11,7 +11,7 @@
 
 [**4. Use jQuery.fn.extend namespace**](#4-use-jqueryfnextend-namespace)
 
-[**5. Check new HTML class/ID effect**](#5-check-new-html-classid-effect)
+[**5. Should avoid using duplicate class/ID html attribute**](#5-should-avoid-using-duplicate-classid-html-attribute)
 
 <br>
 
@@ -180,10 +180,10 @@ $(document).ready(function() {
 </table>
 <br>
 
-## 5. Check new HTML class/ID effect
+## 5. Should avoid using duplicate class/ID html attribute
 
 <table>
-<tr id="5">
+<tr id="5.1">
 <td width="5%" >
 
 **5.1**
@@ -198,10 +198,41 @@ The new HTML class/ID is not used in another HTML tag.
 ```html
 // File .html
 
-<button class="btn-change-time" width="300px">
+// Bad
+<script>
+// Existing JS event
+$('.btn-change-time').on('click', function() {
+  openCalendarPopup();
+})
+</script>
 
-// Good 👍 
-// Search results for the keyword 'btn-change-time' in all project files: 0 results
+<!-- Existing button -->
+<button class="btn-change-time" width="50px">
+  Change delivery time
+</button>
+
+<!-- New button -->
+<button class="btn-change-time" width="30px">
+  Cancel order
+</button>
+
+// Good 👍
+<script>
+// Existing JS event
+$('.btn-change-time').on('click', function() {
+  openCalendarPopup();
+})
+</script>
+
+<!-- Existing button -->
+<button class="btn-change-time" width="50px">
+  Change delivery time
+</button>
+
+<!-- New button -->
+<button class="btn-cancel-order" width="30px">
+  Cancel order
+</button>
 ```
 
 </td>
@@ -209,7 +240,7 @@ The new HTML class/ID is not used in another HTML tag.
 </table>
 
 <table>
-<tr id="5">
+<tr id="5.2">
 <td width="5%" >
 
 **5.2**
@@ -222,16 +253,43 @@ The new HTML class/ID is used in another HTML tag but does not affect any of the
 <td width="45%">
 
 ```html
-// Existing code: file .html
+// File .html
+
+// Bad
 <script>
-$('#upload-document').on('click', function() {
+// Existing JS event
+$('.btn-submit').on('click', function() {
   formValidate();
 })
 </script>
-<button id="upload-document" class="form-submit" width="30px">
 
-// No problem 👍
-<button id="choose-file" class="form-submit" width="30px">
+<!-- Existing button -->
+<button id="btn-submit-order" class="btn-submit">
+  Submit order
+</button>
+
+<!-- New button -->
+<button id="btn-cancel-order" class="btn-submit">
+  Cancel order
+</button>
+
+// Good 👍
+<script>
+// Existing JS event
+$('#btn-submit-order').on('click', function() {
+  formValidate();
+})
+</script>
+
+<!-- Existing button -->
+<button id="btn-submit-order" class="btn-submit">
+  Submit order
+</button>
+
+<!-- New button -->
+<button id="btn-cancel-order" class="btn-submit">
+  Cancel order
+</button>
 ```
 
 </td>
