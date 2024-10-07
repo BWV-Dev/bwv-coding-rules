@@ -122,7 +122,7 @@ trait CommonTrait
 <td>
 
 Names of functions, properties and variables use **lowerCamelCase** format. </br>
-And should be a **verb**.
+Names of functions should be a **verb**.
 </td>
 
 <td>
