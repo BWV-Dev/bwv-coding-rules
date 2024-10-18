@@ -48,7 +48,7 @@
 [**5. Security**](#5-security)
 
 - [5.1 Use parameterized queries](#5.1)
-- [5.2 Use libraries with a good security track record](#5.2)
+- [5.2 Choose Libraries with Proven Security and Reliability](#5.2)
 - [5.3 Implement rate limiting](#5.3)
 - [5.4 Use logging and monitoring](#5.4)
 - [5.5 Escape data HTML](#5.5)
@@ -1096,15 +1096,19 @@ $query = $this->query()->whereRaw('user.name LIKE ?', [$nameInput]);
 </td>
 <td>
 
-**Use libraries with a good security track record**
-You can check rating star on Github or user downloaded, should choose libraries with high ratings to use.
+Choose Libraries with Proven Security and Reliability.
 
 </td>
 <td>
 
-```php
-// No example
-```
+- **Popularity & Downloads**: Use GitHub stars and download counts (should be at least 1,000 downloads in the last 30 days) as an initial filter, but don’t rely solely on them.
+- **Security Monitoring**: Look for any vulnerabilities in CVE databases and security alerts. Use [Snyk](https://security.snyk.io/vuln/composer) to check for vulnerabilities. Avoid libraries with unresolved or critical vulnerabilities.
+- **Active Maintenance**: Check for recent commits, quick issue resolution, and active pull requests.
+- **License Compliance**: Ensure the library uses a permissive, project-compatible license (e.g., MIT, Apache 2.0).
+- **Audits & Testing**: Prefer libraries with external security audits or penetration testing, and those with high test coverage.
+- **Code Quality**: Check for the use of linters, static analysis tools, and automated CI for code quality.
+- **Consider Alternatives**: Look for community-maintained versions (forks) if the original library is no longer well-maintained but still widely used.
+
 </td>
 </tr>
 
@@ -1166,7 +1170,7 @@ public function handleData(Request $request) {
 use Illuminate\Http\Request;
 
 public function handleData(Request $request) {
-    Log::info("Data received");
+    Log::info('Data received');
     Log::info($request->all());
     // Store data in database
 }
@@ -1313,7 +1317,7 @@ Laravel
 ```php
 use Illuminate\Support\Facades\Hash;
 
-$password = "Your Password";
+$password = 'Your Password';
 $hashedPassword = Hash::make($password);
 ```
 
@@ -1322,7 +1326,7 @@ CakePHP
 ```php
 use Cake\Auth\DefaultPasswordHasher;
 
-$password = "Your Password";
+$password = 'Your Password';
 $hasher = new DefaultPasswordHasher();
 $hashedPassword = $hasher->hash($password);
 ```
