@@ -1101,13 +1101,17 @@ Choose Libraries with Proven Security and Reliability.
 </td>
 <td>
 
-- **Popularity & Downloads**: Use GitHub stars and download counts (should be at least 1,000 downloads in the last 30 days) as an initial filter, but don’t rely solely on them.
+**For Open Source Libraries**:
+- **Popularity & Downloads**: Use git platform stars(Github stars, Gitlab stars, etc.) and download counts (should be at least 1,000 downloads in the last 30 days) as an initial filter, but don’t rely solely on them.
 - **Security Monitoring**: Look for any vulnerabilities in CVE databases and security alerts. Use [Snyk](https://security.snyk.io/vuln/composer) to check for vulnerabilities. Avoid libraries with unresolved or critical vulnerabilities.
 - **Active Maintenance**: Check for recent commits, quick issue resolution, and active pull requests.
 - **License Compliance**: Ensure the library uses a permissive, project-compatible license (e.g., MIT, Apache 2.0).
 - **Audits & Testing**: Prefer libraries with external security audits or penetration testing, and those with high test coverage.
 - **Code Quality**: Check for the use of linters, static analysis tools, and automated CI for code quality.
 - **Consider Alternatives**: Look for community-maintained versions (forks) if the original library is no longer well-maintained but still widely used.
+
+**For Third-Party Proprietary Libraries**:
+- **Security Commitment Review**: Before integrating a third-party library, read and understand its security policies, data handling practices, and any security commitments to ensure they align with the project's security requirements and standards.
 
 </td>
 </tr>
