@@ -1,4 +1,4 @@
-# Case Studies jQuery & JavaScript
+# Case Studies for web programming
 
 
 ## Table of Contents
@@ -12,6 +12,8 @@
 [**4. Use jQuery.fn.extend namespace**](#4-use-jqueryfnextend-namespace)
 
 [**5. Should avoid using duplicate class/ID html attribute**](#5-should-avoid-using-duplicate-classid-html-attribute)
+
+[**6. Handle default when the get value does not exist in the database**](#6-handle-default-when-the-get-value-does-not-exist-in-the-database)
 
 <br>
 
@@ -294,6 +296,67 @@ $('#btn-submit-order').on('click', function() {
   console.log($('#customer-name').val());
   // => Result: Jane
 </script>
+```
+
+</td>
+</tr>
+</table>
+<br>
+
+## 6. Handle default when the get value does not exist in the database
+
+<table>
+<tr id="6.1">
+<td width="5%" >
+
+**6.1**
+
+</td>
+<td width="50%">
+Have to handle default when the get value does not exist in the database.<br>
+※ If you're unsure how to handle the default case, you need to consult QA.
+</td>
+
+<td width="45%">
+
+Table: `categories`
+
+| id | name | sort_number |
+| - | - | - |
+| 1 | Category 1 | 1 |
+| 2 | Category 2 | 2 |
+
+Requirements:<br>
+Add new record to `categories` table with:<br>
+`id` = auto increment<br>
+`name` = "Category 3"<br>
+**`sort_number` = (Get max `sort_number` in `categories` table) + 1**<br>
+
+Sample code:
+
+```php
+$queryResult = DB::table('categories')->query()
+    ->select('sort_number')
+    ->orderBy('sort_number', 'desc')
+    ->first();
+```
+
+In case there are no records in the categories table, the above query will return NULL.<br>
+Therefore, we need to handle a default value for that scenario.
+
+```php
+// Bad
+// Without handle default value
+$maxSortNumber = $queryResult->sort_number;
+
+// Good 👍
+// With handle default value
+$maxSortNumber = $queryResult->sort_number ?? 0;
+
+$newCategory = new Category();
+$newCategory->name = 'Category 3';
+$newCategory->sort_number = $maxSortNumber + 1;
+$newCategory->save();
 ```
 
 </td>
