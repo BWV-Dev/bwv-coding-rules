@@ -341,7 +341,7 @@ $queryResult = DB::table('categories')->query()
     ->first();
 ```
 
-In case there are no records in the categories table, the above query will return NULL.<br>
+In case there are no records in the `categories` table, the above query will return NULL.<br>
 Therefore, we need to handle a default value for that scenario.
 
 ```php
