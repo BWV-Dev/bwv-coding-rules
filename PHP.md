@@ -40,10 +40,11 @@
 - [4.6 Converts simple usages of `array_push($x, $y);` to `$x[] = $y;`](#4.6)
 - [4.7 Logical NOT operators (!) should have one trailing whitespace](#4.7)
 - [4.8 The same namespaces must be grouped](#4.8)
-- [4.9 Named Arguments](#4.9)
-- [4.10 Nullsafe operator](#4.10)
-- [4.11 Null coalescing operator](#4.11)
-- [4.12 Avoid handling nested logic](#4.12)
+- [4.9 Sort import statements alphabetically](#4.9)
+- [4.10 Named Arguments](#4.10)
+- [4.11 Nullsafe operator](#4.11)
+- [4.12 Null coalescing operator](#4.12)
+- [4.13 Avoid handling nested logic](#4.13)
 
 [**5. Security**](#5-security)
 
@@ -920,6 +921,43 @@ use Foo\{Bar, Baz};
 </td>
 <td>
 
+**Sort import statements alphabetically** <br />
+All `use` statements (imports) must be sorted alphabetically.
+
+</td>
+<td>
+
+```php
+// Bad
+use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\{
+    User,
+    Post,
+};
+use App\Controllers\UserController;
+
+// Good 👍
+use App\Controllers\UserController;
+use App\Models\{
+    Post,
+    User,
+};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.10'>
+
+**4.10**
+
+</td>
+<td>
+
 **Named Arguments** <br />
 Use Named Arguments instead of Positional arguments when you want to ignore default values.<br />
 For projects using PHP 8 or higher.
@@ -939,9 +977,9 @@ htmlspecialchars($string, double_encode: false);
 </tr>
 
 <tr>
-<td id='4.10'>
+<td id='4.11'>
 
-**4.10**
+**4.11**
 
 </td>
 <td>
@@ -977,9 +1015,9 @@ $country = $user?->address?->getCity()?->country;
 </tr>
 
 <tr>
-<td id='4.11'>
+<td id='4.12'>
 
-**4.11**
+**4.12**
 
 </td>
 <td>
@@ -1003,9 +1041,9 @@ $foo = $bar ?? 'something';
 </tr>
 
 <tr>
-<td id='4.12'>
+<td id='4.13'>
 
-**4.12**
+**4.13**
 
 </td>
 <td>
