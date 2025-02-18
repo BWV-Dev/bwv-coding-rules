@@ -1100,7 +1100,8 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
       "no-console": "error",
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
-      "no-duplicate-imports": "error"
+      "no-duplicate-imports": "error",
+      "max-lines": ["error", 1000]
     }
 }
 ```
@@ -1144,9 +1145,15 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
 Ref here: https://eslint.org/docs/latest/rules/
 <br>
 
-**There are some rules that don't necessarily have to produce an error all the time. For example, in special situations where we need to use the 'any' type, we can disable these rules with the following command:**
+**There are some rules that don't necessarily have to produce an error all the time.**
 
+For example, in special situations where we need to use the 'any' type, we can disable these rules with the following command:
 ```javascript
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ```
+Similarly, for the max-lines rule, in some specific files, we can disable this rule with the following command:
+```javascript
+  /* eslint-disable max-lines */
+```
+
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
