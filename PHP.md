@@ -45,6 +45,7 @@
 - [4.11 Nullsafe operator](#4.11)
 - [4.12 Null coalescing operator](#4.12)
 - [4.13 Avoid handling nested logic](#4.13)
+- [4.14 Maximum number of lines per file](#4.14)
 
 [**5. Security**](#5-security)
 
@@ -1087,6 +1088,29 @@ $openingDays = [
 
 return in_array(strtolower($day), $openingDays, true);
 ```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.14'>
+
+**4.14**
+
+</td>
+<td>
+
+**Maximum number of lines per file** <br />
+To better the code quality, maintainability, and performance, keep files under **1000 lines**.
+
+</td>
+<td>
+
+To avoid violating this rule, your code should follow some best practices:
+
+- Apply the Single Responsibility Principle (SRP): Each file should focus on one specific functionality or purpose.
+- Modularization: Break down your code into logical modules or components that can be organized in separate files.
+- Reuse and Don't Repeat Yourself (DRY): Use inheritance, composition, or utility functions to prevent repeating similar code.
 
 </td>
 </tr>
