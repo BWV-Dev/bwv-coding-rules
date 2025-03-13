@@ -42,7 +42,8 @@
 - [4.7 no-var](#4.7) 
 - [4.8 sort-import](#4.8) 
 - [4.9 no-explicit-any](#4.9) 
-- [4.10 Importing specific functions](#4.10) 
+- [4.10 Importing specific functions](#4.10)
+- [4.11 Maximum number of lines per file](#4.11)
 
 [**5. Security** ](#5-security)
 - [5.1 Use parameterized queries](#5.1) 
@@ -802,6 +803,30 @@ import { get , set } from 'lodash' // <-- Good 👍
 import get from 'lodash/get' // <-- Best way but may not always be practical 👍
 ```
 </td>
+</tr>
+
+<tr>
+<td id='4.11'>
+
+**4.11**
+</td>
+
+<td>
+
+**Maximum number of lines per file** <br />
+Limit each file to a maximum of **1000 lines** of code to enhance code quality, maintainability, and performance.
+</td>
+
+<td>
+
+To ensure compliance with this rule, adhere to the following best practices in your code:
+
+- Implement the Single Responsibility Principle (SRP): Ensure each file is dedicated to a single functionality or purpose.
+- Modularization: Break down your code into logical modules or components that organized in separate files.
+- Adhere to the Don't Repeat Yourself (DRY) principle: Use inheritance, composition, or utility functions to prevent code duplication.
+
+</td>
+</tr>
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
