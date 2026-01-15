@@ -44,6 +44,7 @@
 - [4.9 no-explicit-any](#4.9) 
 - [4.10 Importing specific functions](#4.10)
 - [4.11 Maximum number of lines per file](#4.11)
+- [4.12 Type-Safe Comparisons](#4.12)
 
 [**5. Security** ](#5-security)
 - [5.1 Use parameterized queries](#5.1) 
@@ -824,6 +825,44 @@ To ensure compliance with this rule, adhere to the following best practices in y
 - Implement the Single Responsibility Principle (SRP): Ensure each file is dedicated to a single functionality or purpose.
 - Modularization: Break down your code into logical modules or components that organized in separate files.
 - Adhere to the Don't Repeat Yourself (DRY) principle: Use inheritance, composition, or utility functions to prevent code duplication.
+
+</td>
+</tr>
+
+<tr>
+<td id='4.12'>
+
+**4.12**
+</td>
+
+<td>
+
+**Type-Safe Comparisons**<br>
+Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.<br>
+When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g., `'1' === 1` is `false`).
+</td>
+
+<td>
+
+```typescript
+  const inputValue = '1'; // Value from request, DB, etc.
+
+  // Bad - type mismatch (string vs number)
+  const STATUS_ACTIVE = 1;
+  if (inputValue === STATUS_ACTIVE) { ... } // '1' === 1 → false
+
+  const VALID_IDS = [1, 2, 3, 4, 5];
+  if (VALID_IDS.includes(inputValue)) { ... } // '5' not in [1,2,3,4,5]
+
+  // Good 👍 - Convert to the SAME type before comparing
+  // Option 1: Convert to number
+  enum YesFlag { Yes = 1, No = 0 }
+  if (Number(inputValue) === YesFlag.Yes) { ... }
+
+  // Option 2: Convert to string
+  const VALID_STATUSES = ['1', '2', '3'];
+  if (VALID_STATUSES.includes(String(inputValue))) { ... }
+  ```
 
 </td>
 </tr>
