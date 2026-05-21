@@ -354,18 +354,25 @@ const message = 'Hello, world!';
 </td>
 <td>
 
-Use type annotations whenever possible to help with code readability and maintainability
+**Type annotations for function**<br>
+- **Parameters**: **REQUIRED** to annotate explicitly. 
+- **Return type**: **OPTIONAL** when the function returns a single, simple shape — let TypeScript infer it.
+- **Return type**: **REQUIRED** when the function can return multiple shapes/formats (union types, conditional responses, etc.) so callers know exactly what to handle.
+</td>
 <td>
 
 ```typescript
-// Bad
-function calculateDiscount(price, discountPercentage) {
-  return price * (discountPercentage / 100);
+// Bad - missing parameter types
+function calculateDiscount(price, discount) { ... }
+
+// Good 👍 - parameters typed, return type inferred
+function calculateDiscount(price: number, discount: number) {
+  return price * (discount / 100);
 }
 
-// Good 👍
-function calculateDiscount(price: number, discountPercentage: number): number {
-  return price * (discountPercentage / 100);
+// Good 👍 - multiple return shapes → declare return type explicitly
+function findUser(id: number): User | { error: string } | null {
+  ...
 }
 ```
 </td>
@@ -768,16 +775,24 @@ import a from 'baz.js';
 </td>
 <td>
 
-**no-explicit-any**
+**no-explicit-any**<br>
+- **Avoid abusing** `any` — it disables type checking. Prefer specific types or `unknown` when uncertain.
+- **Acceptable** for genuinely hard-to-type cases (complex generics, dynamic external payloads, untyped 3rd-party libs).
 </td>
 <td>
 
 ```typescript
-// This rule disallows the use of the any type, which can lead to unsafe code.
+// Bad
+const age: any = 'seventeen';
 
-const age: any = 'seventeen'; // <-- Bad
+// Good 👍 - specific type
+const age: number = 17;
 
-const age: number = 17; // <-- Good 👍
+// Good 👍 - 'unknown' when type is uncertain, narrow before use
+function parsePayload(raw: unknown) { ... }
+
+// Acceptable - untyped 3rd-party lib
+const client: any = require('legacy-untyped-sdk');
 ```
 </td>
 
