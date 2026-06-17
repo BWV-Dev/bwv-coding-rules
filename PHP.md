@@ -1103,6 +1103,8 @@ return in_array(strtolower($day), $openingDays, true);
 **Maximum number of lines per file** <br />
 Limit each file to a maximum of **1000 lines** of code to enhance code quality, maintainability, and performance.
 
+> **Note:** If a file cannot follow this limit, the developer must explain the reason and get approval from the Team Lead or Code Reviewer before making an exception.
+
 </td>
 <td>
 
@@ -1111,6 +1113,9 @@ To ensure compliance with this rule, adhere to the following best practices in y
 - Implement the Single Responsibility Principle (SRP): Ensure each file is dedicated to a single functionality or purpose.
 - Modularization: Break down your code into logical modules or components that organized in separate files.
 - Adhere to the Don't Repeat Yourself (DRY) principle: Use inheritance, composition, or utility functions to prevent code duplication.
+
+> ⚠️ **Do not bypass or disable this rule without reporting it and getting approval first.** <br />
+> Some files may need more than 1000 lines, such as generated code, migration files, legacy code, or large service/repository implementations. In such cases, the reason must be documented in a code review comment or the Pull Request description, and approval must be obtained from the Team Lead or Code Reviewer before merging.
 
 </td>
 </tr>
