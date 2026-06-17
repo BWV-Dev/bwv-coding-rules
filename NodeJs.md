@@ -1110,41 +1110,9 @@ npm install prettier eslint-plugin-simple-import-sort --save-dev
 
 #### Step 2
 
-**Create .eslintrc.json (or .js or .yml)**
+**Create eslint.config.mjs**
 
-```json
-{
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "extends": [
-      "plugin:@typescript-eslint/recommended",
-      "plugin:prettier/recommended",
-      "prettier"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "plugins": [
-      "@typescript-eslint",
-      "prettier",
-      "simple-import-sort"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-non-null-assertion": "error",
-      "@typescript-eslint/no-explicit-any": "error",
-      "no-console": "error",
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
-      "no-duplicate-imports": "error",
-      "max-lines": ["error", 1000]
-    }
-}
-```
+Refer to [eslint.config.template.mjs](./eslint.config.template.mjs) — copy it to your project root as `eslint.config.mjs` and enable the layers your stack needs.
 
 #### Step 3
 
