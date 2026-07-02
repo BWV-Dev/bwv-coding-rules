@@ -5,61 +5,56 @@
 <br>
 
 [**1. Naming** ](#1-naming)
-- [1.1 Typescript normally use convention camelCase for variable](#1.1)
+- [1.1 Use camelCase for variables, functions, methods and object properties.](#1.1)
 - [1.2 Use meaningful variable names](#1.2)
-- [1.3 Avoid using overly long variable names](#1.3)
-- [1.4 Do not start variable names with an underscore](#1.4)
-- [1.5 Can use prefix variable names to indicate the data type](#1.5)
-- [1.6 DON’T use unclear abbreviations in variable names](#1.6)
-- [1.7 Should use UPPER_CASE and _ for CONSTANT variable](#1.7)
-- [1.8 Starting a boolean variable or property with a question words like can, is, should...](#1.8)
-- [1.9 Should use let or const for variable instead var](#1.9)
+- [1.3 Avoid overly long or overly short names](#1.3)
+- [1.4 Use boolean names that describe state or capability](#1.4)
+- [1.5 Do not use unclear abbreviations in variable names](#1.5)
+- [1.6 Use PascalCase for classes, interfaces, type aliases and enums](#1.6)
+- [1.7 Use UPPER_CASE only for module-level constants](#1.7)
+- [1.8 Do not use data type prefixes in variable names](#1.8)
+- [1.9 Use const or let instead of var](#1.9)
 - [1.10 Avoid using variable names that are identical to keywords in the programming language or libraries](#1.10)
-- [1.11 TypeScript conventions, use PascalCase for class names, data types, and enumerations (enums)](#1.11)
-  <br>
 
-[**2. Styling** ](#2-styling)
-- [2.1 Use single quotes for string literals unless you need to include a single quote within the string](#2.1)
-- [2.2 Use type annotations whenever possible to help with code readability and maintainability](#2.2)
-- [2.3 Use tab with 2 spaces indentation](#2.3)
-- [2.4 Use async/await instead of callbacks wherever possible](#2.4)
-- [2.5 Use null checks and defensive programming techniques to avoid errors caused by undefined variables](#2.5)  
-- [2.6 Should use interfaces to define object shapes](#2.6)  
+[**2. Styling & TypeScript** ](#2-styling--typescript)
+- [2.1 Let Prettier handle formatting rules](#2.1)
+- [2.2 Type function parameters explicitly](#2.2)
+- [2.3 Declare return types for exported or complex functions](#2.3)
+- [2.4 Use optional chaining and nullish coalescing where appropriate](#2.4)
+- [2.5 Use async/await instead of callbacks wherever possible](#2.5)
+- [2.6 Use interface and type based on the use case](#2.6)
+- [2.7 Avoid non-null assertion unless there is a clear reason](#2.7)
 
 [**3. Comment** ](#3-comment)
-- [3.1 Single-line comment. Format comments like sentences and capitalize the first word](#3.1)  
-- [3.2 Multi-line comments](#3.2)  
-- [3.3 JSDoc comments](#3.3) 
-- [3.4 Other comments](#3.4) 
+- [3.1 Comments should explain why, not repeat what the code does](#3.1)  
+- [3.2 Single-line comments](#3.2)  
+- [3.3 Multi-line comments](#3.3)  
+- [3.4 JSDoc comments](#3.4) 
+- [3.5 TODO and FIXME comments](#3.5) 
 
-[**4. Usage** ](#4-usage)
-- [4.1 Should use library such as lodash to work with Object , Array and more to avoid some exception errors](#4.1) 
-- [4.2 We should setup some config to ignore check some unnecessary files](#4.2) 
-- [4.3 no-unused-vars](#4.3) 
-- [4.4 no-console](#4.4) 
-- [4.5 semi](#4.5) 
-- [4.6 no-debugger](#4.6) 
-- [4.7 no-var](#4.7) 
-- [4.8 sort-import](#4.8) 
-- [4.9 no-explicit-any](#4.9) 
-- [4.10 Importing specific functions](#4.10)
-- [4.11 Maximum number of lines per file](#4.11)
+[**4. Usage & Code Quality** ](#4-usage--code-quality)
+- [4.1 Prefer native JavaScript/TypeScript APIs before adding utility libraries](#4.1) 
+- [4.2 no-unused-vars](#4.2) 
+- [4.3 no-console](#4.3) 
+- [4.4 no-debugger](#4.4) 
+- [4.5 no-var and prefer-const](#4.5) 
+- [4.6 sort-import](#4.6) 
+- [4.7 no-explicit-any](#4.7) 
+- [4.8 Importing specific functions](#4.8)
+- [4.9 Maximum number of lines per file](#4.9)
+- [4.10 no-floating-promises](#4.10)
 
 [**5. Security** ](#5-security)
 - [5.1 Use parameterized queries](#5.1) 
 - [5.2 Choose Libraries with Proven Security and Reliability](#5.2)
 - [5.3 Implement rate limiting](#5.3) 
 - [5.4 Use logging and monitoring](#5.4) 
-- [5.5 Escape data HTML](#5.5) 
-- [5.6 Avoid using input from user to handle files / redirect url etc...](#5.6) 
+- [5.5 Use context-aware output encoding to prevent XSS](#5.5) 
+- [5.6 Avoid direct user input for files, redirects, URLs and commands](#5.6) 
 - [5.7 Should limit IP access to the database](#5.7) 
-- [5.8 Should encrypt sensitive information if it is necessary to store them in a database](#5.8) 
+- [5.8 Hash passwords, do not encrypt them](#5.8) 
 
 [**6. Implement Lint** ](#6-implement-lint)
-- [Step 1: Install package](#step-1)
-- [Step 2: Create .eslintrc.json (or .js or .yml)](#step-2)
-- [Step 3: Create .prettierrc](#step-3)
-- [Step 4: Add script (package.json)](#step-4)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
@@ -71,9 +66,16 @@
 <br>
 
 ## 1. Naming
-The good way to name folder,class,type and variable in Typescript.
+The good way to name folders, classes, types, variables and functions in Typescript.
 
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
+
 <tr>
 <td id='1.1'>
 
@@ -82,108 +84,132 @@ The good way to name folder,class,type and variable in Typescript.
 
 <td>
 
-Typescript normally use convention **camelCase** for variable</td>
+Use **camelCase** for variables, functions, methods and object properties.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td >
 
 ```typescript
 // Bad
 let first_name = 'John';
+function get_user_name() {}
 
 // Good 👍
 let firstName = 'John';
+function getUserName() {}
 ```
 
 </td>
 </tr>
+
 <tr>
 <td id='1.2'>
 
 **1.2**
 </td>
+
 <td>
 
-Use meaningful variable names
+Use meaningful variable names.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
 // Bad
-let a = 'John';
-let b = 20;
+let a = await repo.find();
+let b = true;
 
 // Good 👍
-let firstName = 'John';
-let age = 20;
+const residents = await residentRepository.findMany();
+const isResidentActive = true;
 ```
 
 </td>
 </tr>
+
 <tr>
 <td id='1.3'>
 
 **1.3**
 </td>
+
 <td>
 
-Avoid using overly long variable names
-
+Avoid overly long or overly short names. Long names often mean the function/object is doing too much.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
 // Bad
-let thisIsAVariableThatContainsTheFirstNameOfTheUser = 'John';
+const thisIsTheResidentNameReturnedFromTheDatabaseAfterSearch = 'John';
+const r = 'John';
 
 // Good 👍
-let firstName = 'John';
-
+const residentName = 'John';
 ```
 
 </td>
 </tr>
-<tr>
+
 <td id='1.4'>
 
 **1.4**
 </td>
+
 <td>
 
-Do not start variable names with an underscore </td>
+Boolean variables should start with words that describe state, capability or intention.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// Bad
-let _firstName = 'John';
-
+const isConnected = true;
+const hasPermission = true;
+const canResize = false;
+const shouldConfirm = true;
 ```
 
 </td>
+</tr>
 <tr>
 <td id='1.5'>
 
 **1.5**
 </td>
+
 <td>
 
-Can use prefix variable names to indicate the data type</td>
-<td>
-
-```typescript
-// Better can do
-let strName = 'John';
-let numValue = 10;
-```
-
+**Do not** use unclear abbreviations in variable names
 </td>
-</tr>
-<tr>
-<td id='1.6'>
 
-**1.6**
-</td>
 <td>
 
-**DON’T** use unclear abbreviations in variable names</td>
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
@@ -197,63 +223,141 @@ let firstName = 'John';
 
 </td>
 </tr>
+
+<tr>
+<td id='1.6'>
+
+**1.6**
+</td>
+
+<td>
+
+Use **PascalCase** for classes, interfaces, type aliases and enums.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```typescript
+// Bad
+class residentService {}
+interface residentDto {}
+type residentStatus = 'active' | 'inactive';
+
+// Good 👍
+class ResidentService {}
+interface ResidentDto {}
+type ResidentStatus = 'active' | 'inactive';
+
+enum PaymentStatus {
+  Paid = 'paid',
+  Unpaid = 'unpaid',
+}
+```
+
+</td>
+</tr>
+
 <tr>
 <td id='1.7'>
 
 **1.7**
 </td>
+
 <td>
 
-Should use **UPPER_CASE** and **_** for CONSTANT variable
+Use **UPPER_CASE** only for module-level constants or configuration values that behave like real constants. Do not use UPPER_CASE for every local const.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// Bad
-const bucketUpload = 'folder'
-
 // Good 👍
-const BUCKET_UPLOAD = 'folder';
+const DEFAULT_PAGE_SIZE = 50;
+const MAX_RETRY_COUNT = 3;
+
+function buildResidentName(resident: Resident) {
+  // Good 👍 local const should stay camelCase
+  const residentName = `${resident.firstName} ${resident.lastName}`;
+  return residentName;
+}
 ```
 
 </td>
 </tr>
+
 <tr>
 <td id='1.8'>
 
 **1.8**
 </td>
+
 <td> 
 
-Starting a boolean variable or property with a question words like *can, is, should*,... .
+Do not use _ to mark private fields. Use TypeScript private, protected or JavaScript private fields instead. _ is acceptable for intentionally unused parameters when ESLint is configured for it.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
-let isConnected = true;
-let shouldConfirm = true;
-let canResize = true;
+// Bad
+class UserService {
+  private _token = '';
+}
+
+// Good 👍
+class UserService {
+  private token = '';
+}
+
+// Acceptable 👍 intentionally unused parameter
+function handleError(_err: unknown, req: Request, res: Response) {
+  res.status(500).json({ message: 'Internal server error' });
+}
 ```
 </td>
 </tr>
+
 <tr>
 <td id='1.9'>
 
 **1.9**
 </td>
+
 <td>
 
-Should use **let** or **const** for variable instead **var**</td>
+Use **const** by default. Use **let** only when reassignment is needed. Do not use **var**.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
 // Bad
-var num = 10;
-var PI = 3.14;
+var count = 1;
 
 // Good 👍
-let num = 10;
-const PI = 3.14;
+const DEFAULT_LIMIT = 50;
+let retryCount = 0;
+retryCount += 1;
 ```
 </td>
 </tr>
@@ -263,10 +367,17 @@ const PI = 3.14;
 
 **1.10**
 </td>
+
 <td>
 
 **Avoid** using variable names that are identical to keywords in the programming language or libraries
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
@@ -282,67 +393,51 @@ let printStudentName = function() {};
 
 
 </tr>
-
-<tr>
-<td id='1.11'>
-
-**1.11**
-</td>
-<td>
-
-TypeScript conventions, use PascalCase for class names, data types, and enumerations (enums)
-</td>
-<td>
-
-```typescript
-// Bad
-class person {
-  firstName: string;
-}
-
-enum color {
-  Red,
-}
-
-// Good 👍
-class Person {
-  firstName: string;
-}
-
-enum Color {
-  Red,
-}
-```
-</td>
-</tr>
-
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 <br>
 
-## 2. Styling
+## 2. Styling & TypeScript
 
-The good way to manage structure and environment
+The good way to manage formatting, typing and runtime safety in Node.js TypeScript projects.
 
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
+
 <tr>
 <td id='2.1'>
 
 **2.1**
 </td>
+
 <td >
 
-Use single quotes for string literals unless you need to include a single quote within the string
+Let **Prettier** handle formatting rules such as semicolons, single quotes, trailing commas, print width, indentation (2 spaces), arrow function parentheses and line endings (LF). Team should not manually discuss formatting in code review.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td >
 
 ```typescript
-// Bad
-const message = "Hello, world!";
-
-// Good👍
-const message = 'Hello, world!';
-
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "arrowParens": "always",
+  "endOfLine": "lf"
+}
 ```
 </td>
 </tr>
@@ -352,27 +447,28 @@ const message = 'Hello, world!';
 
 **2.2**
 </td>
+
+<td >
+
+Function parameters must have explicit types.
+</td>
+
 <td>
 
-**Type annotations for function**<br>
-- **Parameters**: **REQUIRED** to annotate explicitly. 
-- **Return type**: **OPTIONAL** when the function returns a single, simple shape — let TypeScript infer it.
-- **Return type**: **REQUIRED** when the function can return multiple shapes/formats (union types, conditional responses, etc.) so callers know exactly what to handle.
+**REQUIRED**
 </td>
-<td>
+
+<td >
 
 ```typescript
-// Bad - missing parameter types
-function calculateDiscount(price, discount) { ... }
-
-// Good 👍 - parameters typed, return type inferred
-function calculateDiscount(price: number, discount: number) {
+// Bad
+function calculateDiscount(price, discount) {
   return price * (discount / 100);
 }
 
-// Good 👍 - multiple return shapes → declare return type explicitly
-function findUser(id: number): User | { error: string } | null {
-  ...
+// Good 👍
+function calculateDiscount(price: number, discount: number) {
+  return price * (discount / 100);
 }
 ```
 </td>
@@ -383,24 +479,37 @@ function findUser(id: number): User | { error: string } | null {
 
 **2.3**
 </td>
+
 <td>
 
-Use tab with 2 spaces indentation
-
+Define explicit return types for exported/public functions and functions with complex return shapes. For simple local functions, explicit return types are optional when TypeScript inference is clear.
 </td>
+
+<td>
+
+**REQUIRED** / **OPTIONAL**
+</td>
+
 <td>
 
 ```typescript
-// Bad
-function multiplyNumbers(a: number, b: number): number {
-    const result = a * b;
-    return result;
+// Good 👍 simple local function can infer return type
+function calculateDiscount(price: number, discount: number) {
+  return price * (discount / 100);
 }
 
-// Good 👍
-function multiplyNumbers(a: number, b: number): number {
-  const result = a * b;
-  return result;
+// Good 👍 public/complex return should be explicit
+export async function findResident(
+  residentNo: string,
+): Promise<ResidentDto | null> {
+  return residentService.findByResidentNo(residentNo);
+}
+
+// Good 👍 complex union return should be explicit
+function parsePage(value: unknown): number | null {
+  if (typeof value !== 'string') return null;
+  const page = Number(value);
+  return Number.isInteger(page) && page > 0 ? page : null;
 }
 ```
 </td>
@@ -411,10 +520,48 @@ function multiplyNumbers(a: number, b: number): number {
 
 **2.4**
 </td>
+
 <td>
-Use async/await instead of callbacks wherever possible
+
+Use optional chaining `?.` and nullish coalescing `??` for nullable data. Avoid deeply nested defensive checks when language syntax can express it clearly.
 
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```typescript
+// Bad
+const city = user && user.address && user.address.city
+  ? user.address.city
+  : 'Unknown';
+
+// Good 👍
+const city = user?.address?.city ?? 'Unknown';
+```
+</td>
+</tr>
+
+<tr>
+<td id='2.5'>
+
+**2.5**
+</td>
+
+<td>
+
+Use async/await instead of callbacks wherever possible
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
@@ -438,49 +585,67 @@ async function fetchData(): Promise<any> {
 <tr>
 
 <tr>
-<td id='2.5'>
+<td id='2.6'>
 
-**2.5**
+**2.6**
 </td>
+
 <td>
-Use null checks and defensive programming techniques to avoid errors caused by undefined variables
-<br>
-Can use Optional chaining syntax (available in Higher Node version ~ v14) or Lodash.Get()
+
+Use interface for public object contracts that may be extended. Use type for unions, mapped types, utility types and function signatures.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
-// Bad
-console.log(user.address.city);
-
-// Good 👍
-if (user && user.address && user.address.city) {
-  console.log(user.address.city);
-} else {
-  console.log("City not found.");
+// Good 👍 object contract
+interface ResidentDto {
+  residentNo: string;
+  name: string;
 }
+
+// Good 👍 union type
+type ResidentStatus = 'active' | 'inactive' | 'deleted';
+
+// Good 👍 mapped/utility type
+type ResidentPatch = Partial<Pick<ResidentDto, 'name'>>;
 ```
 </td>
 </tr>
 
 <tr>
-<td id='2.6'>
+<td id='2.7'>
 
-**2.6**
+**2.7**
 </td>
+
 <td>
 
-Should use interfaces to define object shapes.
-
+Avoid non-null assertion `!`. It disables TypeScript safety. Prefer validation, early return or throwing a clear error.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
-interface User {
-  firstName: string;
-  lastName: string;
-  age: number;
+// Bad
+const residentName = resident!.name;
+
+// Good 👍
+if (!resident) {
+  throw new NotFoundError('Resident not found');
 }
+
+const residentName = resident.name;
 ```
 </td>
 </tr>
@@ -490,9 +655,16 @@ interface User {
 
 ## 3. Comment
 
-Commenting code is an important aspect of software development as it helps other developers understand your code and makes it easier to maintain.
+Comments are useful when they explain business context, assumptions and reasons that are not obvious from code.
 
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
+
 <tr>
 <td id='3.1'>
 
@@ -500,14 +672,25 @@ Commenting code is an important aspect of software development as it helps other
 </td>
 
 <td>
-Single-line comment. Format comments like sentences and capitalize the first word.
+
+Comments should explain **why**, not repeat **what** the code already says.
+</td>
+
+<td>
+
+**REQUIRED**
 </td>
 
 <td>
 
 ```typescript
-// In case no item in list, we do nothing
-if (!hasItems) return false;
+// Bad: repeats what the code does
+// Check if resident is inactive
+if (resident.status === 'inactive') return;
+
+// Good 👍 explains business reason
+// Inactive residents are kept for audit history and must not receive notifications.
+if (resident.status === 'inactive') return;
 ```
 
 </td>
@@ -518,17 +701,23 @@ if (!hasItems) return false;
 
 **3.2**
 </td>
+
 <td>
 
-Multi-line comments</td>
+Single-line comments should be short, clear and written like sentences.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+
 <td>
 
 ```typescript
-/*
-This is a multi-line comment.
-It can be used to explain large sections of code.
-*/
-const age = 30;
+// External partner requires this date format until their API v2 is released.
+const formattedDate = format(date, 'yyyyMMdd');
 ```
 </td>
 </tr>
@@ -538,21 +727,26 @@ const age = 30;
 
 **3.3**
 </td>
-<td>JSDoc comments</td>
+
+<td>
+
+Use multi-line comments only for complex business logic, temporary migration notes or non-obvious technical constraints.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
-/**
-* Adds two numbers together.
-* @param {number} a - The first number to add.
-* @param {number} b - The second number to add.
-* @returns {number} - The sum of a and b.
-*/
-function add(a: number, b: number): number {
-    return a + b;
-}
+/*
+ * This migration must keep old resident numbers because external invoices
+ * still reference them. Do not regenerate residentNo here.
+ */
+await migrateResidentContracts();
 ```
-
 </td>
 </tr>
 
@@ -561,59 +755,105 @@ function add(a: number, b: number): number {
 
 **3.4**
 </td>
-<td>Other comments <br> We should comment Screen name or API url before doing something</td>
+
+<td>Use JSDoc for exported utilities, public APIs or functions with important business rules. Do not add JSDoc to every small private function if the function name is already clear.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-
 /**
- * S306_1 締め処理
+ * Calculates the final billing amount after applying tax and discount rules.
+ * This function must match the invoice specification used by the accounting team.
  */
-export const add = async (req: Request, res: Response, next: NextFunction) => {
-  // do add
-};
-
-/**
- * api/customer
- * @param {ParamsCustomerSearch} params Parameter search
- * @returns {ICustomer} - Return customer
- */
-export const apiSearchCustomer = async (params: ParamsCustomerSearch) => {
-  // do search
+export function calculateBillingAmount(input: BillingInput): BillingAmount {
+  // ...
 }
 ```
 
 </td>
 </tr>
+
+<tr>
+<td id='3.5'>
+
+**3.5**
+</td>
+
+<td>
+
+TODO/FIXME comments should include enough context to be actionable. If possible, include a ticket number or owner.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```typescript
+// Bad
+// TODO: fix this
+
+// Good 👍
+// TODO(BWV-1234): Remove this fallback after partner API v2 is fully migrated.
+const companyCode = input.companyCode ?? legacyCompanyCode;
+```
+
+</td>
+</tr>
+
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 <br>
 
-## 4. Usage
+## 4. Usage & Code Quality
 
-Should use one or more tools to support format coding files such as Prettier, Eslint, Typescript-eslint.
+Use tools and project conventions to keep code consistent, readable and safe.
 
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
 
 <tr>
 <td id='4.1'>
 
 **4.1**
 </td>
+
 <td>
-Should use library such as lodash to work with Object , Array and more to avoid some exception errors
+
+Prefer native JavaScript/TypeScript APIs before adding utility libraries. Do not add lodash just to use basic `map`, `filter`, `find`, `some`, `every` or optional chaining. Use utility libraries only when they make the code clearly simpler or safer.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td >
 
 ```typescript
-// Bad
-const expensiveProducts = products.filter((product) => product.price > 100);
+// Bad: unnecessary dependency for simple filtering
+import { filter } from 'lodash';
+const expensiveProducts = filter(products, (product) => product.price > 100);
 
 // Good 👍
-import { filter } from "lodash/filter";
+const expensiveProducts = products.filter((product) => product.price > 100);
 
-const expensiveProducts = _.filter(products, (product) => product.price > 100);
-
+// Acceptable 👍 when it improves readability
+import groupBy from 'lodash/groupBy';
+const residentsByCompany = groupBy(residents, 'companyNo');
 ```
 </td>
 </tr>
@@ -623,19 +863,29 @@ const expensiveProducts = _.filter(products, (product) => product.price > 100);
 
 **4.2**
 </td>
+
 <td>
-We should setup some config to ignore check some unnecessary files
+
+Enable `@typescript-eslint/no-unused-vars`. Unused variables usually mean unfinished code, wrong refactor or wrong logic.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// Example .eslintignore
-{
-    "ignorePatterns": ["temp.js", "**/vendor/*.js"],
-    "rules": {
-        //...
-    }
-}
+// Bad
+const limit = Number(req.query.limit);
+const page = Number(req.query.page);
+return { limit };
+
+// Good 👍
+const limit = Number(req.query.limit);
+const page = Number(req.query.page);
+return { page, limit };
 ```
 </td>
 </tr>
@@ -645,19 +895,28 @@ We should setup some config to ignore check some unnecessary files
 
 **4.3**
 </td>
+
 <td>
 
-**no-unused-vars**
-</br>
-
+Do not use console in application code (e.g., APIs, front-end applications, background jobs, and batch processes). Use the project logger instead. Utility and development scripts (e.g., migrations and seed scripts) may use console where appropriate.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// Disallow the use of console
-let x = 1; // <-- Error , x does not use anywhere
-let y = 2;
-alert(y); 
+// Bad
+console.log('Resident created', resident);
+
+// Good 👍
+logger.info({ residentNo: resident.residentNo }, 'Resident created');
+
+// Good: utility script (e.g., migration or seed)
+console.log('Resident seed completed');
 ```
 </td>
 </tr>
@@ -667,16 +926,30 @@ alert(y);
 
 **4.4**
 </td>
+
 <td>
 
-**no-console**
+Do not commit `debugger` statements.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// This rule disallows the use of console.log statements in production code.
+// Bad
+function isTruthy(value: unknown) {
+  debugger;
+  return Boolean(value);
+}
 
-console.log('Log something...'); // <-- Error
+// Good 👍
+function isTruthy(value: unknown) {
+  return Boolean(value);
+}
 ```
 </td>
 </tr>
@@ -686,16 +959,27 @@ console.log('Log something...'); // <-- Error
 
 **4.5**
 </td>
+
 <td>
 
-**semi**
+Enable `no-var` and `prefer-const`. Use `const` unless reassignment is required.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// This rule enforces semi-colons at the end of statements.
-var name = "ESLint" // <--- Error, required ';' at the end
-var website = "eslint.org";
+// Bad
+var name = 'John';
+let limit = 50;
+
+// Good 👍
+const name = 'John';
+const limit = 50;
 ```
 </td>
 </tr>
@@ -705,19 +989,27 @@ var website = "eslint.org";
 
 **4.6**
 </td>
+
 <td>
 
-**no-debugger** 
+Sort imports automatically using `simple-import-sort` or an equivalent tool. Keep import order consistent without manual effort.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// This rule disallows the use of the debugger statement in production code.
+// Bad
+import b from 'bar.js';
+import a from 'baz.js';
 
-function isTruthy(x) {
-    debugger; // <-- Error line
-    return Boolean(x);
-}
+// Good 👍
+import a from 'foo.js';
+import b from 'bar.js';
 ```
 </td>
 </tr>
@@ -727,58 +1019,17 @@ function isTruthy(x) {
 
 **4.7**
 </td>
+
 <td>
 
-**no-var**
+Avoid abusing `any`. Prefer specific types or `unknown`. `any` is acceptable only for exceptional cases, such as legacy untyped libraries, with a clear comment.
 </td>
+
 <td>
 
-```typescript
-// This rule encourages the use of let or const instead of var.
-
-var name = "name"; // <-- Error
-let age = 10;
-```
+**RECOMMENDED**
 </td>
-</tr>
 
-<tr>
-<td id='4.8'>
-
-**4.8**
-</td>
-<td>
-
-**sort-import**
-</td>
-<td>
-
-```typescript
-// This rule ensures that all import statements are sorted
-// alphabetically and separated by an empty line.
-
-// No error
-import a from 'foo.js';
-import b from 'bar.js';
-
-// Error
-import b from 'bar.js';
-import a from 'baz.js';
-```
-</td>
-</tr>
-
-<tr>
-<td id='4.9'>
-
-**4.9**
-</td>
-<td>
-
-**no-explicit-any**<br>
-- **Avoid abusing** `any` — it disables type checking. Prefer specific types or `unknown` when uncertain.
-- **Acceptable** for genuinely hard-to-type cases (complex generics, dynamic external payloads, untyped 3rd-party libs).
-</td>
 <td>
 
 ```typescript
@@ -791,21 +1042,28 @@ const age: number = 17;
 // Good 👍 - 'unknown' when type is uncertain, narrow before use
 function parsePayload(raw: unknown) { ... }
 
-// Acceptable - untyped 3rd-party lib
-const client: any = require('legacy-untyped-sdk');
+// Acceptable with reason 👍
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy SDK has no type definitions
+const legacyClient: any = require('legacy-untyped-sdk');
 ```
 </td>
 
-
 <tr>
-<td id='4.10'>
+<td id='4.8'>
 
-**4.10**
+**4.8**
 </td>
+
 <td>
 
 **Importing specific functions**
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
@@ -821,15 +1079,20 @@ import get from 'lodash/get' // <-- Best way but may not always be practical �
 </tr>
 
 <tr>
-<td id='4.11'>
+<td id='4.9'>
 
-**4.11**
+**4.9**
 </td>
 
 <td>
 
 **Maximum number of lines per file** <br />
 Limit each file to a maximum of **1000 lines** of code to enhance code quality, maintainability, and performance.
+</td>
+
+<td>
+
+**REQUIRED**
 </td>
 
 <td>
@@ -842,6 +1105,40 @@ To ensure compliance with this rule, adhere to the following best practices in y
 
 </td>
 </tr>
+
+<tr>
+<td id='4.10'>
+
+**4.10**
+</td>
+
+<td>
+
+Enable `@typescript-eslint/no-floating-promises`. Do not start async work without handling errors.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```typescript
+// Bad
+sendWelcomeEmail(user.email);
+
+// Good 👍
+await sendWelcomeEmail(user.email);
+
+// Good 👍 explicitly ignore only with error handling
+void sendAuditLog(event).catch((error) => {
+  logger.error({ error }, 'Failed to send audit log');
+});
+```
+</td>
+</tr>
+
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
@@ -850,27 +1147,44 @@ To ensure compliance with this rule, adhere to the following best practices in y
 ## 5. Security 
 
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
 
 <tr>
 <td id='5.1'>
 
 **5.1**
 </td>
+
 <td>
 
-**Use parameterized queries.**
-Depend on your ORM framework, Always ensure that the method supports binding parameters.
-(Prevent SQL injection attacks)
+Use parameterized queries or ORM query builders that bind parameters safely. Never concatenate user input directly into SQL.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td >
 
 ```typescript
 // Bad
-const query = `SELECT * FROM users WHERE id=${userId}`;
+const query = `SELECT * FROM users WHERE id = ${userId}`;
 
-// Good 👍
-const query = "SELECT * FROM users WHERE id=?";
+// Good 👍 parameterized query
+const query = 'SELECT * FROM users WHERE id = ?';
+await db.query(query, [userId]);
 
+// Good 👍 ORM/query builder example
+await db
+  .select()
+  .from(users)
+  .where(eq(users.id, userId));
 ```
 </td>
 </tr>
@@ -880,11 +1194,17 @@ const query = "SELECT * FROM users WHERE id=?";
 
 **5.2**
 </td>
+
 <td>
 
 Choose Libraries with Proven Security and Reliability.
-
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 **For Open Source Libraries**:
@@ -907,31 +1227,32 @@ Choose Libraries with Proven Security and Reliability.
 
 **5.3**
 </td>
+
 <td>
 
 **Implement rate limiting.**
 Implement rate limiting to prevent brute force attacks and other forms of abuse.
 However, depend on your project large and the original design, you can choose apply this spec or not.
-</br>
-
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
-// Bad example: no rate limiting
-app.get("/search", (req, res) => {
-  //perform search operation
+import rateLimit from 'express-rate-limit';
+
+const loginLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
-// Good example: implementing rate limiting 👍
-const rateLimit = require("express-rate-limit");
-const searchLimiter = rateLimit({
-  windowMs: 60 * 1000, //1 minute
-  max: 10 //10 requests per minute
-});
-app.get("/search", searchLimiter, (req, res) => {
-  // perform search operation
-});
+app.post('/login', loginLimiter, loginController.login);
 ```
 </td>
 </tr>
@@ -941,11 +1262,18 @@ app.get("/search", searchLimiter, (req, res) => {
 
 **5.4**
 </td>
+
 <td>
 
 **Use logging and monitoring.**
 Best way to know if any error on your server.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
@@ -979,30 +1307,30 @@ app.post("/data", (req, res) => {
 
 **5.5**
 </td>
+
 <td>
 
-**Escape data HTML.**</br>
-(XSS (Cross-site scripting) attack)</br>
-Convert special character: </br>
-  [&] ⇒ [\&amp;] </br>
-  [<] ⇒ [\&lt;]</br>
-  [>] ⇒ [\&gt;]</br>
-  []] ⇒ [\&quot;]</br>
-  [’] ⇒ [\&#39;]
+Use context-aware output encoding to prevent XSS. Do not manually insert untrusted input into HTML, JavaScript, CSS or URLs. When rendering user-provided rich text, sanitize it with an approved sanitizer.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-const ejs = require('ejs');
-const escapeHtml = require('escape-html');
+// Bad
+res.send(`<div>${req.query.name}</div>`);
 
-// Render the template
-const html = ejs.render('<%= escapeHtml(data) %>', 
-{ data: '<script>alert("XSS attack!")</script>' }
-);
+// Better 👍 template engines/frameworks usually escape by default
+res.render('profile', {
+  name: user.name,
+});
 
-// Output: &lt;script&gt;alert(&quot;XSS attack!&quot;)&lt;/script&gt;
-console.log(html); 
+// If HTML is intentionally allowed, sanitize it first.
+const safeHtml = sanitizeHtml(userProvidedHtml);
 ```
 </td>
 </tr>
@@ -1012,23 +1340,32 @@ console.log(html);
 
 **5.6**
 </td>
+
 <td>
 
-**Avoid** using input from user to handle files / redirect url etc... <br>
-Can use ID for finding specific file or url.
+Avoid using direct user input for file paths, redirects, outbound URLs or shell commands. Use IDs, allowlists and safe mapping functions.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
-// Bad
-res.redirect(req.body.hiddenInputUrl);
-
-// Bad
-const dataFileDetail = fs.readFileSync(req.body.filePath);
+// Bad: open redirect
+res.redirect(req.body.redirectUrl);
 
 // Good 👍
-const redirectUrl = getUrlFromInputId(req.body.hiddenInputUrlId);
+const redirectUrl = getAllowedRedirectUrl(req.body.redirectUrlId);
 res.redirect(redirectUrl);
+
+// Bad: path traversal risk
+const file = await fs.readFile(req.body.filePath);
+
+// Good 👍
+const file = await fileStorage.readById(req.body.fileId, currentUser.companyNo);
 ```
 </td>
 </tr>
@@ -1038,10 +1375,17 @@ res.redirect(redirectUrl);
 
 **5.7**
 </td>
+
 <td>
 
 **Should** limit IP access to the database, such as setting an IP limit on AWS, Azure, etc.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```typescript
@@ -1071,21 +1415,31 @@ or range that you want to allow access from.
 
 <td>
 
-**Should** encrypt sensitive information if it is necessary to store them in a database.<br>
-Such as using brypt to encrypt password.
+Hash passwords. Do not encrypt passwords with reversible encryption. Use a strong password hashing algorithm such as Argon2id, bcrypt or PBKDF2 depending on project requirements.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```typescript
 import bcrypt from 'bcrypt';
 
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = 12;
 
-export const hashPassword = async (password: string): Promise<string> => {
-  const salt = await bcrypt.genSalt(SALT_ROUNDS);
-  return bcrypt.hash(password, salt);
-};
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, SALT_ROUNDS);
+}
 
+export async function verifyPassword(
+  password: string,
+  passwordHash: string,
+): Promise<boolean> {
+  return bcrypt.compare(password, passwordHash);
+}
 ```
 </td>
 </tr>
@@ -1096,104 +1450,3 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 ## 6. Implement Lint
 
-Here is an example of how to implement Eslint into a Node.js TypeScript project. <br>
-Ref: https://eslint.org/docs/latest/use/getting-started <br>
-
-#### Step 1
-
-**Install package**
-```typescript
-npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
-npm install prettier eslint-config-prettier eslint-plugin-prettier --save-dev
-npm install prettier eslint-plugin-simple-import-sort --save-dev
-```
-
-#### Step 2
-
-**Create .eslintrc.json (or .js or .yml)**
-
-```json
-{
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "extends": [
-      "plugin:@typescript-eslint/recommended",
-      "plugin:prettier/recommended",
-      "prettier"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "plugins": [
-      "@typescript-eslint",
-      "prettier",
-      "simple-import-sort"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-non-null-assertion": "error",
-      "@typescript-eslint/no-explicit-any": "error",
-      "no-console": "error",
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
-      "no-duplicate-imports": "error",
-      "max-lines": ["error", 1000]
-    }
-}
-```
-
-#### Step 3
-
-**Create .prettierrc**
-
-```json
-{
-  "arrowParens": "always",
-  "trailingComma": "all",
-  "tabWidth": 2,
-  "singleQuote": true,
-  "overrides": [{
-    "files": "*.ts",
-    "options": {
-      "parser": "typescript"
-    }
-  }]
-}
-
-```
-
-#### Step 4
-
-**Add script (package.json)**
-
-```json
-"scripts": {
-  "lint": "eslint . --ext .ts",
-  "lint-and-fix": "eslint . --ext .ts --fix",
-},
-```
-
-**Explain:** 
-<br>
-
-**lint** Command to check and show error. <br>
-**lint-and-fix** Command to fix and replace some rules (**). Some rules are automatically fixable by this command. <br>
-Ref here: https://eslint.org/docs/latest/rules/
-<br>
-
-**There are some rules that don't necessarily have to produce an error all the time.**
-
-For example, in special situations where we need to use the 'any' type, we can disable these rules with the following command:
-```javascript
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-```
-Similarly, for the max-lines rule, in some specific files, we can disable this rule with the following command:
-```javascript
-  /* eslint-disable max-lines */
-```
-
-<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
