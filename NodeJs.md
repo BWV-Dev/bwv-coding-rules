@@ -171,6 +171,7 @@ const residentName = 'John';
 </td>
 </tr>
 
+<tr>
 <td id='1.4'>
 
 **1.4**
@@ -178,12 +179,12 @@ const residentName = 'John';
 
 <td>
 
-Boolean variables should start with words that describe state, capability or intention.
+Boolean names should read clearly as a predicate, state, capability, or intention. Prefer `is`, `has`, `can`, `should` where they improve clarity; descriptive adjectives such as `enabled`, `visible`, and `loading` are acceptable.
 </td>
 
 <td>
 
-**REQUIRED**
+**RECOMMENDED**
 </td>
 
 <td>
@@ -193,6 +194,7 @@ const isConnected = true;
 const hasPermission = true;
 const canResize = false;
 const shouldConfirm = true;
+const loading = true;
 ```
 
 </td>
@@ -430,7 +432,7 @@ Let **Prettier** handle formatting rules such as semicolons, single quotes, trai
 
 <td >
 
-```typescript
+```json
 {
   "semi": true,
   "singleQuote": true,
@@ -629,7 +631,7 @@ type ResidentPatch = Partial<Pick<ResidentDto, 'name'>>;
 
 <td>
 
-Avoid non-null assertion `!`. It disables TypeScript safety. Prefer validation, early return or throwing a clear error.
+Avoid non-null assertion `!`. It disables TypeScript safety. Prefer validation, early return or throwing a clear error. `!` is acceptable only when non-null is guaranteed by an invariant that TypeScript cannot narrow (e.g. `map.get(key)` right after `map.has(key)`); add a short comment stating the guarantee.
 </td>
 
 <td>
@@ -649,6 +651,12 @@ if (!resident) {
 }
 
 const residentName = resident.name;
+
+// Acceptable 👍 invariant TypeScript cannot narrow
+if (residentsById.has(residentId)) {
+  // has() above guarantees the entry exists
+  const resident = residentsById.get(residentId)!;
+}
 ```
 </td>
 </tr>
@@ -759,7 +767,7 @@ await migrateResidentContracts();
 **3.4**
 </td>
 
-<td>Use JSDoc for exported utilities, public APIs or functions with important business rules. Do not add JSDoc to every small private function if the function name is already clear.
+<td>Use JSDoc for exported utilities, public APIs or functions. The block should describe the purpose of the function, its parameters (`@param`) and its return value (`@returns`) — types stay in the TypeScript signature, not in the tags. Do not add JSDoc to every small private function if the function name is already clear.
 </td>
 
 <td>
@@ -772,7 +780,8 @@ await migrateResidentContracts();
 ```typescript
 /**
  * Calculates the final billing amount after applying tax and discount rules.
- * This function must match the invoice specification used by the accounting team.
+ * @param input billing details (amount, tax category, discounts)
+ * @returns final invoice amount, including tax
  */
 export function calculateBillingAmount(input: BillingInput): BillingAmount {
   // ...
@@ -995,7 +1004,7 @@ const limit = 50;
 
 <td>
 
-Sort imports automatically using `simple-import-sort` or an equivalent tool. Keep import order consistent without manual effort.
+Sort imports automatically using `simple-import-sort` or an equivalent tool. Imports are sorted primarily by the module specifier after `from`, not by the local imported name. This keeps dependency and source-path grouping predictable even when local names are aliased. Specifiers within the same import statement are sorted separately. Do not sort imports manually.
 </td>
 
 <td>
@@ -1007,12 +1016,12 @@ Sort imports automatically using `simple-import-sort` or an equivalent tool. Kee
 
 ```typescript
 // Bad
-import b from 'bar.js';
-import a from 'baz.js';
+import alpha from 'zoo.js';
+import zebra from 'alpha.js';
 
 // Good 👍
-import a from 'foo.js';
-import b from 'bar.js';
+import zebra from 'alpha.js';
+import alpha from 'zoo.js';
 ```
 </td>
 </tr>
@@ -1050,6 +1059,7 @@ function parsePayload(raw: unknown) { ... }
 const legacyClient: any = require('legacy-untyped-sdk');
 ```
 </td>
+</tr>
 
 <tr>
 <td id='4.8'>
@@ -1569,12 +1579,12 @@ export async function verifyPassword(
 
 ## 6. Implement Lint
 
-Ready-to-use templates are provided in the [`config/`](./config) folder. They implement the lintable rules of this document — every rule in the ESLint template is annotated with its ID (e.g. `// 4.10 — no-floating-promises`) so each setting can be traced back to this page.
+Ready-to-use templates are provided in the [`config/nodejs/`](./config/nodejs) folder. They implement the lintable rules of this document — every rule in the ESLint template is annotated with its ID (e.g. `// 4.10 — no-floating-promises`) so each setting can be traced back to this page.
 
 | Template | Copy to project root as | Purpose |
 |---|---|---|
-| [config/eslint.config.template.mjs](./config/eslint.config.template.mjs) | `eslint.config.mjs` | ESLint flat config (ESLint 9+) covering the lintable rules of sections 1, 2, 3 and 4 |
-| [config/.prettierrc.template.json](./config/.prettierrc.template.json) | `.prettierrc` | Prettier settings per rule [2.1](#2.1) — formatting is owned by Prettier, not ESLint |
+| [config/nodejs/eslint.config.template.mjs](./config/nodejs/eslint.config.template.mjs) | `eslint.config.mjs` | ESLint flat config (ESLint 9+) covering the lintable rules of sections 1, 2, 3 and 4 |
+| [config/nodejs/.prettierrc.template.json](./config/nodejs/.prettierrc.template.json) | `.prettierrc` | Prettier settings per rule [2.1](#2.1) — formatting is owned by Prettier, not ESLint |
 
 Ref: https://eslint.org/docs/latest/use/getting-started
 
@@ -1592,13 +1602,13 @@ npm i -D eslint @eslint/js typescript-eslint eslint-plugin-vue \
 
 **Create eslint.config.mjs**
 
-Copy [config/eslint.config.template.mjs](./config/eslint.config.template.mjs) to your project root as `eslint.config.mjs`, then adjust the settings to the stack your project uses — each layer is explained by its comments in the template.
+Copy [config/nodejs/eslint.config.template.mjs](./config/nodejs/eslint.config.template.mjs) to your project root as `eslint.config.mjs`, then adjust the settings to the stack your project uses — each layer is explained by its comments in the template.
 
 #### Step 3
 
 **Create .prettierrc**
 
-Copy [config/.prettierrc.template.json](./config/.prettierrc.template.json) to your project root as `.prettierrc` (settings per rule [2.1](#2.1)).
+Copy [config/nodejs/.prettierrc.template.json](./config/nodejs/.prettierrc.template.json) to your project root as `.prettierrc` (settings per rule [2.1](#2.1)).
 
 #### Step 4
 
