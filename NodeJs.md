@@ -12,7 +12,7 @@
 - [1.5 Do not use unclear abbreviations in variable names](#1.5)
 - [1.6 Use PascalCase for classes, interfaces, type aliases and enums](#1.6)
 - [1.7 Use UPPER_CASE only for module-level constants](#1.7)
-- [1.8 Do not use data type prefixes in variable names](#1.8)
+- [1.8 Do not use _ to mark private fields](#1.8)
 - [1.9 Use const or let instead of var](#1.9)
 - [1.10 Avoid using variable names that are identical to keywords in the programming language or libraries](#1.10)
 
