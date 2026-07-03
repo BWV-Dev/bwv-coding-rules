@@ -1569,3 +1569,70 @@ export async function verifyPassword(
 
 ## 6. Implement Lint
 
+Ready-to-use templates are provided in the [`config/`](./config) folder. They implement the lintable rules of this document — every rule in the ESLint template is annotated with its ID (e.g. `// 4.10 — no-floating-promises`) so each setting can be traced back to this page.
+
+| Template | Copy to project root as | Purpose |
+|---|---|---|
+| [config/eslint.config.template.mjs](./config/eslint.config.template.mjs) | `eslint.config.mjs` | ESLint flat config (ESLint 9+) covering the lintable rules of sections 1, 2, 3 and 4 |
+| [config/.prettierrc.template.json](./config/.prettierrc.template.json) | `.prettierrc` | Prettier settings per rule [2.1](#2.1) — formatting is owned by Prettier, not ESLint |
+
+Ref: https://eslint.org/docs/latest/use/getting-started
+
+#### Step 1
+
+**Install packages**
+
+```bash
+npm i -D eslint @eslint/js typescript-eslint eslint-plugin-vue \
+  eslint-plugin-simple-import-sort eslint-plugin-jsdoc \
+  eslint-config-prettier globals prettier
+```
+
+#### Step 2
+
+**Create eslint.config.mjs**
+
+Copy [config/eslint.config.template.mjs](./config/eslint.config.template.mjs) to your project root as `eslint.config.mjs`, then adjust the settings to the stack your project uses — each layer is explained by its comments in the template.
+
+#### Step 3
+
+**Create .prettierrc**
+
+Copy [config/.prettierrc.template.json](./config/.prettierrc.template.json) to your project root as `.prettierrc` (settings per rule [2.1](#2.1)).
+
+#### Step 4
+
+**Add scripts (package.json)**
+
+```json
+"scripts": {
+  "lint": "eslint .",
+  "lint:fix": "eslint . --fix",
+  "format": "prettier --write ."
+}
+```
+
+**Explain:**
+
+- **lint** — checks and reports violations. With flat config, ESLint resolves the file patterns from `eslint.config.mjs`; the old `--ext` flag is no longer needed.
+- **lint:fix** — automatically fixes the auto-fixable rules (import order, `prefer-const`, …). Ref: https://eslint.org/docs/latest/rules/
+- **format** — formats the codebase with Prettier.
+
+#### Disabling a rule
+
+Disabling a rule is the exception, never the default. When you must do it:
+
+1. **Scope it as narrowly as possible** — prefer `eslint-disable-next-line` over file-wide (`/* eslint-disable */`) or config-wide disables.
+2. **Always add an inline comment explaining why**, using the `-- reason` syntax:
+
+```typescript
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy SDK has no type definitions
+const legacyClient: any = require('legacy-untyped-sdk');
+
+/* eslint-disable max-lines -- auto-generated file, do not split manually */
+```
+
+3. **Report the disable to your PM/leader** before merging. A disable without an inline reason and without the PM being informed must be rejected in code review.
+4. If the same rule keeps getting disabled across the project, raise it with the leader — revisit the rule severity or the config instead of accumulating disables.
+
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
