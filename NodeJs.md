@@ -43,6 +43,9 @@
 - [4.8 Importing specific functions](#4.8)
 - [4.9 Maximum number of lines per file](#4.9)
 - [4.10 no-floating-promises](#4.10)
+- [4.11 Function complexity](#4.11)
+- [4.12 Parameter object pattern](#4.12)
+- [4.13 Early returns and guard clauses](#4.13)
 
 [**5. Security** ](#5-security)
 - [5.1 Use parameterized queries](#5.1) 
@@ -1135,6 +1138,122 @@ await sendWelcomeEmail(user.email);
 void sendAuditLog(event).catch((error) => {
   logger.error({ error }, 'Failed to send audit log');
 });
+```
+</td>
+</tr>
+
+<tr>
+<td id='4.11'>
+
+**4.11**
+</td>
+
+<td>
+
+**Function complexity**
+
+Do not judge a function by line count alone. Flag functions that are intellectually difficult to scan. For long functions (more than 50 lines), consider extracting sub-routines with descriptive names.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```typescript
+// Bad: validation, persistence and notification are mixed together
+async function registerUser(input: RegisterUserInput) {
+  // More than 50 lines of validation, data mapping, persistence and email logic...
+}
+
+// Good: 👍 each step communicates its purpose
+async function registerUser(input: RegisterUserInput) {
+  validateRegistration(input);
+  const user = await createUser(input);
+  await sendWelcomeEmail(user);
+  return user;
+}
+```
+</td>
+</tr>
+
+<tr>
+<td id='4.12'>
+
+**4.12**
+</td>
+
+<td>
+
+**Parameter object pattern**
+
+Functions with more than three arguments must use a typed parameter object and object destructuring. This makes call sites easier to read and future changes safer.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```typescript
+// Bad
+function createUser(name: string, email: string, role: Role, companyId: string) {}
+
+// Good 👍
+interface CreateUserParams {
+  name: string;
+  email: string;
+  role: Role;
+  companyId: string;
+}
+
+function createUser({ name, email, role, companyId }: CreateUserParams) {}
+```
+</td>
+</tr>
+
+<tr>
+<td id='4.13'>
+
+**4.13**
+</td>
+
+<td>
+
+**Early returns and guard clauses**
+
+Flatten nesting deeper than three levels. Invert conditions and return early instead of wrapping the main logic in large `else` blocks.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```typescript
+// Bad
+function publish(post: Post) {
+  if (post.isValid) {
+    if (post.author.isActive) {
+      return postRepository.publish(post);
+    }
+  }
+  return undefined;
+}
+
+// Good
+function publish(post: Post) {
+  if (!post.isValid) return undefined;
+  if (!post.author.isActive) return undefined;
+
+  return postRepository.publish(post);
+}
 ```
 </td>
 </tr>
