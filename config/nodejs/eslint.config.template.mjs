@@ -372,9 +372,9 @@ export default [
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      // 4.7 — no-explicit-any (RECOMMENDED → warn,
-      // overrides the 'error' from tseslint recommended)
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // 4.7 — no-explicit-any
+      // Will use CodeRabbit to review this rule
+      '@typescript-eslint/no-explicit-any': 'off',
       // 2.7 — no-non-null-assertion (RECOMMENDED → warn). In LAYER 6 so
       // 'warn' survives tseslint.configs.strict, which sets it to 'error'.
       '@typescript-eslint/no-non-null-assertion': 'warn',
