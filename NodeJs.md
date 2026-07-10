@@ -46,6 +46,7 @@
 - [4.11 Function complexity](#4.11)
 - [4.12 Parameter object pattern](#4.12)
 - [4.13 Early returns and guard clauses](#4.13)
+- [4.14 Type-Safe Comparisons](#4.14)
 
 [**5. Security** ](#5-security)
 - [5.1 Use parameterized queries](#5.1) 
@@ -1264,6 +1265,69 @@ function publish(post: Post) {
 
   return postRepository.publish(post);
 }
+```
+</td>
+</tr>
+
+<tr>
+<td id='4.14'>
+
+**4.14**
+</td>
+
+<td>
+
+**Type-Safe Comparisons**
+
+Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.<br>
+When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g., `'1' === 1` is `false`).
+
+**Exceptions**:
+
+- Use `value == null` or `value != null` only when intentionally treating both `null` and `undefined` as the same absence state. Keep this scoped to nullish checks, not general value comparison.
+- Use dedicated JavaScript APIs for edge cases where strict equality is not the correct semantic check, such as `Number.isNaN(value)` for `NaN` or `Object.is(a, b)` when `-0` must be distinguished from `0`.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```typescript
+const inputValue = '1'; // Value from request, DB, etc.
+
+// Bad - type mismatch (string vs number)
+const STATUS_ACTIVE = 1;
+if (inputValue === STATUS_ACTIVE) { ... } // '1' === 1 → false
+
+const VALID_IDS = [1, 2, 3, 4, 5];
+if (VALID_IDS.includes(inputValue)) { ... } // '1' not in [1,2,3,4,5]
+
+// Good 👍 - Convert to the SAME type before comparing
+// Option 1: Convert to number
+enum YesFlag { Yes = 1, No = 0 }
+if (Number(inputValue) === YesFlag.Yes) { ... }
+
+// Option 2: Convert to string
+const VALID_STATUSES = ['1', '2', '3'];
+if (VALID_STATUSES.includes(String(inputValue))) { ... }
+
+// Exception - nullish check
+// Allowed when both null and undefined mean "missing"
+if (optionalValue == null) {
+  return defaultValue;
+}
+
+// Exception - NaN must be checked with Number.isNaN
+const score = Number(request.query.score);
+if (Number.isNaN(score)) {
+  throw new Error('Invalid score');
+}
+
+// Exception - Object.is when the difference between 0 and -0 matters
+Object.is(-0, 0); // false
 ```
 </td>
 </tr>
