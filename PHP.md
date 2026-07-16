@@ -21,7 +21,7 @@
 - [2.6 There must not be more than one statement per line](#2.6)
 - [2.7 Use curly braces for all flow control statements](#2.7)
 - [2.8 In function line break rules](#2.8)
-- [2.9 Use `===` instead of `==`, `!==` instead of `!=`](#2.9)
+- [2.9 Type-Safe Comparisons](#2.9)
 
 [**3. Comment**](#3-comment)
 
@@ -549,13 +549,14 @@ return true;
 </td>
 <td>
 
-Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.
-
+**Type-Safe Comparisons**<br>
+Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.<br>
+When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g., `'1' === 1` is `false`).
 </td>
 <td>
 
 ```php
-// Example: check NULL column data from database
+// Example 1: check NULL column data from database
 
 // Bad
 $userFlag = $this->User->getUserFlag();
@@ -571,6 +572,19 @@ if ($userFlag === null) {
     return;
 }
 // ...
+
+// Example 2: Type mismatch (string vs number)
+// Bad
+$status = $request->input('status'); // returns string '1'
+if ($status === 1) { ... } // '1' === 1 → false
+
+// Good 👍 - Convert to the SAME type before comparing
+// Option 1: Convert to int
+if ((int) $status === 1) { ... }
+
+// Option 2: Convert to string
+$validStatuses = ['1', '2', '3'];
+if (in_array((string) $status, $validStatuses, true)) { ... }
 ```
 
 </td>

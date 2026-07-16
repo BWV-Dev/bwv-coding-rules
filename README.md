@@ -13,3 +13,6 @@
 - [**PHP**](./PHP.md)
 - [**Python**](./Python.md)
 - [**Case Studies**](./WebCaseStudies.md)
+
+## 3. Guidelines
+- [**Dependency Upgrade**](./DependencyUpgradeGuideline.md)
