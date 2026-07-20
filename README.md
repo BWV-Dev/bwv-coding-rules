@@ -12,7 +12,9 @@
 - [**NodeJS**](./NodeJs.md)
 - [**PHP**](./PHP.md)
 - [**Python**](./Python.md)
+- [**Security**](./WebSecurityRules.md)
 - [**Case Studies**](./WebCaseStudies.md)
 
 ## 3. Guidelines
-- [**Dependency Upgrade**](./DependencyUpgradeGuideline.md)
+- [**Dependency Upgrade**](./Guidelines/DependencyUpgradeGuideline.md)
+- [**Hide Version Information**](./Guidelines/HideVersionInfoGuideline.md)
