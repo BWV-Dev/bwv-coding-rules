@@ -372,16 +372,31 @@ export default [
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      // 4.7 — no-explicit-any
-      // Will use CodeRabbit to review this rule
-      '@typescript-eslint/no-explicit-any': 'off',
+      // 4.7 — no-explicit-any. When unavoidable, use
+      // `eslint-disable-next-line` with a `-- reason` (see NodeJs.md §6).
+      '@typescript-eslint/no-explicit-any': 'error',
       // 2.7 — no-non-null-assertion (RECOMMENDED → warn). In LAYER 6 so
       // 'warn' survives tseslint.configs.strict, which sets it to 'error'.
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      'no-undef': 'off', // TS handles this; avoid false positives
       'no-unexpected-multiline': 'off',
     },
   },
+
+  // no-undef — off only for TS/Vue files (their compiler already checks
+  // undefined identifiers). Keep it active for plain .js files.
+  {
+    files: ['**/*.{ts,tsx,vue}'],
+    rules: {
+      'no-undef': 'off',
+    },
+  },
+
+  // 4.7 (exception) — when a library forces `any` (e.g. Drizzle), lower
+  // error → warn for that folder only, with a PROJECT DECISION comment.
+  // {
+  //   files: ['src/db/**/*.ts', 'src/db/**/*.tsx'],
+  //   rules: { '@typescript-eslint/no-explicit-any': 'warn' },
+  // },
 
   // 2.1 — Let Prettier handle formatting rules
   // MUST BE LAST: disables every formatting rule that conflicts with Prettier
