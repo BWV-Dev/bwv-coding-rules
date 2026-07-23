@@ -1108,6 +1108,11 @@ return in_array(strtolower($day), $openingDays, true);
 **Maximum number of lines per file** <br />
 Limit each file to a maximum of **1000 lines** of code to enhance code quality, maintainability, and performance.
 
+> **Exceptions** (generated code, migration files, legacy code, large service implementations) are allowed — but this is the exception, never the default. When you must exceed the limit:
+> 1. Document the reason in the Pull Request description or code review comment.
+> 2. Report the exception to your PM/leader before merging. An exception without a documented reason and without approval **must be rejected** in code review.
+> 3. If the same file keeps exceeding the limit, raise it with the leader — revisit the architecture instead of accumulating exceptions.
+
 </td>
 <td>
 
