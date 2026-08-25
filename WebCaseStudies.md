@@ -15,6 +15,8 @@
 
 [**6. Handle default when the get value does not exist in the database**](#6-handle-default-when-the-get-value-does-not-exist-in-the-database)
 
+[**7. Confirm the data loading strategy for screens with large data**](#7-confirm-the-data-loading-strategy-for-screens-with-large-data)
+
 <br>
 
 ## 1. The event does not load jQuery in HTML
@@ -358,6 +360,96 @@ $newCategory->name = 'Category 3';
 $newCategory->sort_number = $maxSortNumber + 1;
 $newCategory->save();
 ```
+
+</td>
+</tr>
+</table>
+<br>
+
+## 7. Confirm the data loading strategy for screens with large data
+
+<table>
+<tr id="7.1">
+<td width="5%" >
+
+**7.1**
+
+</td>
+<td width="50%">
+
+Confirm the data loading strategy with the customer **at the start of the project**, before implementing list/search screens.<br>
+Loading all data will certainly cause a performance problem in the future, so two things must be clarified in the design phase:<br>
+1. Can pagination be applied, or is loading all data mandatory?<br>
+2. If loading all data is mandatory: will the data volume grow large enough to cause a performance problem?<br>
+
+※ If the answer is unclear, consult QA / BrSE and confirm with the Japanese side before implementing.
+
+</td>
+<td width="45%">
+
+Confirmation checklist:
+
+| Item | To confirm |
+| - | - |
+| Design | Does the screen design allow pagination, or must all data be shown at once? |
+| Data volume | Expected maximum number of records (at release / after a few years)? |
+| Growth | How many records are added per month/year? |
+| Scope | Which screens are affected? |
+
+Confirming after implementation is too late: the countermeasures below change screen behavior, so a late change means rework and degrade risk.
+
+</td>
+</tr>
+<tr id="7.2">
+<td width="5%" >
+
+**7.2**
+
+</td>
+<td width="50%">
+
+Countermeasures when all data must be loaded.<br>
+Infinite scroll and virtual scroll solve two different bottlenecks, so they can be applied separately or combined.
+
+</td>
+<td width="45%">
+
+| Technique | Reduces load on | How it works |
+| - | - | - |
+| Infinite scroll | Back-end / network | Fetch a fixed number of records per request (like pagination). When the user scrolls near the end of the currently loaded data, load the next chunk |
+| Virtual scroll | Front-end / browser | Render only the rows visible in the viewport instead of rendering the whole table. Rendering all rows normally makes the browser lag when the row count is large |
+
+If the screen already uses a table/grid library, check whether that library supports virtual scroll before implementing it manually.<br>
+For manual handling, `@tanstack/vue-virtual` can be used as a reference (many other libraries are available - choose depending on the project).
+
+```dart
+// Virtual scroll (reference: @tanstack/vue-virtual)
+const rowVirtualizer = useVirtualizer({
+  count: rows.length,     // total rows loaded in memory
+  getScrollElement: () => scrollEl.value,
+  estimateSize: () => 40, // row height (px)
+  overscan: 10,
+});
+```
+
+</td>
+</tr>
+<tr id="7.3">
+<td width="5%" >
+
+**7.3**
+
+</td>
+<td width="50%">
+High-risk screens when applying infinite scroll
+
+</td>
+<td width="45%">
+
+| Screen type | Risk |
+| - | - |
+| Inline input + save the whole list | Rows that are not loaded yet do not exist in the DOM, so their values are not posted to the server → data loss on save |
+| Select box / "select all" checkbox | The meaning of "all" becomes ambiguous: only the loaded rows, or all rows matching the search condition? |
 
 </td>
 </tr>
