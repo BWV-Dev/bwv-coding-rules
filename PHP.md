@@ -1,83 +1,88 @@
-# PHP Coding Rules
 
+# PHP Coding Rules & Security (BWV)
 ## Table of Contents
+[**Common** ](#common)
+<br>
 
-[**1. Naming**](#1-naming)
+[**1. Naming** ](#1-naming)
+- [1.1 Use PascalCase for files, namespaces, classes, interfaces, enums and traits](#1.1)
+- [1.2 Use camelCase for functions, methods, properties and variables](#1.2)
+- [1.3 Use UPPER_CASE for constants](#1.3)
+- [1.4 Use meaningful names and avoid unclear abbreviations](#1.4)
+- [1.5 Use boolean names that describe state or capability](#1.5)
 
-- [1.1 Name of files, namespaces, classes, interfaces, enums and traits](#1.1)
-- [1.2 Names of functions, properties and variables](#1.2)
-- [1.3 Names of constants](#1.3)
-- [1.4 Use meaningful variable names](#1.4)
-- [1.5 Starting a boolean variable or property with a question words](#1.5)
-- [1.6 Can use prefix variable names to indicate the data type](#1.6)
+[**2. Styling & Types** ](#2-styling--types)
+- [2.1 Let PHP-CS-Fixer handle formatting rules](#2.1)
+- [2.2 Class layout](#2.2)
+- [2.3 Prefer a maximum line length](#2.3)
+- [2.4 Declare strict types and type declarations](#2.4)
+- [2.5 Use constructor property promotion and readonly](#2.5)
+- [2.6 Use curly braces for all flow control statements](#2.6)
+- [2.7 Blank line rules inside a function](#2.7)
+- [2.8 Type-Safe Comparisons](#2.8)
+- [2.9 Use nullsafe and null coalescing operators](#2.9)
 
-[**2. Styling**](#2-styling)
+[**3. Comment** ](#3-comment)
+- [3.1 Comments should explain why, not repeat what the code does](#3.1)
+- [3.2 Single-line comments](#3.2)
+- [3.3 Multi-line comments](#3.3)
+- [3.4 PHPDoc comments](#3.4)
+- [3.5 Use English for comments](#3.5)
+- [3.6 TODO and FIXME comments](#3.6)
 
-- [2.1 Class layout](#2.1)
-- [2.2 Prefer a maximum line length](#2.2)
-- [2.3 Use single quotes for string literals](#2.3)
-- [2.4 Use 4 whitespaces for indentation](#2.4)
-- [2.5 Multi-line arrays, arguments list, parameters list and match expressions must have a trailing comma](#2.5)
-- [2.6 There must not be more than one statement per line](#2.6)
-- [2.7 Use curly braces for all flow control statements](#2.7)
-- [2.8 In function line break rules](#2.8)
-- [2.9 Type-Safe Comparisons](#2.9)
+[**4. Usage & Code Quality** ](#4-usage--code-quality)
+- [4.1 Early returns and guard clauses](#4.1)
+- [4.2 Prefer built-in functions over hand-rolled nested logic](#4.2)
+- [4.3 Distinguish between isset() and empty()](#4.3)
+- [4.4 Named arguments](#4.4)
+- [4.5 Use enums for fixed sets of values](#4.5)
+- [4.6 Maximum number of lines per file](#4.6)
 
-[**3. Comment**](#3-comment)
+[**5. Security** ](#5-security)
 
-- [3.1 Single-line comment](#3.1)
-- [3.2 Multi-line comments](#3.2)
-- [3.3 PHPDoc comments](#3.3)
-- [3.4 Use English for comment](#3.3)
-
-[**4. Usage**](#4-usage)
-
-- [4.1 PHP arrays should be declared using the short syntax](#4.1)
-- [4.2 Should use explicit variables](#4.2)
-- [4.3 Add curly braces to indirect variables](#4.3)
-- [4.4 When we have to meet certain criteria to continue execution, try to exit early](#4.4)
-- [4.5 Need to distinguish between `isset()` and `!empty()`](#4.5)
-- [4.6 Converts simple usages of `array_push($x, $y);` to `$x[] = $y;`](#4.6)
-- [4.7 Logical NOT operators (!) should have one trailing whitespace](#4.7)
-- [4.8 The same namespaces must be grouped](#4.8)
-- [4.9 Sort import statements alphabetically](#4.9)
-- [4.10 Named Arguments](#4.10)
-- [4.11 Nullsafe operator](#4.11)
-- [4.12 Null coalescing operator](#4.12)
-- [4.13 Avoid handling nested logic](#4.13)
-- [4.14 Maximum number of lines per file](#4.14)
-
-[**5. Security**](#5-security)
-
-[**6. Implement Lint**](#6-implement-lint)
-
-- [Step 1: Install package](#step-1)
-- [Step 2: Create .php-cs-fixer.dist.php put in the root directory](#step-2)
-- [Step 3: Add scripts to composer.json](#step-3)
-- [Step 4: Run composer commands](#step-4)
+[**6. Implement Lint** ](#6-implement-lint)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
+## Common
+- Always check wiki on redmine
+- Always prioritize the coding rules of the project, follow the conventions of your project
+- The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
+- These rules assume **PHP >= 8.2**. On an older project, apply only what its PHP version supports and keep the rest as the target when upgrading
+
+<br>
+
 ## 1. Naming
+The good way to name files, classes, functions and variables in PHP.
+
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
+
 <tr>
 <td id='1.1'>
 
 **1.1**
-
 </td>
 
 <td>
 
-Name of files, namespaces, classes, interfaces, enums and traits use **UpperCamelCase** format. </br>
-And should be a **noun**.
+Use **PascalCase** (UpperCamelCase) for files, namespaces, classes, interfaces, enums, traits and enum cases. The name should be a **noun**.
+</td>
+
+<td>
+
+**REQUIRED**
 </td>
 
 <td>
 
 ```php
-UserController.php
-
+// UserController.php
 namespace App\Http\Controllers;
 
 class UserController
@@ -85,15 +90,15 @@ class UserController
     // ...
 }
 
-interface Rule
+interface PaymentRule
 {
     // ...
 }
 
-enum UserType
+enum UserType: string
 {
-    case Admin;
-    case Support;
+    case Admin = 'admin';
+    case Support = 'support';
 }
 
 trait CommonTrait
@@ -109,21 +114,28 @@ trait CommonTrait
 <td id='1.2'>
 
 **1.2**
-
 </td>
 
 <td>
 
-Names of functions, properties and variables use **lowerCamelCase** format. </br>
-Names of functions should be a **verb**.
+Use **camelCase** for functions, methods, properties and variables. Function and method names should start with a **verb**.
+</td>
+
+<td>
+
+**REQUIRED**
 </td>
 
 <td>
 
 ```php
-function redirectTo($request) {
-    // ...
-}
+// Bad
+function user_name() {}
+$route_name = 'abc';
+
+// Good 👍
+function getUserName(): string {}
+function redirectTo(Request $request): ?string {}
 
 $routeName = 'abc';
 ```
@@ -135,19 +147,27 @@ $routeName = 'abc';
 <td id='1.3'>
 
 **1.3**
-
 </td>
 
 <td>
 
-Names of constants use **UPPER_CASE_UNDERSCORE** format.
+Use **UPPER_CASE_UNDERSCORE** for class constants and global constants.
+</td>
 
+<td>
+
+**REQUIRED**
 </td>
 
 <td>
 
 ```php
 const TABLE_NAME = 'users';
+
+class Invoice
+{
+    public const MAX_RETRY_COUNT = 3;
+}
 ```
 
 </td>
@@ -157,68 +177,60 @@ const TABLE_NAME = 'users';
 <td id='1.4'>
 
 **1.4**
-
 </td>
+
 <td>
 
-Use meaningful variable names.
-
+Use meaningful names. **Do not** use unclear abbreviations, single letters (except loop indexes) or data-type prefixes — the type belongs in the type declaration, not in the name (see [2.4](#2.4)).
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```php
 // Bad
 $fn = 'John';
 $a = 20;
+$strName = 'John';   // type prefix is redundant
+$arrAnimals = [];
 
-// Good 👍                                                  
+// Good 👍
 $firstName = 'John';
 $age = 20;
+$animals = [];
 ```
 
 </td>
 </tr>
 
-</tr>
 <tr>
 <td id='1.5'>
 
 **1.5**
-
 </td>
-<td> 
 
-Starting a boolean variable or property with a question words like *can, is, should*,...
+<td>
 
+Boolean names should read clearly as a predicate, state, capability or intention. Prefer `is`, `has`, `can`, `should` where they improve clarity; descriptive adjectives such as `enabled`, `visible`, `active` are acceptable.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```php
 $isConnected = true;
+$hasPermission = true;
+$canResize = false;
 $shouldConfirm = true;
-$canResize = true;
-```
-
-</td>
-</tr>
-
-<tr>
-<td id='1.6'>
-
-**1.6**
-
-</td>
-<td> 
-
-Can use prefix variable names to indicate the data type.
-
-</td>
-<td>
-
-```php
-// Better can do
-$strName = 'John';
-$arrAnimals = [];
+$enabled = true;
 ```
 
 </td>
@@ -226,72 +238,64 @@ $arrAnimals = [];
 
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-<br />
+<br>
 
-## 2. Styling
+## 2. Styling & Types
+
+The good way to manage formatting, typing and runtime safety in PHP projects.
+
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
 
 <tr>
 <td id='2.1'>
 
 **2.1**
-
 </td>
+
 <td>
 
-**Class layout**<br />
-Orders the elements in class:
-- Use trait
-- 1 line break
-- Constant (with order public -> protected -> private)
-- 1 line break
-- Property (with order public -> protected -> private)
-- 1 line break
-- Construct
-- 1 line break
-- Destruct
-- 1 line break
-- Magic method
-- 1 line break
-- Method (with order public -> protected -> private)
-- 1 line break each method
+Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-implement-lint)). Team should not manually discuss formatting in code review. The shared config enforces:
 
+- 4 spaces for indentation (never tabs), LF line endings
+- single quotes for string literals, unless the string contains a variable or a single quote
+- short array syntax `[]` instead of `array()`
+- trailing comma in multi-line arrays, arguments, parameters and `match`
+- one statement per line
+- explicit variables in strings: `"Hello {$name}"`
+- one space after the logical NOT operator: `! $isActive`
+- `use` statements sorted alphabetically, grouped per namespace, unused imports removed
+- class elements ordered per [2.2](#2.2)
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```php
-class Example
-{
-    use BarTrait;
-    use BazTrait;
+// After `composer lint:fix`
+use App\Models\{Invoice, User};
+use Illuminate\Http\Request;
 
-    public const PUBLIC_CONSTANT = 1;
-    protected const PROTECTED_CONSTANT = 2;
-    private const PRIVATE_CONSTANT = 2;
+$animals = ['tiger', 'lion'];
+$message = "Hello {$name}";
 
-    public $pubicProperty;
-    protected $protectedProperty;
-    private $privateProperty;
-
-    public function __construct() {}
-
-    public function __destruct() {}
-
-    public function __toString() {}
-
-    public function pubicFunction() {}
-
-    public static function pubicStaticFunction() {}
-
-    protected function protectedFunction() {}
-
-    protected static function protectedStaticFunction() {}
-
-    private function privateFunction() {}
-
-    private static function privateStaticFunction() {}
+if (! $isActive) {
+    return null;
 }
 
+$config = [
+    'retry' => 3,
+    'debug' => false,
+];
 ```
 
 </td>
@@ -301,29 +305,60 @@ class Example
 <td id='2.2'>
 
 **2.2**
-
 </td>
+
 <td>
 
-	
-**Prefer a maximum line length of 80 characters**<br />
-When the line exceeds column limit, it must be wrapped by follow conventions:
--	Break after a comma.
--	Break before an operator.
+**Class layout**<br />
+Order the elements in a class, separated by 1 blank line:
 
+- `use` trait
+- Enum cases
+- Constants (public → protected → private)
+- Properties (public → protected → private)
+- Constructor
+- Destructor
+- Magic methods
+- Methods (public → protected → private)
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```php
-if (
-    ($condition1 === true || $condition2 > 0)
-    && $condition3 === false // Break before an operator
-    && $condition4 === 1
-) {
-    callSomeThing(
-        $longNameParam, // Break after a comma
-        $otherLongNameParam,
-    );
+final class InvoiceService
+{
+    use LoggableTrait;
+
+    public const MAX_RETRY_COUNT = 3;
+    private const CACHE_KEY = 'invoice';
+
+    public int $version = 1;
+    private array $items = [];
+
+    public function __construct(
+        private readonly InvoiceRepository $repository,
+    ) {}
+
+    public function __toString(): string {
+        return self::CACHE_KEY;
+    }
+
+    public function issue(int $invoiceNo): Invoice {
+        // ...
+    }
+
+    protected function buildLines(array $rows): array {
+        // ...
+    }
+
+    private function normalize(array $rows): array {
+        // ...
+    }
 }
 ```
 
@@ -334,22 +369,36 @@ if (
 <td id='2.3'>
 
 **2.3**
-
 </td>
+
 <td>
 
-Use single quotes for string literals unless we need to include a single quote or variables within the string.
+**Prefer a maximum line length of 80 characters**<br />
+This is not auto-fixed — when a line exceeds the limit, wrap it by these conventions:
+- Break after a comma.
+- Break before an operator.
 
+Prefer going over the limit if breaking the line would make it less readable — for example a long string literal, a URL or a fully qualified class name that should not be split.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```php
-// Bad
-$message = "Hello world";
-
-// Good👍
-$message1 = 'Hello world';
-$message2 = "Hello {$name}";
+if (
+    ($condition1 === true || $condition2 > 0)
+    && $condition3 === false // Break before an operator
+    && $condition4 === 1
+) {
+    callSomething(
+        $longNameParam, // Break after a comma
+        $otherLongNameParam,
+    );
+}
 ```
 
 </td>
@@ -359,20 +408,50 @@ $message2 = "Hello {$name}";
 <td id='2.4'>
 
 **2.4**
-
 </td>
+
 <td>
 
-Use 4 whitespaces for indentation instead of tabs.
-
+**Declare strict types and type declarations**<br />
+Add `declare(strict_types=1);` at the top of every PHP file, and declare types for parameters, return values and properties. Types belong in the signature — this is what makes [2.8](#2.8) work at runtime and removes most redundant PHPDoc (see [3.4](#3.4)).<br />
+Use `void`, `?T`, union types and `never` where they describe the real contract. Use `mixed` only when the value truly can be anything.
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```php
-function multiplyNumbers($a, $b) {
-    $result = $a * $b;
+// Bad — no types at all
+function calculateDiscount($price, $discount) {
+    return $price * ($discount / 100);
+}
+```
 
-    return $result;
+```php
+<?php
+// Good 👍
+declare(strict_types=1);
+
+namespace App\Services;
+
+final class PriceService
+{
+    private ?Customer $customer = null;
+
+    public function calculateDiscount(
+        float $price,
+        float $discount,
+    ): float {
+        return $price * ($discount / 100);
+    }
+
+    public function findCustomer(int $customerNo): ?Customer {
+        // ...
+    }
 }
 ```
 
@@ -383,47 +462,40 @@ function multiplyNumbers($a, $b) {
 <td id='2.5'>
 
 **2.5**
-
 </td>
+
 <td>
 
-Multi-line arrays, arguments list, parameters list and match expressions must have a trailing comma (**include last item**).
-
+**Use constructor property promotion and `readonly`**<br />
+Promote constructor parameters instead of declaring the property and assigning it manually. Mark dependencies and value objects `readonly` when they must not change after construction.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```php
-// Array
-$foo = [
-    'bar' => [
-        'baz' => true,
-        'baq' => true,
-    ],
-    'bas' => [
-        'bak' => false,
-    ],
-];
+// Bad
+final class InvoiceService
+{
+    private InvoiceRepository $repository;
 
-// Arguments list
-foo(
-    'bar',
-    'baz',
-);
-
-// Parameters list
-function foo(
-    $x,
-    $y,
-) {
-    // ...
+    public function __construct(InvoiceRepository $repository) {
+        $this->repository = $repository;
+    }
 }
 
-// Match expressions
-$returnValue = match ($food) {
-    'apple' => 'This food is an apple',
-    'bar' => 'This food is a bar',
-    'cake' => 'This food is a cake',
-};
+// Good 👍
+final class InvoiceService
+{
+    public function __construct(
+        private readonly InvoiceRepository $repository,
+        private readonly LoggerInterface $logger,
+    ) {}
+}
 ```
 
 </td>
@@ -433,38 +505,18 @@ $returnValue = match ($food) {
 <td id='2.6'>
 
 **2.6**
-
 </td>
+
 <td>
 
-There must not be more than one statement per line.
-
+Use curly braces for all flow control statements, even single-line bodies.
 </td>
+
 <td>
 
-```php
-// Bad
-foo(); bar();
-
-// Good 👍
-foo();
-bar();
-```
-
+**REQUIRED**
 </td>
-</tr>
 
-<tr>
-<td id='2.7'>
-
-**2.7**
-
-</td>
-<td>
-
-Use curly braces for all flow control statements.
-
-</td>
 <td>
 
 ```php
@@ -477,6 +529,7 @@ if ($arg === null) return true;
 if ($isTrue) {
     echo 'true';
 }
+
 if ($arg === null) {
     return true;
 }
@@ -486,18 +539,23 @@ if ($arg === null) {
 </tr>
 
 <tr>
-<td id='2.8'>
+<td id='2.7'>
 
-**2.8**
-
+**2.7**
 </td>
+
 <td>
 
-**In function line break rules** <br />
-Add 1 line break **after** each if statement, and loop statement. <br />
-Add 1 line break **before** `return` keyword. <br />
-
+**Blank line rules inside a function**<br />
+Add 1 blank line **after** each `if` block and loop block.<br />
+Add 1 blank line **before** the `return` keyword (auto-fixed).
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```php
@@ -505,10 +563,7 @@ Add 1 line break **before** `return` keyword. <br />
 if ($condition) {
     // ...
 }
-for ($index = 0; $index < $count; $i++) {
-    // ...
-}
-while ($a <= 10) {
+foreach ($items as $item) {
     // ...
 }
 return true;
@@ -517,16 +572,64 @@ return true;
 if ($condition) {
     // ...
 }
-// 1 line break
-for ($index = 0; $index < $count; $i++) {
+
+foreach ($items as $item) {
     // ...
 }
-// 1 line break
-while ($a <= 10) {
-    // ...
-}
-// 1 line break
+
 return true;
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='2.8'>
+
+**2.8**
+</td>
+
+<td>
+
+**Type-Safe Comparisons**
+
+Use `===` instead of `==`, `!==` instead of `!=`.<br />
+When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g. `'1' === 1` is `false`).<br />
+Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```php
+// Example 1: check NULL column data from database
+// Bad — when $userFlag = 0, it also returns early
+$userFlag = $this->user->getUserFlag();
+if ($userFlag == null) {
+    return;
+}
+
+// Good 👍
+$userFlag = $this->user->getUserFlag();
+if ($userFlag === null) {
+    return;
+}
+
+// Example 2: type mismatch (string vs number)
+// Bad
+$status = $request->input('status'); // returns string '1'
+if ($status === 1) { ... }           // '1' === 1 → false
+
+// Good 👍 — convert to the SAME type before comparing
+if ((int) $status === 1) { ... }
+
+// Good 👍 — strict in_array
+$validStatuses = ['1', '2', '3'];
+if (in_array((string) $status, $validStatuses, true)) { ... }
 ```
 
 </td>
@@ -536,46 +639,41 @@ return true;
 <td id='2.9'>
 
 **2.9**
-
 </td>
+
 <td>
 
-**Type-Safe Comparisons**<br>
-Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.<br>
-When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g., `'1' === 1` is `false`).
+**Use nullsafe `?->` and null coalescing `??` / `??=`**<br />
+They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```php
-// Example 1: check NULL column data from database
-
 // Bad
-$userFlag = $this->User->getUserFlag();
-// When $userFlag = 0, it also early return
-if ($userFlag == null) {
-    return;
+if ($user !== null) {
+    $address = $user->address;
+
+    if ($address !== null) {
+        $city = $address->getCity();
+
+        if ($city !== null) {
+            $country = $city->country;
+        }
+    }
 }
-// ...
+
+$foo = isset($bar) ? $bar : 'something';
 
 // Good 👍
-$userFlag = $this->User->getUserFlag();
-if ($userFlag === null) {
-    return;
-}
-// ...
-
-// Example 2: Type mismatch (string vs number)
-// Bad
-$status = $request->input('status'); // returns string '1'
-if ($status === 1) { ... } // '1' === 1 → false
-
-// Good 👍 - Convert to the SAME type before comparing
-// Option 1: Convert to int
-if ((int) $status === 1) { ... }
-
-// Option 2: Convert to string
-$validStatuses = ['1', '2', '3'];
-if (in_array((string) $status, $validStatuses, true)) { ... }
+$country = $user?->address?->getCity()?->country;
+$foo = $bar ?? 'something';
+$options['limit'] ??= 50;
 ```
 
 </td>
@@ -583,25 +681,70 @@ if (in_array((string) $status, $validStatuses, true)) { ... }
 
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-<br />
+<br>
 
 ## 3. Comment
 
-Commenting code is an important aspect of software development as it helps other developers understand your code and makes it easier to maintain.
+Comments are useful when they explain business context, assumptions and reasons that are not obvious from code.
 
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
+
 <tr>
 <td id='3.1'>
 
 **3.1**
-
 </td>
 
 <td>
 
-**Single-line comment**<br />
-Format comments like sentences, begin with 1 whitespace and capitalize the first word.
+Comments should explain **why**, not repeat **what** the code already says.
+</td>
 
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```php
+// Bad: repeats what the code does
+// Check if user is inactive
+if ($user->status === UserStatus::Inactive) {
+    return;
+}
+
+// Good 👍 explains the business reason
+// Inactive users are kept for audit history and must not receive notifications.
+if ($user->status === UserStatus::Inactive) {
+    return;
+}
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='3.2'>
+
+**3.2**
+</td>
+
+<td>
+
+**Single-line comments**<br />
+Use `//` (never `#`), begin with 1 whitespace, capitalize the first word and write it like a sentence.
+</td>
+
+<td>
+
+**RECOMMENDED**
 </td>
 
 <td>
@@ -617,55 +760,30 @@ if (! $hasItems) {
 </tr>
 
 <tr>
-<td id='3.2'>
+<td id='3.3'>
 
-**3.2**
-
+**3.3**
 </td>
+
 <td>
 
 **Multi-line comments**<br />
-Note that all "*" should be aligned.
+Use them only for complex business logic, temporary migration notes or non-obvious technical constraints. All `*` must be aligned.
+</td>
 
+<td>
+
+**RECOMMENDED**
 </td>
 
 <td>
 
 ```php
 /*
- * This is a multi-line comment.
- * It can be used to explain large sections of code.
+ * This migration must keep old user numbers because external invoices
+ * still reference them. Do not regenerate userNo here.
  */
-$age = 30;
-```
-
-</td>
-</tr>
-
-<tr>
-<td id='3.3'>
-
-**3.3**
-
-</td>
-<td>
-
-**PHPDoc comments**
-
-</td>
-<td>
-
-```php
-/**
- * This is a PHPDoc comment.
- * There should be a line break between Descriptions and Tags.
- *
- * @param \Illuminate\Http\Request $request
- * @return string|null
- */
-protected function redirectTo($request) {
-    // ...
-}
+$this->migrateUserContracts();
 ```
 
 </td>
@@ -675,13 +793,63 @@ protected function redirectTo($request) {
 <td id='3.4'>
 
 **3.4**
-
 </td>
+
 <td>
 
-**USE** English for comment.
+**PHPDoc comments**<br />
+Write PHPDoc when it adds information the signature cannot express: a description, array shapes, `@throws`, or generics. **Do not** repeat types that are already declared in the signature ([2.4](#2.4)) — a duplicated type is one more thing that can go stale.<br />
+There should be a blank line between the description and the tags.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```php
+// Bad — every tag only repeats the signature
+/**
+ * @param Request $request
+ * @return string|null
+ */
+public function redirectTo(Request $request): ?string {}
+
+// Good 👍 — adds what the signature cannot say
+/**
+ * Builds the redirect target after login.
+ * Guest users are sent back to the page they requested.
+ *
+ * @param array<int, string> $allowedPaths
+ * @throws InvalidRedirectException when the target host is not whitelisted
+ */
+public function redirectTo(
+    Request $request,
+    array $allowedPaths,
+): ?string {}
+```
 
 </td>
+</tr>
+
+<tr>
+<td id='3.5'>
+
+**3.5**
+</td>
+
+<td>
+
+**USE** English for comments.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 ```php
@@ -696,32 +864,98 @@ $students = [];
 
 </td>
 </tr>
+
+<tr>
+<td id='3.6'>
+
+**3.6**
+</td>
+
+<td>
+
+TODO/FIXME comments should include enough context to be actionable. If possible, include a ticket number or owner.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```php
+// Bad
+// TODO: fix this
+
+// Good 👍
+// TODO(#123456): Remove this fallback after the partner API v2 migration.
+$companyCode = $input['companyCode'] ?? $legacyCompanyCode;
+```
+
+</td>
+</tr>
+
 </table>
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-<br />
+<br>
 
-## 4. Usage
+## 4. Usage & Code Quality
+
+Use tools and project conventions to keep code consistent, readable and safe.
+
 <table>
+<tr>
+<th>No</th>
+<th>Rule</th>
+<th>Priority</th>
+<th>Example</th>
+</tr>
 
 <tr>
 <td id='4.1'>
 
 **4.1**
-
 </td>
+
 <td>
 
-PHP arrays should be declared using the **short** syntax instead of long syntax.
-
+**Early returns and guard clauses**<br />
+When we have to meet certain criteria to continue execution, exit early. Flatten nesting deeper than three levels: invert the condition and return instead of wrapping the main logic in a large `else` block.
 </td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
 <td>
 
 ```php
 // Bad
-$numbers = array(1, 2);
+public function publish(Post $post): bool {
+    if ($post->isValid()) {
+        if ($post->author->isActive()) {
+            return $this->repository->publish($post);
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
 
 // Good 👍
-$numbers = [1, 2];
+public function publish(Post $post): bool {
+    if (! $post->isValid()) {
+        return false;
+    }
+
+    if (! $post->author->isActive()) {
+        return false;
+    }
+
+    return $this->repository->publish($post);
+}
 ```
 
 </td>
@@ -731,332 +965,18 @@ $numbers = [1, 2];
 <td id='4.2'>
 
 **4.2**
-
 </td>
+
 <td>
 
-We should use **explicit** variables instead of implicit in double-quoted strings.
-
+Avoid hand-rolled nested logic — look for a built-in function (`in_array`, `array_filter`, `array_column`, `str_contains`, …) or a `match` expression instead.
 </td>
+
 <td>
 
-```php
-// Bad
-$name = 'World';
-$message = "Hello $name";
-
-// Good👍
-$name = 'World';
-$message = "Hello {$name}";
-```
-
+**RECOMMENDED**
 </td>
-</tr>
 
-<tr id="4.3">
-<td>
-
-**4.3**
-
-</td>
-<td>
-
-Add curly braces to indirect variables to make them clear to understand. 
-
-</td>
-<td>
-
-```php
-// Bad
-echo $$foo;
-echo $$foo['bar'];
-echo $foo->$bar['baz'];
-echo $foo->$callback($baz);
-
-// Good 👍
-echo ${$foo};
-echo ${$foo}['bar'];
-echo $foo->{$bar}['baz'];
-echo $foo->{$callback}($baz);
-```
-</td>
-</tr>
-
-<tr id="4.4">
-<td>
-
-**4.4**
-
-</td>
-<td>
-
-When we have to meet certain criteria to continue execution, try to exit early.
-
-</td>
-<td>
-
-```php
-// Bad
-if ($isTrue) {
-    // ...
-}else {
-    return;
-}
-
-// Good 👍
-if (! $isTrue) {
-  return;
-}
-```
-</td>
-</tr>
-
-<tr id="4.5">
-<td>
-
-**4.5**
-
-</td>
-<td>
-
-Need to distinguish between `isset()` and `!empty()`.
-
-</td>
-<td>
-
-**ISSET** checks the variable to see if it has been set.
-In other words, it checks to see if the variable is any value except `null` or `not assigned a value`.<br />
-**ISSET** returns `true` if the variable exists and has a value other than `null`.<br />
-That means variables assigned a `""`, `0`, `"0"`, or `false` are set, and therefore are `true` for **ISSET**.
-
-**EMPTY** checks to see if a variable is `empty`.<br />
-Empty is interpreted as: `""` (an empty string), `0` (integer), `0.0` (float), `"0"` (string), `null`, `false`, `[]` (an empty array), and `$var;` (a variable declared, but without a value in a class).
-
-</td>
-</tr>
-
-<tr id="4.6">
-<td>
-
-**4.6**
-
-</td>
-<td>
-
-Converts simple usages of `array_push($x, $y);` to `$x[] = $y;`.
-
-</td>
-<td>
-
-```php
-// Bad
-$animals = [
-    'tiger',
-    'lion',
-    'dog',
-];
-array_push($animals, 'cat');
-
-// Good 👍
-$animals = [
-    'tiger',
-    'lion',
-    'dog',
-];
-$animals[] = 'cat';
-```
-</td>
-</tr>
-
-<tr id="4.7">
-<td>
-
-**4.7**
-
-</td>
-<td>
-
-Logical NOT operators (!) should have one trailing whitespace.
-
-</td>
-<td>
-
-```php
-// Bad
-if (!$bar) {
-    echo 'Help!';
-}
-
-// Good 👍
-if (! $bar) {
-    echo 'Help!';
-}
-```
-</td>
-</tr>
-
-<tr id="4.8">
-<td>
-
-**4.8**
-
-</td>
-<td>
-
-The same namespaces must be grouped.
-
-</td>
-<td>
-
-```php
-// Bad
-use Foo\Bar;
-use Foo\Baz;
-
-// Good 👍
-use Foo\{Bar, Baz};
-```
-</td>
-</tr>
-
-<tr>
-<td id='4.9'>
-
-**4.9**
-
-</td>
-<td>
-
-**Sort import statements alphabetically** <br />
-All `use` statements (imports) must be sorted alphabetically.
-
-</td>
-<td>
-
-```php
-// Bad
-use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\{
-    User,
-    Post,
-};
-use App\Controllers\UserController;
-
-// Good 👍
-use App\Controllers\UserController;
-use App\Models\{
-    Post,
-    User,
-};
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Route;
-```
-
-</td>
-</tr>
-
-<tr>
-<td id='4.10'>
-
-**4.10**
-
-</td>
-<td>
-
-**Named Arguments** <br />
-Use Named Arguments instead of Positional arguments when you want to ignore default values.<br />
-For projects using PHP 8 or higher.
-
-</td>
-<td>
-
-```php
-// Bad
-htmlspecialchars($string, default, default, false);
-
-// Good 👍
-htmlspecialchars($string, double_encode: false);
-```
-
-</td>
-</tr>
-
-<tr>
-<td id='4.11'>
-
-**4.11**
-
-</td>
-<td>
-
-**Nullsafe operator** <br />
-Nullsafe operator makes it simpler to handle values if the object we access can be `null`.<br />
-For projects using PHP 8 or higher.
-
-</td>
-<td>
-
-```php
-// Bad
-$user = null;
-
-if ($user !== null) {
-    $address = $user->address;
-
-    if ($address !== null) {
-        $city = $address->getCity();
- 
-        if ($city !== null) {
-            $country = $city->country;
-        }
-    }
-}
-
-// Good 👍
-$country = $user?->address?->getCity()?->country;
-```
-
-</td>
-</tr>
-
-<tr>
-<td id='4.12'>
-
-**4.12**
-
-</td>
-<td>
-
-**Null coalescing operator** <br />
-Use for the common case of needing to use a ternary in conjunction with `isset()`.<br />
-For projects using PHP 7 or higher.
-
-</td>
-<td>
-
-```php
-// Bad
-$foo = isset($bar) ? $bar : 'something';
-
-// Good 👍
-$foo = $bar ?? 'something';
-```
-
-</td>
-</tr>
-
-<tr>
-<td id='4.13'>
-
-**4.13**
-
-</td>
-<td>
-
-Avoid handling nested logic, instead look for built-in functions to handle.
-
-</td>
 <td>
 
 ```php
@@ -1076,9 +996,9 @@ if ($day) {
     } else {
         return false;
     }
-} else {
-    return false;
 }
+
+return false;
 
 // Good 👍
 if (empty($day)) {
@@ -1092,17 +1012,149 @@ $openingDays = [
 ];
 
 return in_array(strtolower($day), $openingDays, true);
+
+// Good 👍 — match for value mapping (strict comparison by design)
+$label = match ($food) {
+    'apple' => 'This food is an apple',
+    'cake' => 'This food is a cake',
+    default => 'Unknown food',
+};
 ```
 
 </td>
 </tr>
 
 <tr>
-<td id='4.14'>
+<td id='4.3'>
 
-**4.14**
+**4.3**
+</td>
+
+<td>
+
+Need to distinguish between `isset()` and `empty()`.
+
+**isset()** checks whether the variable has been set — it returns `true` if the variable exists and its value is not `null`. That means `''`, `0`, `'0'`, `false` and `[]` are **set**, so `isset()` returns `true` for them.
+
+**empty()** checks whether a variable is *empty*. These are all empty: `''`, `0`, `0.0`, `'0'`, `null`, `false`, `[]` and a declared-but-unassigned variable.
+
+Use `isset()` when only "missing / null" matters, and `empty()` only when `0` and `''` really should be treated the same as missing — otherwise use an explicit `=== null` or `count()` check.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```php
+$data = ['quantity' => 0];
+
+// Bad — a legit quantity of 0 is treated as "not provided"
+if (empty($data['quantity'])) {
+    throw new InvalidArgumentException('quantity is required');
+}
+
+// Good 👍 — only "missing / null" is rejected
+if (! isset($data['quantity'])) {
+    throw new InvalidArgumentException('quantity is required');
+}
+
+// Good 👍 — empty() is correct here: an empty list means nothing to do
+if (empty($items)) {
+    return;
+}
+```
 
 </td>
+</tr>
+
+<tr>
+<td id='4.4'>
+
+**4.4**
+</td>
+
+<td>
+
+**Named arguments**<br />
+Use named arguments instead of positional ones when you want to skip default values, or when a bare `true` / `null` at the call site says nothing about its meaning.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```php
+// Bad
+htmlspecialchars($string, ENT_QUOTES, 'UTF-8', false);
+
+// Good 👍
+htmlspecialchars($string, double_encode: false);
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.5'>
+
+**4.5**
+</td>
+
+<td>
+
+**Use enums for fixed sets of values**<br />
+Replace magic strings/numbers and loose class constants with a backed `enum`. The type declaration then guarantees only valid values reach the function.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```php
+// Bad
+const STATUS_ACTIVE = 1;
+const STATUS_INACTIVE = 0;
+
+public function updateStatus(int $status): void {}
+
+// Good 👍
+enum UserStatus: int
+{
+    case Active = 1;
+    case Inactive = 0;
+
+    public function label(): string {
+        return match ($this) {
+            self::Active => 'Active',
+            self::Inactive => 'Inactive',
+        };
+    }
+}
+
+public function updateStatus(UserStatus $status): void {}
+
+// At the boundary (request, DB), convert once
+$status = UserStatus::from((int) $request->input('status'));
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='4.6'>
+
+**4.6**
+</td>
+
 <td>
 
 **Maximum number of lines per file** <br />
@@ -1112,8 +1164,13 @@ Limit each file to a maximum of **1000 lines** of code to enhance code quality, 
 > 1. Document the reason in the Pull Request description or code review comment.
 > 2. Report the exception to your PM/leader before merging. An exception without a documented reason and without approval **must be rejected** in code review.
 > 3. If the same file keeps exceeding the limit, raise it with the leader — revisit the architecture instead of accumulating exceptions.
-
 </td>
+
+<td>
+
+**REQUIRED**
+</td>
+
 <td>
 
 To ensure compliance with this rule, adhere to the following best practices in your code:
@@ -1128,179 +1185,84 @@ To ensure compliance with this rule, adhere to the following best practices in y
 </table>
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-<br />
+<br>
 
 ## 5. Security
 
 See **[Web Security Rules](./WebSecurityRules.md)**.
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-<br />
+<br>
 
 ## 6. Implement Lint
 
-We will implement PHP lint using PHP Coding Standards Fixer.<br />
+We implement PHP lint using **PHP Coding Standards Fixer**.<br />
+A ready-to-use template is provided in the [`config/php/`](./config/php) folder. Every fixer in the template is annotated with its rule ID (e.g. `// 2.7 — Blank line rules inside a function`) so each setting can be traced back to this page.
+
+| Template | Copy to project root as | Purpose |
+|---|---|---|
+| [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) | `.php-cs-fixer.dist.php` | PHP-CS-Fixer config covering the auto-fixable rules of sections 1, 2, 3 and 4 |
+
 Ref: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 
 #### Step 1
+
 **Install package**
-```php
+
+```bash
 composer require --dev friendsofphp/php-cs-fixer
 ```
 
 #### Step 2
 
-**Create .php-cs-fixer.dist.php put in the root directory**
+**Create .php-cs-fixer.dist.php**
 
-```php
-<?php
+Copy [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) to your project root as `.php-cs-fixer.dist.php`, then adjust the `Finder` paths to your project layout — each block is explained by its comments in the template.
 
-return (new PhpCsFixer\Config())
-    ->setRules([
-        '@PSR12' => true,
-        'align_multiline_comment' => true,
-        'array_indentation' => true,
-        'array_syntax' => ['syntax' => 'short'],
-        'binary_operator_spaces' => true,
-        'blank_line_before_statement' => ['statements' => ['return']],
-        'cast_spaces' => true,
-        'class_attributes_separation' => true,
-        'class_reference_name_casing' => true,
-        'clean_namespace' => true,
-        'concat_space' => ['spacing' => 'one'],
-        'control_structure_braces' => true,
-        'control_structure_continuation_position' => true,
-        'curly_braces_position' => ['functions_opening_brace' => 'same_line'],
-        'echo_tag_syntax' => ['format' => 'short'],
-        'explicit_indirect_variable' => true,
-        'explicit_string_variable' => true,
-        'fully_qualified_strict_types' => true,
-        'function_typehint_space' => true,
-        'global_namespace_import' => true,
-        'include' => true,
-        'linebreak_after_opening_tag' => true,
-        'list_syntax' => true,
-        'lowercase_cast' => true,
-        'magic_constant_casing' => true,
-        'magic_method_casing' => true,
-        'method_chaining_indentation' => true,
-        'multiline_comment_opening_closing' => true,
-        'multiline_whitespace_before_semicolons' => true,
-        'native_function_casing' => true,
-        'native_function_type_declaration_casing' => true,
-        'no_blank_lines_after_phpdoc' => true,
-        'no_empty_comment' => true,
-        'no_empty_phpdoc' => true,
-        'no_empty_statement' => true,
-        'no_extra_blank_lines' => [
-            'tokens' => [
-                'curly_brace_block',
-                'extra',
-                'parenthesis_brace_block',
-                'square_brace_block',
-                'throw',
-                'use',
-            ],
-        ],
-        'no_leading_namespace_whitespace' => true,
-        'no_mixed_echo_print' => true,
-        'no_multiline_whitespace_around_double_arrow' => true,
-        'no_multiple_statements_per_line' => true,
-        'no_short_bool_cast' => true,
-        'no_singleline_whitespace_before_semicolons' => true,
-        'no_spaces_around_offset' => true,
-        'no_superfluous_elseif' => true,
-        'no_trailing_comma_in_singleline' => true,
-        'no_unset_cast' => true,
-        'no_unused_imports' => true,
-        'no_useless_else' => true,
-        'no_useless_return' => true,
-        'no_whitespace_before_comma_in_array' => true,
-        'not_operator_with_successor_space' => true,
-        'object_operator_without_whitespace' => true,
-        'operator_linebreak' => ['only_booleans' => true],
-        'ordered_class_elements' => [
-            'order' => [
-                'use_trait',
-                'case',
-                'constant_public',
-                'constant_protected',
-                'constant_private',
-                'property_public',
-                'property_protected',
-                'property_private',
-                'construct',
-                'destruct',
-                'magic',
-                'phpunit',
-                'method_public',
-                'method_protected',
-                'method_private',
-            ],
-        ],
-        'ordered_imports' => ['sort_algorithm' => 'alpha'],
-        'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
-        'phpdoc_align' => ['align' => 'left'],
-        'phpdoc_indent' => true,
-        'phpdoc_line_span' => true,
-        'phpdoc_order' => true,
-        'phpdoc_trim' => true,
-        'phpdoc_trim_consecutive_blank_line_separation' => true,
-        'phpdoc_types' => true,
-        'phpdoc_types_order' => [
-            'null_adjustment' => 'always_last',
-            'sort_algorithm' => 'none',
-        ],
-        'phpdoc_var_annotation_correct_order' => true,
-        'phpdoc_var_without_name' => true,
-        'semicolon_after_instruction' => true,
-        'simple_to_complex_string_variable' => true,
-        'single_class_element_per_statement' => true,
-        'single_import_per_statement' => false,
-        'group_import' => true,
-        'single_line_comment_spacing' => true,
-        'single_line_comment_style' => ['comment_types' => ['hash']],
-        'single_quote' => true,
-        'single_space_around_construct' => true,
-        'space_after_semicolon' => ['remove_in_empty_for_expressions' => true],
-        'standardize_not_equals' => true,
-        'statement_indentation' => true,
-        'trailing_comma_in_multiline' => [
-            'elements' => [
-                'arguments',
-                'arrays',
-                'match',
-                'parameters',
-            ],
-        ],
-        'trim_array_spaces' => true,
-        'types_spaces' => true,
-        'unary_operator_spaces' => true,
-        'whitespace_after_comma_in_array' => ['ensure_single_space' => true],
-    ])
-    ->setLineEnding("\n");
+Add the cache file to `.gitignore`:
 
+```
+.php-cs-fixer.cache
 ```
 
 #### Step 3
+
 **Add scripts to composer.json**
 
 ```json
 "scripts": {
-    "lint": "./vendor/bin/php-cs-fixer fix . --dry-run --verbose --config=.php-cs-fixer.dist.php",
-    "lint-and-fix": "./vendor/bin/php-cs-fixer fix . --verbose --config=.php-cs-fixer.dist.php"
+    "lint": "php-cs-fixer fix --dry-run --diff --verbose",
+    "lint:fix": "php-cs-fixer fix --verbose"
 },
 ```
 
 #### Step 4
-**Run composer commands** 
 
-`composer lint`: Command to check lint errors.<br />
-`composer lint-and-fix`: Command to check and fix lint errors.
+**Run composer commands**
+
+- **composer lint** — checks and reports violations (`--diff` shows exactly what would change). Use this in CI.
+- **composer lint:fix** — automatically fixes every auto-fixable rule.
+
+`.php-cs-fixer.dist.php` in the project root is detected automatically, so no `--config` flag is needed.
 
 **Visual Studio Code extension**
 
 https://marketplace.visualstudio.com/items?itemName=junstyle.php-cs-fixer<br />
 This extension simply provides PHP CS Fixer command (include code format).
+
+#### Disabling a rule
+
+PHP-CS-Fixer has no per-line disable comment, so a rule is relaxed by editing the config. Disabling is the exception, never the default:
+
+1. **Scope it as narrowly as possible** — exclude the single path with `$finder->notPath(...)` / `->exclude(...)` instead of turning the fixer off project-wide.
+2. **Always add a comment explaining why**, next to the change:
+
+```php
+// PROJECT DECISION (2026-08-26): generated API client, never edited by hand.
+->notPath('src/Generated/ApiClient.php')
+```
+
+3. **Report the change to your PM/leader** before merging. A disabled rule without a written reason and without the PM being informed must be rejected in code review.
+4. If the same rule keeps getting disabled across the project, raise it with the leader — revisit the rule instead of accumulating exceptions.
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
