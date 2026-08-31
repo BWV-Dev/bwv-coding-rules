@@ -51,12 +51,13 @@ $finder = PhpCsFixer\Finder::create()
 
 return (new PhpCsFixer\Config())
     ->setFinder($finder)
-    // Risky fixers are ENABLED. They implement three REQUIRED rules that cannot
-    // be enforced any other way: 2.4 `declare(strict_types=1)` and both halves
-    // of 2.8 (`===` / strict flags). They can change runtime behaviour, so on an
-    // existing codebase run `composer lint` (dry-run) and read the diff BEFORE
-    // the first `composer lint:fix` — see the LEGACY OPT-OUT block at the end
-    // of this file.
+    // Risky fixers are ENABLED. There are exactly three of them here
+    // ('declare_strict_types', 'strict_comparison', 'strict_param') and between
+    // them they implement two REQUIRED rules that cannot be enforced any other
+    // way: 2.4 `declare(strict_types=1)` and both halves of 2.8 (`===` / strict
+    // flags). They can change runtime behaviour, so on an existing codebase run
+    // `composer lint` (dry-run) and read the diff BEFORE the first
+    // `composer lint:fix` — see the LEGACY OPT-OUT block at the end of this file.
     ->setRiskyAllowed(true)
     ->setRules([
         // ====================================================================
@@ -115,6 +116,11 @@ return (new PhpCsFixer\Config())
         // Replaces the deprecated 'function_typehint_space'
         'type_declaration_spaces' => true,
         'single_space_around_construct' => true,
+        // 2.3 — Prefer a maximum line length
+        // The ONLY fixer backing 2.3, and it does less than the name suggests:
+        // it never introduces a line break, it just moves a `&&` / `||` that
+        // sits at the end of a line down to the start of the next one. Deciding
+        // where to break stays manual, as does every non-boolean operator.
         'operator_linebreak' => ['only_booleans' => true],
         'standardize_not_equals' => true,
 
@@ -232,12 +238,16 @@ return (new PhpCsFixer\Config())
         // ====================================================================
         // 2.7 — Blank line rules inside a function
         // ====================================================================
-        // NOTE: this fixer inserts a blank line BEFORE each listed statement,
-        // not after a block. So it covers "1 blank line before `return`" fully,
-        // but only approximates "1 blank line after each if/loop block": adding
-        // 'if', 'for', 'foreach', 'while', 'switch', 'try' below catches a block
-        // followed by another control structure, and misses a block followed by
-        // anything else (e.g. a plain assignment). The rest stays a review item.
+        // Only 'return' is enabled below, so 2.7 is covered by halves:
+        // "1 blank line before `return`" is enforced, "1 blank line after each
+        // if/loop block" is NOT — it stays a code-review item.
+        //
+        // The reason is that this fixer inserts a blank line BEFORE a listed
+        // statement, which cannot express "after a block". Adding 'if', 'for',
+        // 'foreach', 'while', 'switch' and 'try' to the list would catch only
+        // the case of a block followed by another control structure, and still
+        // miss a block followed by anything else (e.g. a plain assignment) —
+        // half a rule, at the cost of surprising diffs. Left off deliberately.
         'blank_line_before_statement' => ['statements' => ['return']],
 
         // ====================================================================

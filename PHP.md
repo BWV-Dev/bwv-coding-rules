@@ -50,6 +50,18 @@
 - The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
 - These rules assume **PHP >= 8.2**. On an older project, apply only what its PHP version supports and keep the rest as the target when upgrading
 
+**Reading the Priority column**
+
+`REQUIRED` / `RECOMMENDED` say how important a rule is. The marker underneath says who catches a violation — the linter or a human:
+
+| Marker | Meaning |
+|---|---|
+| *(auto-fixed)* | `composer lint` catches the whole rule; `composer lint:fix` repairs it |
+| *(partly auto-fixed)* | the linter catches part of it, the rest is a code-review item |
+| no marker | not lintable at all — code review only |
+
+The exact split is listed in [Auto-fix coverage](#auto-fix-coverage).
+
 <br>
 
 ## 1. Naming
@@ -260,7 +272,7 @@ The good way to manage formatting, typing and runtime safety in PHP projects.
 
 <td>
 
-Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-implement-lint)). Team should not manually discuss formatting in code review. The shared config enforces:
+Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-implement-lint)). Team should not manually discuss formatting in code review. The shared config takes **PSR-12** as its base and enforces:
 
 - 4 spaces for indentation (never tabs), LF line endings
 - single quotes for string literals, unless the string contains a variable or a single quote
@@ -269,13 +281,24 @@ Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-impleme
 - one statement per line
 - explicit variables in strings: `"Hello {$name}"`
 - one space after the logical NOT operator: `! $isActive`
+- one space around the concatenation operator: `$greeting . $name`
 - `use` statements sorted alphabetically, grouped per namespace, unused imports removed
+- global classes imported rather than written inline: `new \DateTimeImmutable()` becomes a `use` plus `new DateTimeImmutable()`
+- an empty body collapses onto the signature line: `public function handle(): void {}`
+- every PHPDoc block is multi-line, even a one-liner
+- `<?php echo $x ?>` becomes `<?= $x; ?>`
 - class elements ordered per [2.2](#2.2)
+
+Two **deliberate deviations from PSR-12** — both are in the template, do not "fix" them in review:
+
+1. The `{` of a function or method stays on the signature line (`public function issue(int $invoiceNo): Invoice {`). Classes and interfaces keep the PSR-12 form, with `{` on its own line.
+2. Group imports are allowed: `use App\Models\{Invoice, User};`
 </td>
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(auto-fixed)*
 </td>
 
 <td>
@@ -310,7 +333,7 @@ $config = [
 <td>
 
 **Class layout**<br />
-Order the elements in a class, separated by 1 blank line:
+Order the elements in a class:
 
 - `use` trait
 - Enum cases
@@ -319,12 +342,16 @@ Order the elements in a class, separated by 1 blank line:
 - Constructor
 - Destructor
 - Magic methods
+- PHPUnit methods (`setUp`, `tearDown`, …)
 - Methods (public → protected → private)
+
+Separate them by 1 blank line — **except enum cases**, which stay packed together. Constants and properties each get their own blank line too: PHP-CS-Fixer has no "separate the groups only" mode, so the airy form below is what `lint:fix` produces.
 </td>
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(auto-fixed)*
 </td>
 
 <td>
@@ -335,9 +362,11 @@ final class InvoiceService
     use LoggableTrait;
 
     public const MAX_RETRY_COUNT = 3;
+
     private const CACHE_KEY = 'invoice';
 
     public int $version = 1;
+
     private array $items = [];
 
     public function __construct(
@@ -374,16 +403,17 @@ final class InvoiceService
 <td>
 
 **Prefer a maximum line length of 80 characters**<br />
-This is not auto-fixed — when a line exceeds the limit, wrap it by these conventions:
+The limit itself is not auto-fixed — no PHP-CS-Fixer rule measures line length. When a line exceeds it, wrap it by these conventions:
 - Break after a comma.
-- Break before an operator.
+- Break before an operator. The fixer never breaks a line for you — it only moves `&&` and `||` to the start of the next line once *you* have broken there. Where to break, and every other operator, is a manual convention.
 
 Prefer going over the limit if breaking the line would make it less readable — for example a long string literal, a URL or a fully qualified class name that should not be split.
 </td>
 
 <td>
 
-**RECOMMENDED**
+**RECOMMENDED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -414,12 +444,14 @@ if (
 
 **Declare strict types and type declarations**<br />
 Add `declare(strict_types=1);` at the top of every PHP file, and declare types for parameters, return values and properties. Types belong in the signature — this is what makes [2.8](#2.8) work at runtime and removes most redundant PHPDoc (see [3.4](#3.4)).<br />
-Use `void`, `?T`, union types and `never` where they describe the real contract. Use `mixed` only when the value truly can be anything.
+Use `void`, `?T`, union types and `never` where they describe the real contract. Use `mixed` only when the value truly can be anything.<br />
+`lint:fix` inserts the missing `declare(strict_types=1);` and rewrites an implicit nullable parameter (`Customer $c = null`) into the explicit `?Customer $c = null`, but it cannot invent the type declarations — those are on you.
 </td>
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -514,7 +546,8 @@ Use curly braces for all flow control statements, even single-line bodies.
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(auto-fixed)*
 </td>
 
 <td>
@@ -548,12 +581,14 @@ if ($arg === null) {
 
 **Blank line rules inside a function**<br />
 Add 1 blank line **after** each `if` block and loop block.<br />
-Add 1 blank line **before** the `return` keyword (auto-fixed).
+Add 1 blank line **before** the `return` keyword.<br />
+Only the `return` half is auto-fixed. The blank line after an `if` or loop block is a manual convention — the fixer works on "blank line before statement X", which cannot express "after a block" in the general case.
 </td>
 
 <td>
 
-**RECOMMENDED**
+**RECOMMENDED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -595,12 +630,14 @@ return true;
 
 Use `===` instead of `==`, `!==` instead of `!=`.<br />
 When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g. `'1' === 1` is `false`).<br />
-Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.
+Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.<br />
+`lint:fix` rewrites `==` / `!=` and adds the missing strict flags. Converting both sides to a common type is on you — the linter cannot know which type you meant.
 </td>
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -644,12 +681,14 @@ if (in_array((string) $status, $validStatuses, true)) { ... }
 <td>
 
 **Use nullsafe `?->` and null coalescing `??` / `??=`**<br />
-They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).
+They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).<br />
+`lint:fix` collapses `isset($x) ? $x : $y` into `??` and `$x = $x ?? $y` into `??=`. Rewriting a nested `if` chain into `?->` is manual.
 </td>
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -739,12 +778,14 @@ if ($user->status === UserStatus::Inactive) {
 <td>
 
 **Single-line comments**<br />
-Use `//` (never `#`), begin with 1 whitespace, capitalize the first word and write it like a sentence.
+Use `//` (never `#`), begin with 1 whitespace, capitalize the first word and write it like a sentence.<br />
+`lint:fix` converts `#` to `//` and normalises the leading space; capitalisation and wording are on you.
 </td>
 
 <td>
 
-**RECOMMENDED**
+**RECOMMENDED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -768,12 +809,13 @@ if (! $hasItems) {
 <td>
 
 **Multi-line comments**<br />
-Use them only for complex business logic, temporary migration notes or non-obvious technical constraints. All `*` must be aligned.
+Use them only for complex business logic, temporary migration notes or non-obvious technical constraints. All `*` must be aligned (auto-fixed); deciding *when* a block comment is warranted is a review item.
 </td>
 
 <td>
 
-**RECOMMENDED**
+**RECOMMENDED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -799,12 +841,14 @@ $this->migrateUserContracts();
 
 **PHPDoc comments**<br />
 Write PHPDoc when it adds information the signature cannot express: a description, array shapes, `@throws`, or generics. **Do not** repeat types that are already declared in the signature ([2.4](#2.4)) — a duplicated type is one more thing that can go stale.<br />
-There should be a blank line between the description and the tags.
+A blank line separates the description from the tags, and each group of tags from the next — `lint:fix` inserts those for you.<br />
+`lint:fix` also deletes tags that only repeat the signature, drops the whole block once nothing is left in it, and aligns what remains.
 </td>
 
 <td>
 
-**REQUIRED**
+**REQUIRED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -823,6 +867,7 @@ public function redirectTo(Request $request): ?string {}
  * Guest users are sent back to the page they requested.
  *
  * @param array<int, string> $allowedPaths
+ *
  * @throws InvalidRedirectException when the target host is not whitelisted
  */
 public function redirectTo(
@@ -920,12 +965,14 @@ Use tools and project conventions to keep code consistent, readable and safe.
 <td>
 
 **Early returns and guard clauses**<br />
-When we have to meet certain criteria to continue execution, exit early. Flatten nesting deeper than three levels: invert the condition and return instead of wrapping the main logic in a large `else` block.
+When we have to meet certain criteria to continue execution, exit early. Flatten nesting deeper than three levels: invert the condition and return instead of wrapping the main logic in a large `else` block.<br />
+`lint:fix` removes an `else` / `elseif` that follows a returning `if`, and drops a useless trailing `return`. Restructuring the logic itself is manual.
 </td>
 
 <td>
 
-**RECOMMENDED**
+**RECOMMENDED**<br />
+*(partly auto-fixed)*
 </td>
 
 <td>
@@ -1197,11 +1244,13 @@ See **[Web Security Rules](./WebSecurityRules.md)**.
 ## 6. Implement Lint
 
 We implement PHP lint using **PHP Coding Standards Fixer**.<br />
-A ready-to-use template is provided in the [`config/php/`](./config/php) folder. Every fixer in the template is annotated with its rule ID (e.g. `// 2.7 — Blank line rules inside a function`) so each setting can be traced back to this page.
+A ready-to-use template is provided in the [`config/php/`](./config/php) folder. Each block of fixers is annotated with the rule ID it implements (e.g. `// 2.7 — Blank line rules inside a function`) so each setting can be traced back to this page; supporting formatting fixers are grouped by topic (`// Arrays`, `// Casing`, …).
 
 | Template | Copy to project root as | Purpose |
 |---|---|---|
-| [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) | `.php-cs-fixer.dist.php` | PHP-CS-Fixer config covering the auto-fixable rules of sections 1, 2, 3 and 4 |
+| [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) | `.php-cs-fixer.dist.php` | PHP-CS-Fixer config covering the auto-fixable rules of sections 2, 3 and 4.1 |
+
+> ⚠️ **Risky fixers are ON by default.** There are exactly three — `declare_strict_types`, `strict_comparison` and `strict_param` — and between them they implement two REQUIRED rules that cannot be enforced otherwise: [2.4](#2.4) `declare(strict_types=1)` and both halves of [2.8](#2.8) (`===`, strict flags). A new project should keep them. On an existing codebase, run `composer lint` (dry-run, changes nothing) and read the diff **before** the first `composer lint:fix` — if it is too large to review safely, follow the `LEGACY OPT-OUT` block at the end of the template and move 2.4 / 2.8 to the manual review checklist.
 
 Ref: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 
@@ -1249,6 +1298,34 @@ Add the cache file to `.gitignore`:
 
 https://marketplace.visualstudio.com/items?itemName=junstyle.php-cs-fixer<br />
 This extension simply provides PHP CS Fixer command (include code format).
+
+#### Auto-fix coverage
+
+Which rules `composer lint` catches, and which ones only a human catches. This table is the source of truth for the markers in the Priority column above.
+
+| Rule | `composer lint` | What is left to code review |
+|---|---|---|
+| [1.1](#1.1) – [1.5](#1.5) Naming | ✗ | Everything. PHP-CS-Fixer does not check naming at all |
+| [2.1](#2.1) Formatting | ✓ | — |
+| [2.2](#2.2) Class layout | ✓ | — |
+| [2.3](#2.3) Line length 80 | ~ | The length itself, and where to break. Only the position of `&&` / `||` is normalised, on lines you already broke |
+| [2.4](#2.4) Strict types | ~ | The type declarations themselves; only `declare(strict_types=1)` and the `?T` on implicit nullables are added |
+| [2.5](#2.5) Promotion / `readonly` | ✗ | Everything |
+| [2.6](#2.6) Curly braces | ✓ | — |
+| [2.7](#2.7) Blank lines | ~ | Blank line after an `if` / loop block; only the one before `return` is fixed |
+| [2.8](#2.8) Type-safe comparison | ~ | Converting both sides to a common type |
+| [2.9](#2.9) Nullsafe / `??` | ~ | Rewriting nested `if` chains into `?->` |
+| [3.1](#3.1) Why, not what | ✗ | Everything |
+| [3.2](#3.2) Single-line comments | ~ | Capitalisation and wording |
+| [3.3](#3.3) Multi-line comments | ~ | Whether a block comment is warranted at all |
+| [3.4](#3.4) PHPDoc | ~ | Writing the descriptions, `@throws` and array shapes — the layout around them is fixed for you |
+| [3.5](#3.5) English | ✗ | Everything |
+| [3.6](#3.6) TODO / FIXME | ✗ | Everything |
+| [4.1](#4.1) Early returns | ~ | The restructuring; only a useless `else` / `return` is removed |
+| [4.2](#4.2) – [4.5](#4.5) | ✗ | Everything |
+| [4.6](#4.6) Max 1000 lines | ✗ | Everything — PHP-CS-Fixer does not measure file length |
+
+For the ✗ rows, consider adding **PHPStan** or **PHP_CodeSniffer** to the project if you want them enforced automatically — PHP-CS-Fixer is a formatter and cannot express them.
 
 #### Disabling a rule
 
