@@ -26,6 +26,10 @@
 
 // ----------------------------------------------------------------------------
 // Files to format — adjust to your project layout (Laravel defaults below).
+//
+// `__DIR__` assumes this file has already been copied to the PROJECT ROOT as
+// `.php-cs-fixer.dist.php`. Running it while it still sits in `config/php/`
+// would scan the wrong directory.
 // ----------------------------------------------------------------------------
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
@@ -47,14 +51,24 @@ $finder = PhpCsFixer\Finder::create()
 
 return (new PhpCsFixer\Config())
     ->setFinder($finder)
-    // Risky fixers can change runtime behaviour — see the OPTIONAL block at the
-    // end of this file before switching this to true.
-    ->setRiskyAllowed(false)
+    // Risky fixers are ENABLED. They implement three REQUIRED rules that cannot
+    // be enforced any other way: 2.4 `declare(strict_types=1)` and both halves
+    // of 2.8 (`===` / strict flags). They can change runtime behaviour, so on an
+    // existing codebase run `composer lint` (dry-run) and read the diff BEFORE
+    // the first `composer lint:fix` — see the LEGACY OPT-OUT block at the end
+    // of this file.
+    ->setRiskyAllowed(true)
     ->setRules([
         // ====================================================================
         // BASE — PSR-12 coding standard (keep first, everything below overrides it)
         // Note: '@PER-CS' (the successor of PSR-12) can be used instead once the
         // whole team is on a PHP-CS-Fixer version that ships it.
+        //
+        // Two deliberate deviations from PSR-12 (both documented in PHP.md 2.1):
+        //   #1 'braces_position'            — `{` of a function/method stays on
+        //                                     the signature line.
+        //   #2 'single_import_per_statement' — group imports `use A\{B, C};`
+        //                                     are allowed.
         // ====================================================================
         '@PSR12' => true,
 
@@ -117,6 +131,9 @@ return (new PhpCsFixer\Config())
         'control_structure_braces' => true,
         'control_structure_continuation_position' => true,
         // Replaces the deprecated 'curly_braces_position'
+        // PSR-12 DEVIATION #1 — PSR-12 puts `{` on its own line for functions
+        // and methods; BWV keeps it on the signature line. Classes/interfaces
+        // are left on the PSR-12 default (`{` on the next line).
         'braces_position' => ['functions_opening_brace' => 'same_line'],
         'single_line_empty_body' => true,
         // 4.1 — Early returns and guard clauses
@@ -126,6 +143,8 @@ return (new PhpCsFixer\Config())
 
         // Imports — sorted alphabetically, grouped per namespace, no unused ones
         'ordered_imports' => ['sort_algorithm' => 'alpha'],
+        // PSR-12 DEVIATION #2 — '@PSR12' forces one import per statement; BWV
+        // groups them per namespace instead: `use App\Models\{Invoice, User};`
         'single_import_per_statement' => false,
         'group_import' => true,
         'global_namespace_import' => true,
@@ -163,7 +182,24 @@ return (new PhpCsFixer\Config())
         // ====================================================================
         // 2.2 — Class layout
         // ====================================================================
-        'class_attributes_separation' => true,
+        // Configured explicitly — the defaults do not match rule 2.2:
+        //   trait_import: default 'none' DELETES the blank line after the
+        //                 `use SomeTrait;` block that 2.2 requires.
+        //   case:         default is already 'none'; spelled out so nobody
+        //                 "fixes" enum cases into a blank-line-separated list.
+        //   const/property: 'one' separates EVERY const and EVERY property, not
+        //                 just the groups. The fixer has no "separate groups
+        //                 only" mode ('only_if_meta' removes the group blank
+        //                 line as well), so 2.2 documents the airy form.
+        'class_attributes_separation' => [
+            'elements' => [
+                'trait_import' => 'one',
+                'case' => 'none',
+                'const' => 'one',
+                'property' => 'one',
+                'method' => 'one',
+            ],
+        ],
         'ordered_class_elements' => [
             'order' => [
                 'use_trait',
@@ -186,18 +222,34 @@ return (new PhpCsFixer\Config())
 
         // ====================================================================
         // 2.4 — Declare strict types and type declarations
-        // (`declare(strict_types=1)` itself is risky to add automatically —
-        //  see the OPTIONAL block at the end of this file)
         // ====================================================================
+        // RISKY — adds `declare(strict_types=1);` to every file. On an existing
+        // codebase this turns silent type juggling into TypeError at runtime.
+        'declare_strict_types' => true,
         'nullable_type_declaration_for_default_null_value' => true,
         'no_null_property_initialization' => true,
 
         // ====================================================================
         // 2.7 — Blank line rules inside a function
-        // Add 'if', 'for', 'foreach', 'while', 'switch', 'try' to the list below
-        // to also enforce the blank line AFTER each control structure.
         // ====================================================================
+        // NOTE: this fixer inserts a blank line BEFORE each listed statement,
+        // not after a block. So it covers "1 blank line before `return`" fully,
+        // but only approximates "1 blank line after each if/loop block": adding
+        // 'if', 'for', 'foreach', 'while', 'switch', 'try' below catches a block
+        // followed by another control structure, and misses a block followed by
+        // anything else (e.g. a plain assignment). The rest stays a review item.
         'blank_line_before_statement' => ['statements' => ['return']],
+
+        // ====================================================================
+        // 2.8 — Type-Safe Comparisons
+        // ====================================================================
+        // RISKY — both rewrite behaviour, not just layout:
+        //   'strict_comparison' turns == / != into === / !==
+        //   'strict_param' forces the strict flag of in_array(), array_search()
+        //                  and array_keys()
+        // Code that relied on loose comparison ('1' == 1) will change result.
+        'strict_comparison' => true,
+        'strict_param' => true,
 
         // ====================================================================
         // 2.9 — Use nullsafe and null coalescing operators
@@ -210,7 +262,10 @@ return (new PhpCsFixer\Config())
         // ====================================================================
         'single_line_comment_style' => ['comment_types' => ['hash']],
         'single_line_comment_spacing' => true,
-        'align_multiline_comment' => true,
+        // 'phpdocs_like' (not the 'phpdocs_only' default) so the `*` of a plain
+        // `/* ... */` block comment is aligned too — that is the comment style
+        // rule 3.3 is about.
+        'align_multiline_comment' => ['comment_type' => 'phpdocs_like'],
         'multiline_comment_opening_closing' => true,
         'no_empty_comment' => true,
 
@@ -239,15 +294,28 @@ return (new PhpCsFixer\Config())
         'phpdoc_var_without_name' => true,
 
         // ====================================================================
-        // OPTIONAL — risky fixers (they can change runtime behaviour)
-        // Enable ONLY on a new project, or after running the full test suite,
-        // and set ->setRiskyAllowed(true) above.
+        // LEGACY OPT-OUT — turning the risky fixers back off
         // ====================================================================
-        // 2.4 — adds `declare(strict_types=1);` to every file
-        // 'declare_strict_types' => true,
-        // 2.8 — Type-Safe Comparisons: rewrites == / != to === / !==
-        // 'strict_comparison' => true,
-        // 2.8 — forces the strict flag of in_array(), array_search(), array_keys()
-        // 'strict_param' => true,
+        // The three risky fixers above ('declare_strict_types',
+        // 'strict_comparison', 'strict_param') implement REQUIRED rules and are
+        // ON by default. A new project should keep them.
+        //
+        // An existing codebase without enough test coverage may not survive them
+        // in one step. Before deciding, look at the damage:
+        //
+        //     composer lint          # dry-run + diff, changes nothing
+        //
+        // If it is too large to review, disable them AT THE START of the project
+        // — comment out the three fixers above, set ->setRiskyAllowed(false),
+        // and record the decision here so it stays visible and reviewable:
+        //
+        //     // PROJECT DECISION (2026-08-31): legacy codebase relies on loose
+        //     // comparison in the billing module; enabling strict_comparison
+        //     // needs the regression suite finished first (#123456).
+        //
+        // Rules 2.4 and 2.8 then move to the manual code-review checklist.
+        // Re-enable them once the test suite can back the change.
     ])
+    // Rule 2.1 — 4 spaces, never tabs; LF line endings.
+    ->setIndent('    ')
     ->setLineEnding("\n");
