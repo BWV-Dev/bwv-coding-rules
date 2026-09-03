@@ -41,6 +41,9 @@
 [**5. Security** ](#5-security)
 
 [**6. Implement Lint** ](#6-implement-lint)
+- [Rector](#rector)
+- [PHP-CS-Fixer](#php-cs-fixer)
+- [PHPStan](#phpstan)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
@@ -49,19 +52,6 @@
 - Always prioritize the coding rules of the project, follow the conventions of your project
 - The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
 - These rules assume **PHP >= 8.2**. On an older project, apply only what its PHP version supports and keep the rest as the target when upgrading
-
-**Reading the Priority column**
-
-`REQUIRED` / `RECOMMENDED` say how important a rule is. The marker underneath says who catches a violation — the linter or a human:
-
-| Marker | Meaning |
-|---|---|
-| *(auto-fixed)* | `composer lint` catches the whole rule; `composer lint:fix` repairs it |
-| *(partly auto-fixed)* | the linter catches part of it, the rest is a code-review item |
-| no marker | not lintable at all — code review only |
-
-The exact split is listed in [Auto-fix coverage](#auto-fix-coverage).
-
 <br>
 
 ## 1. Naming
@@ -288,17 +278,11 @@ Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-impleme
 - every PHPDoc block is multi-line, even a one-liner
 - `<?php echo $x ?>` becomes `<?= $x; ?>`
 - class elements ordered per [2.2](#2.2)
-
-Two **deliberate deviations from PSR-12** — both are in the template, do not "fix" them in review:
-
-1. The `{` of a function or method stays on the signature line (`public function issue(int $invoiceNo): Invoice {`). Classes and interfaces keep the PSR-12 form, with `{` on its own line.
-2. Group imports are allowed: `use App\Models\{Invoice, User};`
 </td>
 
 <td>
 
-**REQUIRED**<br />
-*(auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -344,14 +328,11 @@ Order the elements in a class:
 - Magic methods
 - PHPUnit methods (`setUp`, `tearDown`, …)
 - Methods (public → protected → private)
-
-Separate them by 1 blank line — **except enum cases**, which stay packed together. Constants and properties each get their own blank line too: PHP-CS-Fixer has no "separate the groups only" mode, so the airy form below is what `lint:fix` produces.
 </td>
 
 <td>
 
-**REQUIRED**<br />
-*(auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -403,17 +384,16 @@ final class InvoiceService
 <td>
 
 **Prefer a maximum line length of 80 characters**<br />
-The limit itself is not auto-fixed — no PHP-CS-Fixer rule measures line length. When a line exceeds it, wrap it by these conventions:
+When a line exceeds it, wrap it by these conventions:
 - Break after a comma.
-- Break before an operator. The fixer never breaks a line for you — it only moves `&&` and `||` to the start of the next line once *you* have broken there. Where to break, and every other operator, is a manual convention.
+- Break before an operator.
 
 Prefer going over the limit if breaking the line would make it less readable — for example a long string literal, a URL or a fully qualified class name that should not be split.
 </td>
 
 <td>
 
-**RECOMMENDED**<br />
-*(partly auto-fixed)*
+**RECOMMENDED**
 </td>
 
 <td>
@@ -444,14 +424,12 @@ if (
 
 **Declare strict types and type declarations**<br />
 Add `declare(strict_types=1);` at the top of every PHP file, and declare types for parameters, return values and properties. Types belong in the signature — this is what makes [2.8](#2.8) work at runtime and removes most redundant PHPDoc (see [3.4](#3.4)).<br />
-Use `void`, `?T`, union types and `never` where they describe the real contract. Use `mixed` only when the value truly can be anything.<br />
-`lint:fix` inserts the missing `declare(strict_types=1);` and rewrites an implicit nullable parameter (`Customer $c = null`) into the explicit `?Customer $c = null`, but it cannot invent the type declarations — those are on you.
+Use `void`, `?T`, union types and `never` where they describe the real contract. Use `mixed` only when the value truly can be anything.
 </td>
 
 <td>
 
-**REQUIRED**<br />
-*(partly auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -546,8 +524,7 @@ Use curly braces for all flow control statements, even single-line bodies.
 
 <td>
 
-**REQUIRED**<br />
-*(auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -581,14 +558,12 @@ if ($arg === null) {
 
 **Blank line rules inside a function**<br />
 Add 1 blank line **after** each `if` block and loop block.<br />
-Add 1 blank line **before** the `return` keyword.<br />
-Only the `return` half is auto-fixed. The blank line after an `if` or loop block is a manual convention — the fixer works on "blank line before statement X", which cannot express "after a block" in the general case.
+Add 1 blank line **before** the `return` keyword.
 </td>
 
 <td>
 
-**RECOMMENDED**<br />
-*(partly auto-fixed)*
+**RECOMMENDED**
 </td>
 
 <td>
@@ -630,14 +605,12 @@ return true;
 
 Use `===` instead of `==`, `!==` instead of `!=`.<br />
 When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g. `'1' === 1` is `false`).<br />
-Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.<br />
-`lint:fix` rewrites `==` / `!=` and adds the missing strict flags. Converting both sides to a common type is on you — the linter cannot know which type you meant.
+Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.
 </td>
 
 <td>
 
-**REQUIRED**<br />
-*(partly auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -681,14 +654,12 @@ if (in_array((string) $status, $validStatuses, true)) { ... }
 <td>
 
 **Use nullsafe `?->` and null coalescing `??` / `??=`**<br />
-They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).<br />
-`lint:fix` collapses `isset($x) ? $x : $y` into `??` and `$x = $x ?? $y` into `??=`. Rewriting a nested `if` chain into `?->` is manual.
+They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).
 </td>
 
 <td>
 
-**REQUIRED**<br />
-*(partly auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -778,14 +749,12 @@ if ($user->status === UserStatus::Inactive) {
 <td>
 
 **Single-line comments**<br />
-Use `//` (never `#`), begin with 1 whitespace, capitalize the first word and write it like a sentence.<br />
-`lint:fix` converts `#` to `//` and normalises the leading space; capitalisation and wording are on you.
+Use `//` (never `#`), begin with 1 whitespace, capitalize the first word and write it like a sentence.
 </td>
 
 <td>
 
-**RECOMMENDED**<br />
-*(partly auto-fixed)*
+**RECOMMENDED**
 </td>
 
 <td>
@@ -809,13 +778,12 @@ if (! $hasItems) {
 <td>
 
 **Multi-line comments**<br />
-Use them only for complex business logic, temporary migration notes or non-obvious technical constraints. All `*` must be aligned (auto-fixed); deciding *when* a block comment is warranted is a review item.
+Use them only for complex business logic, temporary migration notes or non-obvious technical constraints.
 </td>
 
 <td>
 
-**RECOMMENDED**<br />
-*(partly auto-fixed)*
+**RECOMMENDED**
 </td>
 
 <td>
@@ -841,14 +809,12 @@ $this->migrateUserContracts();
 
 **PHPDoc comments**<br />
 Write PHPDoc when it adds information the signature cannot express: a description, array shapes, `@throws`, or generics. **Do not** repeat types that are already declared in the signature ([2.4](#2.4)) — a duplicated type is one more thing that can go stale.<br />
-A blank line separates the description from the tags, and each group of tags from the next — `lint:fix` inserts those for you.<br />
-`lint:fix` also deletes tags that only repeat the signature, drops the whole block once nothing is left in it, and aligns what remains.
+A blank line separates the description from the tags, and each group of tags from the next.
 </td>
 
 <td>
 
-**REQUIRED**<br />
-*(partly auto-fixed)*
+**REQUIRED**
 </td>
 
 <td>
@@ -965,14 +931,12 @@ Use tools and project conventions to keep code consistent, readable and safe.
 <td>
 
 **Early returns and guard clauses**<br />
-When we have to meet certain criteria to continue execution, exit early. Flatten nesting deeper than three levels: invert the condition and return instead of wrapping the main logic in a large `else` block.<br />
-`lint:fix` removes an `else` / `elseif` that follows a returning `if`, and drops a useless trailing `return`. Restructuring the logic itself is manual.
+When we have to meet certain criteria to continue execution, exit early. Flatten nesting deeper than three levels: invert the condition and return instead of wrapping the main logic in a large `else` block.
 </td>
 
 <td>
 
-**RECOMMENDED**<br />
-*(partly auto-fixed)*
+**RECOMMENDED**
 </td>
 
 <td>
@@ -1243,101 +1207,155 @@ See **[Web Security Rules](./WebSecurityRules.md)**.
 
 ## 6. Implement Lint
 
-We implement PHP lint using **PHP Coding Standards Fixer**.<br />
-A ready-to-use template is provided in the [`config/php/`](./config/php) folder. Each block of fixers is annotated with the rule ID it implements (e.g. `// 2.7 — Blank line rules inside a function`) so each setting can be traced back to this page; supporting formatting fixers are grouped by topic (`// Arrays`, `// Casing`, …).
+We implement PHP lint using **Rector**, **PHP Coding Standards Fixer** and **PHPStan**. Rector handles automated code *rewrites* (constructor promotion, `readonly`, nullsafe chains, early returns, switch→match) that a formatter cannot express; PHP-CS-Fixer handles formatting/style — the two are configured to never touch the same rule; PHPStan handles static type analysis — it only *reports*, scoped to the type-safety half of [2.4](#2.4) and [2.8](#2.8) that neither of the other two tools can invent.<br />
+Ready-to-use templates are provided in the [`config/php/`](./config/php) folder.
 
-| Template | Copy to project root as | Purpose |
-|---|---|---|
-| [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) | `.php-cs-fixer.dist.php` | PHP-CS-Fixer config covering the auto-fixable rules of sections 2, 3 and 4.1 |
+| Template | Copy to project root as |
+|---|---|
+| [config/php/rector.template.php](./config/php/rector.template.php) | `rector.php` |
+| [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) | `.php-cs-fixer.dist.php` |
+| [config/php/phpstan.dist.template.neon](./config/php/phpstan.dist.template.neon) | `phpstan.dist.neon` |
 
-> ⚠️ **Risky fixers are ON by default.** There are exactly three — `declare_strict_types`, `strict_comparison` and `strict_param` — and between them they implement two REQUIRED rules that cannot be enforced otherwise: [2.4](#2.4) `declare(strict_types=1)` and both halves of [2.8](#2.8) (`===`, strict flags). A new project should keep them. On an existing codebase, run `composer lint` (dry-run, changes nothing) and read the diff **before** the first `composer lint:fix` — if it is too large to review safely, follow the `LEGACY OPT-OUT` block at the end of the template and move 2.4 / 2.8 to the manual review checklist.
+### Rector
 
-Ref: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+#### Setup steps
 
-#### Step 1
+1. **Install packages**
 
-**Install package**
+   ```bash
+   composer require --dev rector/rector driftingly/rector-laravel
+   ```
 
-```bash
-composer require --dev friendsofphp/php-cs-fixer
-```
+2. **Create rector.php**
 
-#### Step 2
+   Copy [config/php/rector.template.php](./config/php/rector.template.php) to your project root as `rector.php`, then adjust the `withPaths()` list to your project layout — each block is explained by its comments in the template.
 
-**Create .php-cs-fixer.dist.php**
+   Add the cache directory to `.gitignore`:
 
-Copy [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) to your project root as `.php-cs-fixer.dist.php`, then adjust the `Finder` paths to your project layout — each block is explained by its comments in the template.
+   ```
+   .rector/
+   ```
 
-Add the cache file to `.gitignore`:
+3. **Add scripts to composer.json**
 
-```
-.php-cs-fixer.cache
-```
+   ```json
+   "scripts": {
+       "rector": "rector process --dry-run",
+       "rector:fix": "rector process"
+   },
+   ```
 
-#### Step 3
+4. **Run composer commands**
 
-**Add scripts to composer.json**
+   - **composer rector** — dry-run, reports what Rector would rewrite, changes nothing.
+   - **composer rector:fix** — applies Rector's rewrites.
 
-```json
-"scripts": {
-    "lint": "php-cs-fixer fix --dry-run --diff --verbose",
-    "lint:fix": "php-cs-fixer fix --verbose"
-},
-```
+### PHP-CS-Fixer
 
-#### Step 4
+#### Setup steps
 
-**Run composer commands**
+1. **Install package**
 
-- **composer lint** — checks and reports violations (`--diff` shows exactly what would change). Use this in CI.
-- **composer lint:fix** — automatically fixes every auto-fixable rule.
+   ```bash
+   composer require --dev friendsofphp/php-cs-fixer
+   ```
 
-`.php-cs-fixer.dist.php` in the project root is detected automatically, so no `--config` flag is needed.
+2. **Create .php-cs-fixer.dist.php**
 
-**Visual Studio Code extension**
+   Copy [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) to your project root as `.php-cs-fixer.dist.php`, then adjust the `Finder` paths to your project layout — each block is explained by its comments in the template.
+
+   Add the cache file to `.gitignore`:
+
+   ```
+   .php-cs-fixer.cache
+   ```
+
+3. **Add scripts to composer.json**
+
+   ```json
+   "scripts": {
+       "lint": "php-cs-fixer fix --dry-run --diff --verbose",
+       "lint:fix": "php-cs-fixer fix --verbose"
+   },
+   ```
+
+4. **Run composer commands**
+
+   - **composer lint** — checks and reports violations (`--diff` shows exactly what would change). Use this in CI.
+   - **composer lint:fix** — automatically fixes every rule it can.
+
+#### VSCode extension
 
 https://marketplace.visualstudio.com/items?itemName=junstyle.php-cs-fixer<br />
 This extension simply provides PHP CS Fixer command (include code format).
 
-#### Auto-fix coverage
+### PHPStan
 
-Which rules `composer lint` catches, and which ones only a human catches. This table is the source of truth for the markers in the Priority column above.
+#### Setup steps
 
-| Rule | `composer lint` | What is left to code review |
-|---|---|---|
-| [1.1](#1.1) – [1.5](#1.5) Naming | ✗ | Everything. PHP-CS-Fixer does not check naming at all |
-| [2.1](#2.1) Formatting | ✓ | — |
-| [2.2](#2.2) Class layout | ✓ | — |
-| [2.3](#2.3) Line length 80 | ~ | The length itself, and where to break. Only the position of `&&` / `||` is normalised, on lines you already broke |
-| [2.4](#2.4) Strict types | ~ | The type declarations themselves; only `declare(strict_types=1)` and the `?T` on implicit nullables are added |
-| [2.5](#2.5) Promotion / `readonly` | ✗ | Everything |
-| [2.6](#2.6) Curly braces | ✓ | — |
-| [2.7](#2.7) Blank lines | ~ | Blank line after an `if` / loop block; only the one before `return` is fixed |
-| [2.8](#2.8) Type-safe comparison | ~ | Converting both sides to a common type |
-| [2.9](#2.9) Nullsafe / `??` | ~ | Rewriting nested `if` chains into `?->` |
-| [3.1](#3.1) Why, not what | ✗ | Everything |
-| [3.2](#3.2) Single-line comments | ~ | Capitalisation and wording |
-| [3.3](#3.3) Multi-line comments | ~ | Whether a block comment is warranted at all |
-| [3.4](#3.4) PHPDoc | ~ | Writing the descriptions, `@throws` and array shapes — the layout around them is fixed for you |
-| [3.5](#3.5) English | ✗ | Everything |
-| [3.6](#3.6) TODO / FIXME | ✗ | Everything |
-| [4.1](#4.1) Early returns | ~ | The restructuring; only a useless `else` / `return` is removed |
-| [4.2](#4.2) – [4.5](#4.5) | ✗ | Everything |
-| [4.6](#4.6) Max 1000 lines | ✗ | Everything — PHP-CS-Fixer does not measure file length |
+1. **Install packages**
 
-For the ✗ rows, consider adding **PHPStan** or **PHP_CodeSniffer** to the project if you want them enforced automatically — PHP-CS-Fixer is a formatter and cannot express them.
+   ```bash
+   composer require --dev phpstan/phpstan phpstan/phpstan-strict-rules
+   ```
 
-#### Disabling a rule
+2. **Create phpstan.dist.neon**
 
-PHP-CS-Fixer has no per-line disable comment, so a rule is relaxed by editing the config. Disabling is the exception, never the default:
+   Copy [config/php/phpstan.dist.template.neon](./config/php/phpstan.dist.template.neon) to your project root as `phpstan.dist.neon`, then adjust `parameters.paths` to your project layout — each block is explained by its comments in the template.
 
-1. **Scope it as narrowly as possible** — exclude the single path with `$finder->notPath(...)` / `->exclude(...)` instead of turning the fixer off project-wide.
+   Add PHPStan's cache directory to `.gitignore`:
+
+   ```
+   .phpstan/
+   ```
+
+3. **Add scripts to composer.json**
+
+   ```json
+   "scripts": {
+       "stan": "phpstan analyse --memory-limit=1G",
+       "stan:baseline": "phpstan analyse --memory-limit=1G --generate-baseline"
+   },
+   ```
+
+4. **Run composer commands**
+
+   - **composer stan** — analyses the codebase at the configured level and reports violations.
+   - **composer stan:baseline** — (re)generates `phpstan-baseline.neon`, freezing every current error so `composer stan` only fails on new ones. Run this once when adopting PHPStan on an existing codebase, then periodically to shrink the baseline.
+
+#### VSCode extension *(optional)*
+
+https://marketplace.visualstudio.com/items?itemName=SanderRonde.phpstan-vscode<br />
+Shows PHPStan errors inline as you type, without waiting for `composer stan`.
+
+### Disabling a rule
+
+None of the three tools should have a rule disabled by default — disabling is the exception, and the same discipline applies across PHP-CS-Fixer, Rector and PHPStan:
+
+1. **Scope it as narrowly as possible** instead of turning a rule off project-wide:
+   - **PHP-CS-Fixer** (no per-line disable comment) — exclude the single path with `$finder->notPath(...)` / `->exclude(...)`.
+   - **Rector** (no per-line disable comment) — skip the single rule-and-path pair with `->withSkip([RuleClass::class => ['path/to/File.php']])`, the narrowest form; avoid removing the rule project-wide.
+   - **PHPStan** (the one tool with a native per-line disable comment) — prefer `// @phpstan-ignore-next-line <rule>: <reason>` on the offending line over an `excludePaths` entry in `phpstan.dist.neon`, unless the exception spans a whole file.
+
 2. **Always add a comment explaining why**, next to the change:
 
-```php
-// PROJECT DECISION (2026-08-26): generated API client, never edited by hand.
-->notPath('src/Generated/ApiClient.php')
-```
+   - PHP-CS-Fixer:
+     ```php
+     // PROJECT DECISION (2026-08-26): generated API client, never edited by hand.
+     ->notPath('src/Generated/ApiClient.php')
+     ```
+   - Rector:
+     ```php
+     ->withSkip([
+         // PROJECT DECISION (2026-08-26): generated API client, never edited by hand.
+         ReadOnlyPropertyRector::class => ['src/Generated/ApiClient.php'],
+     ])
+     ```
+   - PHPStan — the reason lives inline in the ignore comment itself, no separate comment needed:
+     ```php
+     // @phpstan-ignore-next-line argument.type: Legacy payload always returns array<mixed>, safe to cast here.
+     $this->process($legacyPayload);
+     ```
 
 3. **Report the change to your PM/leader** before merging. A disabled rule without a written reason and without the PM being informed must be rejected in code review.
 4. If the same rule keeps getting disabled across the project, raise it with the leader — revisit the rule instead of accumulating exceptions.
