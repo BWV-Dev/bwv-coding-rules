@@ -47,6 +47,7 @@
 - [4.12 Parameter object pattern](#4.12)
 - [4.13 Early returns and guard clauses](#4.13)
 - [4.14 Type-Safe Comparisons](#4.14)
+- [4.15 Pin Node.js version with .nvmrc](#4.15)
 
 [**5. Security** ](#5-security)
 
@@ -1335,6 +1336,38 @@ if (Number.isNaN(score)) {
 
 // Exception - Object.is when the difference between 0 and -0 matters
 Object.is(-0, 0); // false
+```
+</td>
+</tr>
+
+<tr>
+<td id='4.15'>
+
+**4.15**
+</td>
+
+<td>
+
+**Pin Node.js version with .nvmrc**
+
+Every Node.js project must declare an exact Node.js version in `.nvmrc`. Keep the same version in local development, CI, Docker/runtime configuration, and `engines.node` when present. Use the appropriate command for your version manager before running the project.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```text
+// .nvmrc
+24.20.0
+```
+
+```bash
+# Good 👍 switch to the version declared in .nvmrc
+nvm use
 ```
 </td>
 </tr>
