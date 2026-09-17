@@ -46,6 +46,7 @@
 - [4.12 Null coalescing operator](#4.12)
 - [4.13 Avoid handling nested logic](#4.13)
 - [4.14 Maximum number of lines per file](#4.14)
+- [4.15 Pin PHP version](#4.15)
 
 [**5. Security**](#5-security)
 
@@ -1121,6 +1122,46 @@ To ensure compliance with this rule, adhere to the following best practices in y
 - Implement the Single Responsibility Principle (SRP): Ensure each file is dedicated to a single functionality or purpose.
 - Modularization: Break down your code into logical modules or components that organized in separate files.
 - Adhere to the Don't Repeat Yourself (DRY) principle: Use inheritance, composition, or utility functions to prevent code duplication.
+
+</td>
+</tr>
+
+<tr>
+<td id='4.15'>
+
+**4.15**
+
+</td>
+<td>
+
+**Pin PHP version** <br />
+Every PHP project must declare an exact PHP version and keep it consistent across `composer.json`, CI configuration, and Docker/runtime configuration.
+- `composer.json` config
+  - `require.php` declares the supported version constraint.
+  - `config.platform.php` locks Composer's dependency resolution to an exact version, regardless of the PHP binary actually installed.
+- Keep the CI workflow and Dockerfile base image pinned to the same exact version.
+
+</td>
+<td>
+
+```json
+// composer.json
+{
+    "require": {
+        "php": "^8.3"
+    },
+    "config": {
+        "platform": {
+            "php": "8.3.12"
+        }
+    }
+}
+```
+
+```dockerfile
+# Good 👍 Docker base image aligned with composer.json platform
+FROM php:8.3.12-fpm
+```
 
 </td>
 </tr>
