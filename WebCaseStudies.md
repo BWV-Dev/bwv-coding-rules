@@ -15,6 +15,8 @@
 
 [**6. Handle default when the get value does not exist in the database**](#6-handle-default-when-the-get-value-does-not-exist-in-the-database)
 
+[**7. Duplicate Vue instances after upgrading Nuxt**](#7-duplicate-vue-instances-after-upgrading-nuxt)
+
 <br>
 
 ## 1. The event does not load jQuery in HTML
@@ -357,6 +359,75 @@ $newCategory = new Category();
 $newCategory->name = 'Category 3';
 $newCategory->sort_number = $maxSortNumber + 1;
 $newCategory->save();
+```
+
+</td>
+</tr>
+</table>
+<br>
+
+## 7. Duplicate Vue instances after upgrading Nuxt
+
+<table>
+<tr id="7.1">
+<td width="5%" >
+
+**7.1**
+
+</td>
+<td width="50%">
+When upgrading Nuxt, the Vue version bundled internally by Nuxt is upgraded as well. If Vue was also installed manually as a direct dependency of the project, that manual copy keeps its old, pinned version. As a result, two different Vue instances run at the same time in the app.<br><br>
+Symptoms: "Vue detected multiple instances" warning, broken reactivity, `provide`/`inject` not working across component boundaries, components not updating as expected.<br><br>
+Fix: pin a single Vue version across the whole dependency tree at install time, and add a Vite dedupe as a safety net at build time in case any duplicate copy still slips through (e.g. via workspace/monorepo linking).
+</td>
+
+<td width="45%">
+
+```dart
+// package.json
+// Pick the block that matches your package manager,
+// pin the version to the same Vue version Nuxt uses.
+
+// npm
+{
+  "overrides": {
+    "vue": "<version-of-vue-used-by-nuxt>"
+  }
+}
+
+// yarn
+{
+  "resolutions": {
+    "vue": "<version-of-vue-used-by-nuxt>"
+  }
+}
+
+// pnpm
+{
+  "pnpm": {
+    "overrides": {
+      "vue": "<version-of-vue-used-by-nuxt>"
+    }
+  }
+}
+```
+
+```dart
+// nuxt.config.ts
+// Safety net: force Vite to collapse any remaining
+// duplicate 'vue' imports to a single module instance.
+export default defineNuxtConfig({
+  vite: {
+    resolve: {
+      dedupe: ['vue'],
+    },
+  },
+});
+```
+
+After changing the config, delete `node_modules` and the lockfile, reinstall, then verify only one version remains:
+```dart
+npm ls vue
 ```
 
 </td>
