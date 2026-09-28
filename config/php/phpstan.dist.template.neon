@@ -1,12 +1,20 @@
 includes:
+    - vendor/larastan/larastan/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
 parameters:
     level: 8
+    tmpDir: .phpstan
     paths:
         - app
+        - bootstrap
         - config
         - database
         - routes
         - tests
+    excludePaths:
+        - bootstrap/cache
+    reportIgnoresWithoutComments: true
     strictRules:
         disallowedLooseComparison: true
+        # Reports Laravel macros ($request->validate()) and PHPUnit's $this->assert*() — see PHP.md "PHPStan".
+        dynamicCallOnStaticMethod: false

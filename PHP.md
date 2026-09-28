@@ -5,7 +5,7 @@
 <br>
 
 [**1. Naming** ](#1-naming)
-- [1.1 Use PascalCase for files, namespaces, classes, interfaces, enums and traits](#1.1)
+- [1.1 Use PascalCase for class files, namespaces, classes, interfaces, enums, enum cases and traits](#1.1)
 - [1.2 Use camelCase for functions, methods, properties and variables](#1.2)
 - [1.3 Use UPPER_CASE for constants](#1.3)
 - [1.4 Use meaningful names and avoid unclear abbreviations](#1.4)
@@ -33,7 +33,7 @@
 [**4. Usage & Code Quality** ](#4-usage--code-quality)
 - [4.1 Early returns and guard clauses](#4.1)
 - [4.2 Prefer built-in functions over hand-rolled nested logic](#4.2)
-- [4.3 Distinguish between isset() and empty()](#4.3)
+- [4.3 Do not use empty(); use isset() or explicit checks](#4.3)
 - [4.4 Named arguments](#4.4)
 - [4.5 Use enums for fixed sets of values](#4.5)
 - [4.6 Maximum number of lines per file](#4.6)
@@ -45,6 +45,8 @@
 - [Rector](#rector)
 - [PHP-CS-Fixer](#php-cs-fixer)
 - [PHPStan](#phpstan)
+- [Running all three](#running-all-three)
+- [Disabling a rule](#disabling-a-rule)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
@@ -52,7 +54,8 @@
 - Always check wiki on redmine
 - Always prioritize the coding rules of the project, follow the conventions of your project
 - The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
-- These rules assume **PHP >= 8.2**. On an older project, apply only what its PHP version supports and keep the rest as the target when upgrading
+- These rules assume **PHP >= 8.5**. On an older project, apply only what its PHP version supports and keep the rest as the target when upgrading
+- `REQUIRED` / `RECOMMENDED` say how important a rule is in code review. Whatever part of a rule the tools in [6. Implement Lint](#6-implement-lint) enforce is mandatory in CI regardless of that label. A leader who does not want to apply such a rule turns it off at the start of the project, following [Disabling a rule](#disabling-a-rule). The PHPStan level is not one of those rules: every project runs level 8 (see [Existing codebase](#existing-codebase))
 <br>
 
 ## 1. Naming
@@ -74,7 +77,8 @@ The good way to name files, classes, functions and variables in PHP.
 
 <td>
 
-Use **PascalCase** (UpperCamelCase) for files, namespaces, classes, interfaces, enums, traits and enum cases. The name should be a **noun**.
+Use **PascalCase** (UpperCamelCase) for class files, namespaces, classes, interfaces, enums, traits and enum cases. The name should be a **noun**.<br />
+A class file is named after the class it holds (PSR-4). Other files — config, routes, migrations, views, tool configs such as `rector.php` — follow the framework's own convention.
 </td>
 
 <td>
@@ -154,7 +158,7 @@ $routeName = 'abc';
 
 <td>
 
-Use **UPPER_CASE_UNDERSCORE** for class constants and global constants.
+Use **UPPER_CASE_UNDERSCORE** for class constants and global constants. Enum cases are the exception — they use PascalCase (see [1.1](#1.1)).
 </td>
 
 <td>
@@ -169,7 +173,7 @@ const TABLE_NAME = 'users';
 
 class Invoice
 {
-    public const MAX_RETRY_COUNT = 3;
+    public const int MAX_RETRY_COUNT = 3;
 }
 ```
 
@@ -263,7 +267,7 @@ The good way to manage formatting, typing and runtime safety in PHP projects.
 
 <td>
 
-Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-implement-lint)). Team should not manually discuss formatting in code review. The shared config takes **PSR-12** as its base and enforces:
+Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-implement-lint)). Team should not manually discuss the formatting the fixer enforces in code review — only what it cannot enforce (line length in [2.3](#2.3), the blank line after a block in [2.7](#2.7)). The shared config takes **PSR-12** as its base and enforces:
 
 - 4 spaces for indentation (never tabs), LF line endings
 - single quotes for string literals, unless the string contains a variable or a single quote
@@ -273,10 +277,12 @@ Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-impleme
 - explicit variables in strings: `"Hello {$name}"`
 - one space after the logical NOT operator: `! $isActive`
 - one space around the concatenation operator: `$greeting . $name`
-- `use` statements sorted alphabetically, grouped per namespace, unused imports removed
+- `use` statements sorted alphabetically, grouped per namespace (`use App\Models\{Invoice, User};` — a deliberate deviation from PSR-12), unused imports removed
 - global classes imported rather than written inline: `new \DateTimeImmutable()` becomes a `use` plus `new DateTimeImmutable()`
+- no parentheses around `new` when calling a member on it: `new Money($amount)->add($tax)` instead of `(new Money($amount))->add($tax)`
+- the `{` of a function or method stays on the signature line (a deliberate deviation from PSR-12); classes, interfaces and enums keep `{` on its own line
 - an empty body collapses onto the signature line: `public function handle(): void {}`
-- every PHPDoc block is multi-line, even a one-liner
+- every PHPDoc block of a class constant, property or method is multi-line, even a one-liner
 - `<?php echo $x ?>` becomes `<?= $x; ?>`
 - class elements ordered per [2.2](#2.2)
 </td>
@@ -295,6 +301,7 @@ use Illuminate\Http\Request;
 
 $animals = ['tiger', 'lion'];
 $message = "Hello {$name}";
+$total = new Money($amount)->add($tax);
 
 if (! $isActive) {
     return null;
@@ -339,17 +346,17 @@ Order the elements in a class:
 <td>
 
 ```php
-final class InvoiceService
+final class InvoiceService implements Stringable
 {
     use LoggableTrait;
 
-    public const MAX_RETRY_COUNT = 3;
+    public const int MAX_RETRY_COUNT = 3;
 
-    private const CACHE_KEY = 'invoice';
+    private const string CACHE_KEY = 'invoice';
 
     public int $version = 1;
 
-    private array $items = [];
+    private int $retryCount = 0;
 
     public function __construct(
         private readonly InvoiceRepository $repository,
@@ -363,11 +370,11 @@ final class InvoiceService
         // ...
     }
 
-    protected function buildLines(array $rows): array {
+    protected function buildLines(Invoice $invoice): InvoiceLines {
         // ...
     }
 
-    private function normalize(array $rows): array {
+    private function normalize(InvoiceLines $lines): InvoiceLines {
         // ...
     }
 }
@@ -425,7 +432,9 @@ if (
 
 **Declare strict types and type declarations**<br />
 Add `declare(strict_types=1);` at the top of every PHP file, and declare types for parameters, return values and properties. Types belong in the signature — this is what makes [2.8](#2.8) work at runtime and removes most redundant PHPDoc (see [3.4](#3.4)).<br />
-Use `void`, `?T`, union types and `never` where they describe the real contract. Use `mixed` only when the value truly can be anything.
+Use `void`, `?T`, union types and `never` where they describe the real contract.<br />
+Narrow `mixed` at the boundary — request input, config, JSON, database rows, untyped libraries — with `is_*()`, `instanceof` or a typed accessor (`$request->integer()`, `Config::string()`, …), and pass only typed values further in. PHPStan reports a missing type declaration, but at level 8 it does not check what you do with a `mixed` value (`$request->input()`, `config()`, `json_decode()`, …), so this part is checked in code review.<br />
+Class constants are typed too (`public const int MAX_RETRY_COUNT = 3;`). Rector adds the type to private constants and to every constant of a `final` class; type the others yourself.
 </td>
 
 <td>
@@ -478,7 +487,8 @@ final class PriceService
 <td>
 
 **Use constructor property promotion and `readonly`**<br />
-Promote constructor parameters instead of declaring the property and assigning it manually. Mark dependencies and value objects `readonly` when they must not change after construction.
+Promote constructor parameters instead of declaring the property and assigning it manually. Mark dependencies and value objects `readonly` when they must not change after construction. When every property of a class is `readonly`, mark the class itself `readonly` instead.<br />
+Rector applies all three automatically.
 </td>
 
 <td>
@@ -500,11 +510,11 @@ final class InvoiceService
 }
 
 // Good 👍
-final class InvoiceService
+final readonly class InvoiceService
 {
     public function __construct(
-        private readonly InvoiceRepository $repository,
-        private readonly LoggerInterface $logger,
+        private InvoiceRepository $repository,
+        private LoggerInterface $logger,
     ) {}
 }
 ```
@@ -558,8 +568,8 @@ if ($arg === null) {
 <td>
 
 **Blank line rules inside a function**<br />
-Add 1 blank line **after** each `if` block and loop block.<br />
-Add 1 blank line **before** the `return` keyword.
+Add 1 blank line **after** each `if` block and loop block, unless the block is the last statement of its enclosing block.<br />
+Add 1 blank line **before** the `return` keyword, unless `return` is the first statement of its block (e.g. a guard clause).
 </td>
 
 <td>
@@ -605,8 +615,9 @@ return true;
 **Type-Safe Comparisons**
 
 Use `===` instead of `==`, `!==` instead of `!=`.<br />
-When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g. `'1' === 1` is `false`).<br />
-Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.
+When comparing two values, always ensure they are of the **same data type** to avoid unexpected results (e.g. `'1' === 1` is `false`). Convert the value once, at the boundary, with a typed accessor (`$request->integer()`) — or cast it only after validating it (`is_numeric()`): `(int) 'abc'` silently becomes `0`, and PHPStan at level 8 does not report it (see [2.4](#2.4)).<br />
+Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.<br />
+PHPStan reports every `==` / `!=` and every missing strict flag; Rector rewrites `==` to `===` only when both sides provably have the same type. The conversion itself is on you. Rector also turns `switch` (loose comparison) into `match` (strict comparison) — check the types when reviewing that diff.
 </td>
 
 <td>
@@ -635,12 +646,13 @@ if ($userFlag === null) {
 $status = $request->input('status'); // returns string '1'
 if ($status === 1) { ... }           // '1' === 1 → false
 
-// Good 👍 — convert to the SAME type before comparing
-if ((int) $status === 1) { ... }
+// Good 👍 — convert to the SAME type once, at the boundary
+$status = $request->integer('status');
+if ($status === 1) { ... }
 
 // Good 👍 — strict in_array
-$validStatuses = ['1', '2', '3'];
-if (in_array((string) $status, $validStatuses, true)) { ... }
+$validStatuses = [1, 2, 3];
+if (in_array($status, $validStatuses, true)) { ... }
 ```
 
 </td>
@@ -655,7 +667,8 @@ if (in_array((string) $status, $validStatuses, true)) { ... }
 <td>
 
 **Use nullsafe `?->` and null coalescing `??` / `??=`**<br />
-They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).
+They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).<br />
+PHPStan (level 8) reports calling a method or reading a property on a value that may be `null`, so a missing `null` check fails CI.
 </td>
 
 <td>
@@ -810,6 +823,7 @@ $this->migrateUserContracts();
 
 **PHPDoc comments**<br />
 Write PHPDoc when it adds information the signature cannot express: a description, array shapes, `@throws`, or generics. **Do not** repeat types that are already declared in the signature ([2.4](#2.4)) — a duplicated type is one more thing that can go stale.<br />
+Every `array`, `iterable` or generic type in a signature needs its element type in PHPDoc (`@param list<string> $paths`): PHPStan reports a bare `array` as a missing type (`missingType.iterableValue`).<br />
 A blank line separates the description from the tags, and each group of tags from the next.
 </td>
 
@@ -932,7 +946,7 @@ Use tools and project conventions to keep code consistent, readable and safe.
 <td>
 
 **Early returns and guard clauses**<br />
-When we have to meet certain criteria to continue execution, exit early. Flatten nesting deeper than three levels: invert the condition and return instead of wrapping the main logic in a large `else` block.
+When we have to meet certain criteria to continue execution, exit early. Flatten nested conditions: invert the condition and return instead of wrapping the main logic in a large `else` block.
 </td>
 
 <td>
@@ -1013,7 +1027,7 @@ if ($day) {
 return false;
 
 // Good 👍
-if (empty($day)) {
+if (! is_string($day)) {
     return false;
 }
 
@@ -1044,13 +1058,13 @@ $label = match ($food) {
 
 <td>
 
-Need to distinguish between `isset()` and `empty()`.
+**Do not use `empty()`** — use `isset()` or an explicit check.
 
 **isset()** checks whether the variable has been set — it returns `true` if the variable exists and its value is not `null`. That means `''`, `0`, `'0'`, `false` and `[]` are **set**, so `isset()` returns `true` for them.
 
-**empty()** checks whether a variable is *empty*. These are all empty: `''`, `0`, `0.0`, `'0'`, `null`, `false`, `[]` and a declared-but-unassigned variable.
+**empty()** checks whether a variable is *empty*, and these are all empty: `''`, `0`, `0.0`, `'0'`, `null`, `false`, `[]` and a declared-but-unassigned variable. A legit `0` or `'0'` silently becomes "missing", which is why PHPStan reports every `empty()` call.
 
-Use `isset()` when only "missing / null" matters, and `empty()` only when `0` and `''` really should be treated the same as missing — otherwise use an explicit `=== null` or `count()` check.
+Use `isset()` when only "missing / null" matters. Otherwise say exactly what you mean: `=== null`, `=== ''`, `=== []`, `=== 0` or `count($items) === 0`.
 </td>
 
 <td>
@@ -1073,8 +1087,8 @@ if (! isset($data['quantity'])) {
     throw new InvalidArgumentException('quantity is required');
 }
 
-// Good 👍 — empty() is correct here: an empty list means nothing to do
-if (empty($items)) {
+// Good 👍 — an empty list means nothing to do: say so explicitly
+if ($items === []) {
     return;
 }
 ```
@@ -1103,7 +1117,7 @@ Use named arguments instead of positional ones when you want to skip default val
 
 ```php
 // Bad
-htmlspecialchars($string, ENT_QUOTES, 'UTF-8', false);
+htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false);
 
 // Good 👍
 htmlspecialchars($string, double_encode: false);
@@ -1144,7 +1158,7 @@ enum UserStatus: int
     case Active = 1;
     case Inactive = 0;
 
-    public function label(): string {
+    public function getLabel(): string {
         return match ($this) {
             self::Active => 'Active',
             self::Inactive => 'Inactive',
@@ -1154,8 +1168,10 @@ enum UserStatus: int
 
 public function updateStatus(UserStatus $status): void {}
 
-// At the boundary (request, DB), convert once
-$status = UserStatus::from((int) $request->input('status'));
+// At the boundary (request, DB), validate and convert once
+$request->validate(['status' => ['required', Rule::enum(UserStatus::class)]]);
+$status = $request->enum('status', UserStatus::class)
+    ?? throw new InvalidArgumentException('Invalid status');
 ```
 
 </td>
@@ -1221,11 +1237,11 @@ Every PHP project must declare an exact PHP version and keep it consistent acros
 // composer.json
 {
     "require": {
-        "php": "^8.3"
+        "php": "^8.5"
     },
     "config": {
         "platform": {
-            "php": "8.3.12"
+            "php": "8.5.11"
         }
     }
 }
@@ -1233,7 +1249,7 @@ Every PHP project must declare an exact PHP version and keep it consistent acros
 
 ```dockerfile
 # Good 👍 Docker base image aligned with composer.json platform
-FROM php:8.3.12-fpm
+FROM php:8.5.11-fpm
 ```
 
 </td>
@@ -1253,7 +1269,15 @@ See **[Web Security Rules](./WebSecurityRules.md)**.
 
 ## 6. Implement Lint
 
-We implement PHP lint using **Rector**, **PHP Coding Standards Fixer** and **PHPStan**. Rector handles automated code *rewrites* (constructor promotion, `readonly`, nullsafe chains, early returns, switch→match) that a formatter cannot express; PHP-CS-Fixer handles formatting/style — the two are configured to never touch the same rule; PHPStan handles static type analysis — it only *reports*, scoped to the type-safety half of [2.4](#2.4) and [2.8](#2.8) that neither of the other two tools can invent.<br />
+We implement PHP lint using **Rector**, **PHP Coding Standards Fixer** and **PHPStan**:
+
+- **Rector** rewrites code: constructor promotion, `readonly` properties and classes, `switch` → `match`, removing an `else` after a `return`, adding type declarations and class constant types. Its PHP 8.4 and 8.5 sets also migrate code to the new syntax: `?T` for a parameter whose default is `null`, `new Foo()->bar()`, simple `foreach` loops to `array_find()` / `array_any()` / `array_all()`, `array_first()` / `array_last()`, `#[\Override]` on a property that overrides a parent property, and replacements for what 8.5 deprecates (the backtick operator, `(integer)`-style casts, `case X;`, `__sleep()` / `__wakeup()`). It does not turn nested `if`s into guard clauses ([4.1](#4.1)) or nested null checks into `?->` ([2.9](#2.9)) — those stay manual.
+- **PHP-CS-Fixer** handles formatting and style, plus a few safe rewrites. Some of them overlap with Rector: `??` and `??=`, removing a useless `else` / `return`, removing PHPDoc tags that repeat the signature, and removing the parentheses around `new` (`new Foo()->bar()`). Both tools produce the same result, so the overlap is harmless — but a behaviour you want to turn off must be turned off in both (see [Disabling a rule](#disabling-a-rule)).
+- **PHPStan** only *reports*. The template runs **level 8** with `phpstan-strict-rules` and Larastan, so missing type declarations and iterable element types, calls on a possibly-`null` value, loose comparison, missing strict flags, `empty()` and non-boolean conditions are all errors. PHPStan does not check operations on `mixed` at this level, so narrowing `mixed` ([2.4](#2.4)) is checked in code review.
+
+The templates do not hardcode the PHP version: Rector's `withPhpSets()` reads `require.php` and PHPStan reads `config.platform.php` from `composer.json`, and PHP-CS-Fixer follows the PHP binary it runs on — so pin all three as in [4.7](#4.7).
+
+Run them in that order — Rector, then PHP-CS-Fixer (which formats Rector's output), then PHPStan — see [Running all three](#running-all-three).<br />
 Ready-to-use templates are provided in the [`config/php/`](./config/php) folder.
 
 | Template | Copy to project root as |
@@ -1274,7 +1298,7 @@ Ready-to-use templates are provided in the [`config/php/`](./config/php) folder.
 
 2. **Create rector.php**
 
-   Copy [config/php/rector.template.php](./config/php/rector.template.php) to your project root as `rector.php`, then adjust the `withPaths()` list to your project layout — each block is explained by its comments in the template.
+   Copy [config/php/rector.template.php](./config/php/rector.template.php) to your project root as `rector.php`, then adjust the `withPaths()` list to your project layout.
 
    Add the cache directory to `.gitignore`:
 
@@ -1308,7 +1332,7 @@ Ready-to-use templates are provided in the [`config/php/`](./config/php) folder.
 
 2. **Create .php-cs-fixer.dist.php**
 
-   Copy [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) to your project root as `.php-cs-fixer.dist.php`, then adjust the `Finder` paths to your project layout — each block is explained by its comments in the template.
+   Copy [config/php/.php-cs-fixer.dist.template.php](./config/php/.php-cs-fixer.dist.template.php) to your project root as `.php-cs-fixer.dist.php`, then adjust the `Finder` paths to your project layout.
 
    Add the cache file to `.gitignore`:
 
@@ -1327,8 +1351,10 @@ Ready-to-use templates are provided in the [`config/php/`](./config/php) folder.
 
 4. **Run composer commands**
 
-   - **composer lint** — checks and reports violations (`--diff` shows exactly what would change). Use this in CI.
+   - **composer lint** — checks and reports violations (`--diff` shows exactly what would change).
    - **composer lint:fix** — automatically fixes every rule it can.
+
+> ⚠️ `declare_strict_types` is a *risky* fixer: on an existing codebase it turns silent type juggling into a `TypeError` at runtime. Run `composer lint` and read the diff before the first `composer lint:fix`. If the diff is too large to review safely, turn the fixer off at the start of the project, following [Disabling a rule](#disabling-a-rule).
 
 #### VSCode extension
 
@@ -1342,14 +1368,18 @@ This extension simply provides PHP CS Fixer command (include code format).
 1. **Install packages**
 
    ```bash
-   composer require --dev phpstan/phpstan phpstan/phpstan-strict-rules
+   composer require --dev phpstan/phpstan phpstan/phpstan-strict-rules larastan/larastan
    ```
+
+   The template is written for PHPStan 2.x and Larastan 3.x; PHP 8.5 syntax needs PHPStan 2.1.32 or later. Larastan is what lets PHPStan understand Eloquent models, facades and the container — without it, almost every model and facade call in a Laravel project is reported.
+
+   The template turns off exactly one strict rule, `dynamicCallOnStaticMethod`: it reports Laravel macros such as `$request->validate()` and PHPUnit's `$this->assertSame()` as errors, which would flag ordinary Laravel code and every test.
 
 2. **Create phpstan.dist.neon**
 
-   Copy [config/php/phpstan.dist.template.neon](./config/php/phpstan.dist.template.neon) to your project root as `phpstan.dist.neon`, then adjust `parameters.paths` to your project layout — each block is explained by its comments in the template.
+   Copy [config/php/phpstan.dist.template.neon](./config/php/phpstan.dist.template.neon) to your project root as `phpstan.dist.neon`, then adjust `parameters.paths` and `excludePaths` to your project layout.
 
-   Add PHPStan's cache directory to `.gitignore`:
+   Add PHPStan's cache directory (`tmpDir` in the template) to `.gitignore`:
 
    ```
    .phpstan/
@@ -1367,40 +1397,65 @@ This extension simply provides PHP CS Fixer command (include code format).
 4. **Run composer commands**
 
    - **composer stan** — analyses the codebase at the configured level and reports violations.
-   - **composer stan:baseline** — (re)generates `phpstan-baseline.neon`, freezing every current error so `composer stan` only fails on new ones. Run this once when adopting PHPStan on an existing codebase, then periodically to shrink the baseline.
+   - **composer stan:baseline** — (re)generates `phpstan-baseline.neon`, freezing every current error so `composer stan` only fails on new ones. Run this once when adopting PHPStan on an existing codebase, then periodically to shrink the baseline. The baseline only takes effect once it is included in `phpstan.dist.neon`:
+
+     ```neon
+     includes:
+         - phpstan-baseline.neon
+     ```
+
+#### Existing codebase
+
+Every project runs **level 8** — do not lower or raise it. On an existing codebase, run `composer rector:fix` first — the type declarations it adds remove many missing-type errors — then `composer stan:baseline` to freeze the remaining errors, and shrink the baseline as you touch that code. Regenerate the baseline only to shrink it, never to absorb errors in new code.
 
 #### VSCode extension *(optional)*
 
 https://marketplace.visualstudio.com/items?itemName=SanderRonde.phpstan-vscode<br />
 Shows PHPStan errors inline as you type, without waiting for `composer stan`.
 
+### Running all three
+
+Rector's output is not formatted to the house style, so PHP-CS-Fixer must run after it. Add two scripts that fix the order once:
+
+```json
+"scripts": {
+    "fix": ["@rector:fix", "@lint:fix"],
+    "check": ["@rector", "@lint", "@stan"]
+},
+```
+
+- **composer fix** — applies Rector's rewrites, then formats the result.
+- **composer check** — dry-run of all three tools, changes nothing. Use this in CI.
+
 ### Disabling a rule
 
-None of the three tools should have a rule disabled by default — disabling is the exception, and the same discipline applies across PHP-CS-Fixer, Rector and PHPStan:
+Apart from `dynamicCallOnStaticMethod` in the PHPStan template (see [PHPStan](#phpstan)), none of the three tools should have a rule disabled by default — disabling is the exception, and the same discipline applies across PHP-CS-Fixer, Rector and PHPStan:
 
 1. **Scope it as narrowly as possible** instead of turning a rule off project-wide:
    - **PHP-CS-Fixer** (no per-line disable comment) — exclude the single path with `$finder->notPath(...)` / `->exclude(...)`.
-   - **Rector** (no per-line disable comment) — skip the single rule-and-path pair with `->withSkip([RuleClass::class => ['path/to/File.php']])`, the narrowest form; avoid removing the rule project-wide.
-   - **PHPStan** (the one tool with a native per-line disable comment) — prefer `// @phpstan-ignore-next-line <rule>: <reason>` on the offending line over an `excludePaths` entry in `phpstan.dist.neon`, unless the exception spans a whole file.
+   - **Rector** (no per-line disable comment) — skip the single rule-and-path pair with `->withSkip([RuleClass::class => [__DIR__ . '/path/to/File.php']])`, the narrowest form; avoid removing the rule project-wide.
+   - **PHPStan** (the one tool with a native per-line disable comment) — prefer `// @phpstan-ignore <identifier> (<reason>)` on the offending line over an `excludePaths` entry in `phpstan.dist.neon`, unless the exception spans a whole file. `@phpstan-ignore-line` / `@phpstan-ignore-next-line` are not allowed: they silence every error on the line and cannot carry a reason, so the template rejects them (`reportIgnoresWithoutComments: true`). For a type error, fix the type first (`is_*()`, `instanceof`, a `null` check, a typed accessor) — ignoring is the last resort.
+   - The PHPStan `level` cannot be disabled or changed: it stays at 8 in every project (see [Existing codebase](#existing-codebase)).
+   - A behaviour that both Rector and PHP-CS-Fixer implement (see [6. Implement Lint](#6-implement-lint)) must be turned off in both — for example, keeping an `else` after a `return` means skipping `RemoveAlwaysElseRector` **and** turning off `no_useless_else` / `no_superfluous_elseif`.
 
 2. **Always add a comment explaining why**, next to the change:
 
    - PHP-CS-Fixer:
      ```php
      // PROJECT DECISION (2026-08-26): generated API client, never edited by hand.
-     ->notPath('src/Generated/ApiClient.php')
+     ->notPath('app/Generated/ApiClient.php')
      ```
    - Rector:
      ```php
      ->withSkip([
          // PROJECT DECISION (2026-08-26): generated API client, never edited by hand.
-         ReadOnlyPropertyRector::class => ['src/Generated/ApiClient.php'],
+         ReadOnlyPropertyRector::class => [__DIR__ . '/app/Generated/ApiClient.php'],
      ])
      ```
    - PHPStan — the reason lives inline in the ignore comment itself, no separate comment needed:
      ```php
-     // @phpstan-ignore-next-line argument.type: Legacy payload always returns array<mixed>, safe to cast here.
-     $this->process($legacyPayload);
+     // @phpstan-ignore argument.type (acme/billing-sdk v2 declares string, but the API takes the int id; fixed upstream in v3 — #123456.)
+     $client->fetchInvoice($invoiceNo);
      ```
 
 3. **Report the change to your PM/leader** before merging. A disabled rule without a written reason and without the PM being informed must be rejected in code review.
