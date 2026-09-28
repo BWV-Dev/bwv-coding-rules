@@ -60,6 +60,16 @@ Do **NOT** upgrade solely for:
 - Developer curiosity or preference.
 - Unmeasured minor performance gains.
 
+### Dependency Categories
+
+Not all dependencies carry the same risk. Classify the dependency **before** starting the workflow:
+
+| Category | Examples | Production Impact | Required Workflow |
+|---|---|---|---|
+| **Runtime dependency** (`dependencies`, `require`) | express, axios, lodash, laravel/framework | ✅ Direct — code ships to production | Full workflow (Steps 1–7). |
+| **Build/Compile tools** (usually `devDependencies`, `require-dev`) | webpack, vite, esbuild, tsc, babel, sass | ⚠️ Indirect — tool output **becomes** the production artifact | Full workflow (Steps 1–7). Step 6 focuses on build output: build succeeds, bundle size/diff comparison, smoke test of the built app. |
+| **Development tooling** (`devDependencies`, `require-dev`) | eslint, prettier, jest, phpunit, husky | ❌ None — never touches the production artifact | Simplified: Steps 1–5, then verify the tool itself runs (lint/test/CI passes). Monkey testing and performance testing are **not required**. Risk level is normally 🟢 Low. |
+
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ---
@@ -143,7 +153,7 @@ When using a library with major version `0`:
                            ▼
 ┌──────────────────────────────────────────────────────────┐
 │          Step 6: Testing & Verification                  │
-│  - Monkey testing / Performance testing                  │
+│  - Monkey testing / Performance testing (if required)    │
 │  - Automated unit tests (if project has them)            │
 └──────────────────────────┬───────────────────────────────┘
                            │
@@ -191,8 +201,8 @@ When using a library with major version `0`:
 | Release Type | Minimum Wait Period | Exception |
 |---|---|---|
 | **PATCH** (`x.y.Z`) | ✅ Immediate. | - |
-| **MINOR** (`x.Y.0`) | ⏳ 2–4 weeks, or until `x.Y.1+`. | Urgently needed feature, or backed by reputable team (React, Laravel, CakePHP…). |
-| **MAJOR** (`X.0.0`) | ⏳ 1–3 months, or until `X.1.0+`. | EOL, explicit client requirement, or forced by environment upgrade. |
+| **MINOR** (`x.Y.0`) | ⏳ **2 weeks**, or until `x.Y.1` is released — whichever comes first. | Urgently needed feature, or backed by reputable team (React, Laravel, CakePHP…). |
+| **MAJOR** (`X.0.0`) | ⏳ **2 months**, or until `X.1.0` is released — whichever comes first. | EOL, explicit client requirement, or forced by environment upgrade. |
 | **Major zero** (`0.y.z`) | ⚠️ No guaranteed stability. | Only when no stable alternative exists; document the risk. |
 
 Also check: weekly downloads (NPM/Packagist), open bugs on GitHub, maintainer credibility, changelog quality.
@@ -245,7 +255,18 @@ Write test cases for all features using the upgraded library; compare old vs new
 
 > Use the [Monkey Test Template (Google Sheets)](https://docs.google.com/spreadsheets/d/1VouHff39pjwo9aklpgJFADetmj7wPavMpxoLid-r4Go/edit). Attach the link in the Completion Report.
 
-#### 6.2 Performance Testing
+#### 6.2 Performance Testing (only when required)
+
+Performance testing is **required** only when at least one of the following applies:
+
+| # | Condition | Example |
+|---|---|---|
+| 1 | Core framework / runtime / infrastructure upgrade | PHP 8.1 → 8.5, Node.js 18 → 22, Laravel 10 → 12 |
+| 2 | Library sits on a performance-critical path | ORM/query builder, HTTP client/server, image/file processing, data serialization, rendering |
+| 3 | Changelog mentions performance-related changes | Engine rewrite, algorithm change, caching behavior change |
+| 4 | Risk level is 🟠 High or 🔴 Critical | - |
+
+Otherwise (development tooling, small utilities, PATCH upgrades of non-critical libraries), skip performance testing and record `N/A - [reason]` in the Completion Report.
 
 | Metric | Before | After |
 |---|---|---|
@@ -325,7 +346,7 @@ Fill in the [Completion Report Template](#43-completion-report-template) and sub
 >
 > **Monkey Test Results:** [Link to TestResult Sheet]
 >
-> **Performance Test Results:** [Attach table from Step 6.2.]
+> **Performance Test Results:** [Attach table from Step 6.2, or `N/A - [reason]` if not required.]
 >
 > **Automated Unit Test Results:** [Attach evidence, if available.]
 >
