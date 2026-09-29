@@ -2,19 +2,14 @@
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
     ->exclude([
-        'bootstrap/cache',
+        'logs',
         'node_modules',
-        'public',
-        'storage',
+        'templates',
+        'tmp',
         'vendor',
+        'webroot',
     ])
-    ->notName([
-        '*.blade.php',
-        '_ide_helper.php',
-        '_ide_helper_actions.php',
-        '_ide_helper_models.php',
-        '.phpstorm.meta.php',
-    ])
+    ->notPath('config/app_local.php')
     ->name('*.php');
 return (new PhpCsFixer\Config())
     ->setFinder($finder)
