@@ -18,3 +18,4 @@
 ## 3. Guidelines
 - [**Dependency Upgrade**](./Guidelines/DependencyUpgradeGuideline.md)
 - [**Hide Version Information**](./Guidelines/HideVersionInfoGuideline.md)
+- [**Git Workflow**](./Guidelines/GitWorkflowGuideline.md)
