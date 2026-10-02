@@ -57,8 +57,8 @@
 - Always check wiki on redmine
 - Always prioritize the coding rules of the project, follow the conventions of your project
 - The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
-- These rules assume **PHP >= 8.5**. On an older project, apply only what its PHP version supports and keep the rest as the target when upgrading
-- The lint templates in [6. Implement Lint](#6-implement-lint) come in two sets: **Laravel 12+** (13 for a new project) and **CakePHP 5.3+** — the first versions that run on PHP 8.5. Examples use Laravel APIs unless a `(CakePHP)` variant is shown
+- These rules assume **PHP 8.5**
+- The lint templates in [6. Implement Lint](#6-implement-lint) come in two sets: **Laravel 13** and **CakePHP 5.4**, both running on PHP 8.5. Examples use Laravel APIs unless a `(CakePHP)` variant is shown
 - `REQUIRED` / `RECOMMENDED` say how important a rule is in code review. Whatever part of a rule the tools in [6. Implement Lint](#6-implement-lint) enforce is mandatory in CI regardless of that label. A leader who does not want to apply such a rule turns it off at the start of the project, following [Disabling a rule](#disabling-a-rule). The PHPStan level is not one of those rules: every project runs level 8 (see [Existing codebase](#existing-codebase))
 <br>
 
@@ -1301,7 +1301,7 @@ See **[Web Security Rules](./WebSecurityRules.md)**.
 
 We implement PHP lint using **Rector**, **PHP Coding Standards Fixer** and **PHPStan**:
 
-- **Rector** rewrites code: constructor promotion, `readonly` properties and classes, `switch` → `match`, removing an `else` after a `return`, adding type declarations and class constant types. Its PHP 8.4 and 8.5 sets also migrate code to the new syntax: `?T` for a parameter whose default is `null`, `new Foo()->bar()`, simple `foreach` loops to `array_find()` / `array_any()` / `array_all()`, `array_first()` / `array_last()`, `#[\Override]` on a property that overrides a parent property, and replacements for what 8.5 deprecates (the backtick operator, `(integer)`-style casts, `case X;`, `__sleep()` / `__wakeup()`). It does not turn nested `if`s into guard clauses ([4.1](#4.1)) or nested null checks into `?->` ([2.9](#2.9)) — those stay manual. The Laravel template also loads the rector-laravel sets; CakePHP has no maintained Rector set for code quality, so the CakePHP template uses the generic sets only.
+- **Rector** rewrites code: constructor promotion, `readonly` properties and classes, `switch` → `match`, removing an `else` after a `return`, adding type declarations and class constant types. With PHP 8.5 as the target, its PHP sets also migrate code to the new syntax: `?T` for a parameter whose default is `null`, `new Foo()->bar()`, simple `foreach` loops to `array_find()` / `array_any()` / `array_all()`, `array_first()` / `array_last()`, `#[\Override]` on a property that overrides a parent property, and replacements for what 8.5 deprecates (the backtick operator, `(integer)`-style casts, `case X;`, `__sleep()` / `__wakeup()`). It does not turn nested `if`s into guard clauses ([4.1](#4.1)) or nested null checks into `?->` ([2.9](#2.9)) — those stay manual. The Laravel template also loads the rector-laravel sets; CakePHP has no maintained Rector set for code quality, so the CakePHP template uses the generic sets only.
 - **PHP-CS-Fixer** handles formatting and style, plus a few safe rewrites. Some of them overlap with Rector: `??` and `??=`, removing a useless `else` / `return`, removing PHPDoc tags that repeat the signature, and removing the parentheses around `new` (`new Foo()->bar()`). Both tools produce the same result, so the overlap is harmless — but a behaviour you want to turn off must be turned off in both (see [Disabling a rule](#disabling-a-rule)).
 - **PHPStan** only *reports*. Both templates run **level 8** with `phpstan-strict-rules` and the framework's extension (Larastan for Laravel, `cakedc/cakephp-phpstan` for CakePHP), so missing type declarations and iterable element types, calls on a possibly-`null` value, loose comparison, missing strict flags, `empty()` and non-boolean conditions are all errors. PHPStan does not check operations on `mixed` at this level, so narrowing `mixed` ([2.4](#2.4)) is checked in code review.
 
@@ -1320,9 +1320,9 @@ Set up a project with the steps for its framework, then the [Shared steps](#shar
 
 ### Laravel setup
 
-For Laravel 12+ (13 for a new project).
+For Laravel 13.
 
-1. **Pin the PHP version** as in [4.7](#4.7). The skeleton ships `"php": "^8.3"`, and Rector's `withPhpSets()` takes the lowest version the constraint allows — without the pin, none of the PHP 8.4 / 8.5 rewrites run.
+1. **Pin the PHP version** as in [4.7](#4.7). The skeleton's `"php"` constraint starts below 8.5, and Rector's `withPhpSets()` takes the lowest version the constraint allows — without the pin, none of the new-syntax rewrites listed in [6. Implement Lint](#6-implement-lint) run.
 
 2. **Install packages**
 
@@ -1343,9 +1343,9 @@ For Laravel 12+ (13 for a new project).
 
 ### CakePHP setup
 
-For CakePHP 5.3+. CakePHP 4.x and older need PHPStan 1.x, so the templates do not apply there — apply sections 1–4 only.
+For CakePHP 5.4.
 
-1. **Pin the PHP version** as in [4.7](#4.7). The skeleton ships `"php": ">=8.2"` — same reason as for Laravel.
+1. **Pin the PHP version** as in [4.7](#4.7). The skeleton's `"php"` constraint also starts below 8.5 — same reason as for Laravel.
 
 2. **Install packages**
 
