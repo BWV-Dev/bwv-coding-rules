@@ -58,8 +58,6 @@
 - Always prioritize the coding rules of the project, follow the conventions of your project
 - The following coding rules have been applied in some projects, depending on the project's style, the leader will select and apply them differently
 - These rules assume **PHP 8.5**
-- The lint templates in [6. Implement Lint](#6-implement-lint) come in two sets: **Laravel 13** and **CakePHP 5.4**, both running on PHP 8.5. Examples use Laravel APIs unless a `(CakePHP)` variant is shown
-- `REQUIRED` / `RECOMMENDED` say how important a rule is in code review. Whatever part of a rule the tools in [6. Implement Lint](#6-implement-lint) enforce is mandatory in CI regardless of that label. A leader who does not want to apply such a rule turns it off at the start of the project, following [Disabling a rule](#disabling-a-rule). The PHPStan level is not one of those rules: every project runs level 8 (see [Existing codebase](#existing-codebase))
 <br>
 
 ## 1. Naming
@@ -81,8 +79,7 @@ The good way to name files, classes, functions and variables in PHP.
 
 <td>
 
-Use **PascalCase** (UpperCamelCase) for class files, namespaces, classes, interfaces, enums, traits and enum cases. The name should be a **noun**.<br />
-A class file is named after the class it holds (PSR-4). Other files — config, routes, migrations, views, tool configs such as `rector.php` — follow the framework's own convention.
+Use **PascalCase** (UpperCamelCase) for class files, namespaces, classes, interfaces, enums, traits and enum cases. The name should be a **noun**.
 </td>
 
 <td>
@@ -162,7 +159,7 @@ $routeName = 'abc';
 
 <td>
 
-Use **UPPER_CASE_UNDERSCORE** for class constants and global constants. Enum cases are the exception — they use PascalCase (see [1.1](#1.1)).
+Use **UPPER_CASE_UNDERSCORE** for class constants and global constants.
 </td>
 
 <td>
@@ -192,7 +189,7 @@ class Invoice
 
 <td>
 
-Use meaningful names. **Do not** use unclear abbreviations, single letters (except loop indexes) or data-type prefixes — the type belongs in the type declaration, not in the name (see [2.4](#2.4)).
+Use meaningful names. **Do not** use unclear abbreviations, single letters (except loop indexes) or data-type prefixes.
 </td>
 
 <td>
@@ -271,23 +268,18 @@ The good way to manage formatting, typing and runtime safety in PHP projects.
 
 <td>
 
-Let **PHP-CS-Fixer** handle formatting rules (see [6. Implement Lint](#6-implement-lint)). Team should not manually discuss the formatting the fixer enforces in code review — only what it cannot enforce (line length in [2.3](#2.3), the blank line after a block in [2.7](#2.7)). The shared config takes **PSR-12** as its base and enforces:
+Let **PHP-CS-Fixer** format the code (see [6. Implement Lint](#6-implement-lint)). Do not discuss what it enforces in code review — only what it cannot: line length ([2.3](#2.3)) and the blank line after a block ([2.7](#2.7)). The config is **PSR-12** plus:
 
-- 4 spaces for indentation (never tabs), LF line endings
-- single quotes for string literals, unless the string contains a variable or a single quote
-- short array syntax `[]` instead of `array()`
-- trailing comma in multi-line arrays, arguments, parameters and `match`
+- 4 spaces for indentation, LF line endings
+- single quotes, unless the string contains a variable or a single quote; variables in braces: `"Hello {$name}"`
+- short array syntax `[]`; trailing comma in multi-line arrays, arguments, parameters and `match`
 - one statement per line
-- explicit variables in strings: `"Hello {$name}"`
-- one space after the logical NOT operator: `! $isActive`
-- one space around the concatenation operator: `$greeting . $name`
-- `use` statements sorted alphabetically, grouped per namespace (`use App\Models\{Invoice, User};` — a deliberate deviation from PSR-12), unused imports removed
-- global classes imported rather than written inline: `new \DateTimeImmutable()` becomes a `use` plus `new DateTimeImmutable()`
-- no parentheses around `new` when calling a member on it: `new Money($amount)->add($tax)` instead of `(new Money($amount))->add($tax)`
-- the `{` of a function or method stays on the signature line (a deliberate deviation from PSR-12); classes, interfaces and enums keep `{` on its own line
-- an empty body collapses onto the signature line: `public function handle(): void {}`
-- every PHPDoc block of a class constant, property or method is multi-line, even a one-liner
-- `<?php echo $x ?>` becomes `<?= $x; ?>` in the files the fixer runs on — view templates (Blade, CakePHP `templates/`) are excluded (see [6. Implement Lint](#6-implement-lint))
+- one space after `!` and around `.`: `! $isActive`, `$greeting . $name`
+- `use` sorted and grouped per namespace (`use App\Models\{Invoice, User};` — differs from PSR-12), global classes imported, unused imports removed
+- no parentheses around `new`: `new Money($amount)->add($tax)`
+- `{` of a function or method on the signature line (differs from PSR-12), of a class, interface or enum on its own line; an empty body collapses: `public function handle(): void {}`
+- PHPDoc of constants, properties and methods is always multi-line
+- `<?php echo $x ?>` becomes `<?= $x; ?>` (view templates are excluded)
 - class elements ordered per [2.2](#2.2)
 </td>
 
@@ -396,11 +388,7 @@ final class InvoiceService implements Stringable
 <td>
 
 **Prefer a maximum line length of 80 characters**<br />
-When a line exceeds it, wrap it by these conventions:
-- Break after a comma.
-- Break before an operator.
-
-Prefer going over the limit if breaking the line would make it less readable — for example a long string literal, a URL or a fully qualified class name that should not be split.
+Wrap a longer line after a comma and before an operator. Do not split a long string, URL or fully qualified class name just to fit.
 </td>
 
 <td>
@@ -435,10 +423,9 @@ if (
 <td>
 
 **Declare strict types and type declarations**<br />
-Add `declare(strict_types=1);` at the top of every PHP file except view templates, and declare types for parameters, return values and properties. Types belong in the signature — this is what makes [2.8](#2.8) work at runtime and removes most redundant PHPDoc (see [3.4](#3.4)).<br />
-Use `void`, `?T`, union types and `never` where they describe the real contract.<br />
-Narrow `mixed` at the boundary — request input, config, JSON, database rows, untyped libraries — with `is_*()`, `instanceof` or a typed accessor (Laravel: `$request->integer()`, `Config::string()`, …; CakePHP: `toInt()`, `toString()`, … from `Cake\Core`), and pass only typed values further in. PHPStan reports a missing type declaration, but at level 8 it does not check what you do with a `mixed` value (`$request->input()`, `config()`, `$this->request->getData()`, `Configure::read()`, `json_decode()`, …), so this part is checked in code review.<br />
-Class constants are typed too (`public const int MAX_RETRY_COUNT = 3;`). Rector adds the type to private constants and to every constant of a `final` class; type the others yourself.
+Add `declare(strict_types=1);` to every PHP file except view templates, and type every parameter, return value, property and class constant.<br />
+Narrow `mixed` values (request input, config, JSON, database rows) once, at the boundary, with `is_*()`, `instanceof` or a typed accessor (`$request->integer()` in Laravel, `toInt()` in CakePHP).<br />
+PHPStan reports a missing type but not how a `mixed` value is used — that part is checked in code review.
 </td>
 
 <td>
@@ -491,8 +478,7 @@ final class PriceService
 <td>
 
 **Use constructor property promotion and `readonly`**<br />
-Promote constructor parameters instead of declaring the property and assigning it manually. Mark dependencies and value objects `readonly` when they must not change after construction. When every property of a class is `readonly`, mark the class itself `readonly` instead.<br />
-Rector applies all three automatically.
+Promote constructor parameters instead of assigning them by hand. Mark a property `readonly` when it must not change after construction, and the class `readonly` when all its properties are. Rector applies all three.
 </td>
 
 <td>
@@ -572,8 +558,8 @@ if ($arg === null) {
 <td>
 
 **Blank line rules inside a function**<br />
-Add 1 blank line **after** each `if` block and loop block, unless the block is the last statement of its enclosing block.<br />
-Add 1 blank line **before** the `return` keyword, unless `return` is the first statement of its block (e.g. a guard clause).
+Add 1 blank line **after** each `if` or loop block, unless it is the last statement of its block.<br />
+Add 1 blank line **before** `return`, unless it is the first statement of its block (e.g. a guard clause).
 </td>
 
 <td>
@@ -616,12 +602,10 @@ return true;
 
 <td>
 
-**Type-Safe Comparisons**
-
-Use `===` instead of `==`, `!==` instead of `!=`.<br />
-When comparing two values, always ensure they are of the **same data type** to avoid unexpected results (e.g. `'1' === 1` is `false`). Convert the value once, at the boundary, with a typed accessor (`$request->integer()` in Laravel, `toInt()` in CakePHP) — or cast it only after validating it (`is_numeric()`): `(int) 'abc'` silently becomes `0`, and PHPStan at level 8 does not report it (see [2.4](#2.4)).<br />
-Pass `true` as the third argument of `in_array()` / `array_search()` / `array_keys()` to force strict comparison.<br />
-PHPStan reports every `==` / `!=` and every missing strict flag; Rector rewrites `==` to `===` only when both sides provably have the same type. The conversion itself is on you. Rector also turns `switch` (loose comparison) into `match` (strict comparison) — check the types when reviewing that diff.
+**Type-Safe Comparisons**<br />
+Use `===` / `!==`, and pass `true` as the strict flag of `in_array()`, `array_search()` and `array_keys()`.<br />
+Both sides must have the **same type** (`'1' === 1` is `false`): convert once, at the boundary ([2.4](#2.4)), and cast only after `is_numeric()` — `(int) 'abc'` silently becomes `0`.<br />
+PHPStan reports every loose comparison. When Rector turns `switch` into `match`, check the types: `match` compares strictly.
 </td>
 
 <td>
@@ -678,8 +662,8 @@ if (in_array($status, $validStatuses, true)) { ... }
 <td>
 
 **Use nullsafe `?->` and null coalescing `??` / `??=`**<br />
-They replace nested `null` checks and `isset()` ternaries. Note that `?->` stops the whole chain as soon as one link is `null` — do not use it to hide a value that should never be `null` (validate and fail early instead).<br />
-PHPStan (level 8) reports calling a method or reading a property on a value that may be `null`, so a missing `null` check fails CI.
+Use them instead of nested `null` checks and `isset()` ternaries, but not on a value that must never be `null` — fail early instead.<br />
+PHPStan reports member access on a possibly-`null` value.
 </td>
 
 <td>
@@ -833,9 +817,8 @@ $this->migrateUserContracts();
 <td>
 
 **PHPDoc comments**<br />
-Write PHPDoc when it adds information the signature cannot express: a description, array shapes, `@throws`, or generics. **Do not** repeat types that are already declared in the signature ([2.4](#2.4)) — a duplicated type is one more thing that can go stale.<br />
-Every `array`, `iterable` or generic type in a signature needs its element type in PHPDoc (`@param list<string> $paths`): PHPStan reports a bare `array` as a missing type (`missingType.iterableValue`).<br />
-A blank line separates the description from the tags, and each group of tags from the next.
+Write PHPDoc only for what the signature cannot say: a description, `@throws`, and the element type of an `array`, `iterable` or generic (`@param list<string> $paths`) — PHPStan reports it when missing. **Do not** repeat a declared type.<br />
+Separate the description and each group of tags with a blank line.
 </td>
 
 <td>
@@ -1069,13 +1052,8 @@ $label = match ($food) {
 
 <td>
 
-**Do not use `empty()`** — use `isset()` or an explicit check.
-
-**isset()** checks whether the variable has been set — it returns `true` if the variable exists and its value is not `null`. That means `''`, `0`, `'0'`, `false` and `[]` are **set**, so `isset()` returns `true` for them.
-
-**empty()** checks whether a variable is *empty*, and these are all empty: `''`, `0`, `0.0`, `'0'`, `null`, `false`, `[]` and a declared-but-unassigned variable. A legit `0` or `'0'` silently becomes "missing", which is why PHPStan reports every `empty()` call.
-
-Use `isset()` when only "missing / null" matters. Otherwise say exactly what you mean: `=== null`, `=== ''`, `=== []`, `=== 0` or `count($items) === 0`.
+**Do not use `empty()`** — it treats `0`, `'0'`, `''`, `false` and `[]` as missing, so a valid `0` is rejected. PHPStan reports every call.<br />
+Use `isset()` when only missing / `null` matters (it is `true` for `0`, `''` and `[]`); otherwise check exactly what you mean: `=== null`, `=== ''`, `=== []`, `=== 0` or `count($items) === 0`.
 </td>
 
 <td>
@@ -1217,11 +1195,6 @@ public function validationDefault(Validator $validator): Validator {
 
 **Maximum number of lines per file** <br />
 Limit each file to a maximum of **1000 lines** of code to enhance code quality, maintainability, and performance.
-
-> **Exceptions** (generated code, migration files, legacy code, large service implementations) are allowed — but this is the exception, never the default. When you must exceed the limit:
-> 1. Document the reason in the Pull Request description or code review comment.
-> 2. Report the exception to your PM/leader before merging. An exception without a documented reason and without approval **must be rejected** in code review.
-> 3. If the same file keeps exceeding the limit, raise it with the leader — revisit the architecture instead of accumulating exceptions.
 </td>
 
 <td>
@@ -1301,14 +1274,9 @@ See **[Web Security Rules](./WebSecurityRules.md)**.
 
 We implement PHP lint using **Rector**, **PHP Coding Standards Fixer** and **PHPStan**:
 
-- **Rector** rewrites code: constructor promotion, `readonly` properties and classes, `switch` → `match`, removing an `else` after a `return`, adding type declarations and class constant types. With PHP 8.5 as the target, its PHP sets also migrate code to the new syntax: `?T` for a parameter whose default is `null`, `new Foo()->bar()`, simple `foreach` loops to `array_find()` / `array_any()` / `array_all()`, `array_first()` / `array_last()`, `#[\Override]` on a property that overrides a parent property, and replacements for what 8.5 deprecates (the backtick operator, `(integer)`-style casts, `case X;`, `__sleep()` / `__wakeup()`). It does not turn nested `if`s into guard clauses ([4.1](#4.1)) or nested null checks into `?->` ([2.9](#2.9)) — those stay manual. The Laravel template also loads the rector-laravel sets; CakePHP has no maintained Rector set for code quality, so the CakePHP template uses the generic sets only.
-- **PHP-CS-Fixer** handles formatting and style, plus a few safe rewrites. Some of them overlap with Rector: `??` and `??=`, removing a useless `else` / `return`, removing PHPDoc tags that repeat the signature, and removing the parentheses around `new` (`new Foo()->bar()`). Both tools produce the same result, so the overlap is harmless — but a behaviour you want to turn off must be turned off in both (see [Disabling a rule](#disabling-a-rule)).
-- **PHPStan** only *reports*. Both templates run **level 8** with `phpstan-strict-rules` and the framework's extension (Larastan for Laravel, `cakedc/cakephp-phpstan` for CakePHP), so missing type declarations and iterable element types, calls on a possibly-`null` value, loose comparison, missing strict flags, `empty()` and non-boolean conditions are all errors. PHPStan does not check operations on `mixed` at this level, so narrowing `mixed` ([2.4](#2.4)) is checked in code review.
-
-The templates do not hardcode the PHP version: Rector's `withPhpSets()` reads `require.php` and PHPStan reads `config.platform.php` from `composer.json`, and PHP-CS-Fixer follows the PHP binary it runs on — so pin all three as in [4.7](#4.7).
-
-Run them in that order — Rector, then PHP-CS-Fixer (which formats Rector's output), then PHPStan — see [Running all three](#running-all-three).<br />
-Ready-to-use templates are provided per framework in [`config/php/laravel/`](./config/php/laravel) and [`config/php/cakephp/`](./config/php/cakephp). The PHP-CS-Fixer rules are identical in both — only the `Finder` paths differ.
+- **Rector** rewrites code: constructor promotion, `readonly`, `switch` → `match`, removing an `else` after a `return`, type declarations, and PHP 8.5 syntax and deprecations (e.g. `new Foo()->bar()`, `array_find()` / `array_any()`, `#[\Override]`). Guard clauses ([4.1](#4.1)) and `?->` ([2.9](#2.9)) stay manual. The Laravel template adds the rector-laravel sets; CakePHP has no maintained Rector set for code quality, so its template uses the generic sets only.
+- **PHP-CS-Fixer** formats code ([2.1](#2.1)). Some of its rewrites overlap with Rector (`??=`, a useless `else`, PHPDoc tags that repeat the signature, parentheses around `new`): the result is the same, but a behaviour you turn off must be turned off in both ([Disabling a rule](#disabling-a-rule)).
+- **PHPStan** only reports, at **level 8** with `phpstan-strict-rules` and the framework extension (Larastan for Laravel, `cakedc/cakephp-phpstan` for CakePHP). What it reports is noted in [2.4](#2.4), [2.8](#2.8), [2.9](#2.9), [3.4](#3.4) and [4.3](#4.3), plus non-boolean conditions. It does not check operations on `mixed` ([2.4](#2.4)).
 
 | Laravel | CakePHP | Copy to project root as |
 |---|---|---|
@@ -1322,7 +1290,7 @@ Set up a project with the steps for its framework, then the [Shared steps](#shar
 
 For Laravel 13.
 
-1. **Pin the PHP version** as in [4.7](#4.7). The skeleton's `"php"` constraint starts below 8.5, and Rector's `withPhpSets()` takes the lowest version the constraint allows — without the pin, none of the new-syntax rewrites listed in [6. Implement Lint](#6-implement-lint) run.
+1. **Pin the PHP version** as in [4.7](#4.7).
 
 2. **Install packages**
 
@@ -1330,11 +1298,9 @@ For Laravel 13.
    composer require --dev rector/rector driftingly/rector-laravel friendsofphp/php-cs-fixer phpstan/phpstan phpstan/phpstan-strict-rules larastan/larastan
    ```
 
-   The PHPStan template is written for Larastan 3.x. Larastan is what lets PHPStan understand Eloquent models, facades and the container — without it, almost every model and facade call in a Laravel project is reported.
-
 3. **Remove the tools that conflict with the templates**
 
-   - Run `composer remove --dev laravel/pint`. The skeleton ships Pint, whose `laravel` preset puts the `{` of a method on its own line — the opposite of [2.1](#2.1). Two formatters would keep rewriting each other's output.
+   - Run `composer remove --dev laravel/pint`.
    - Delete any `phpstan.neon` / `phpstan.neon.dist`: PHPStan reads them before `phpstan.dist.neon`, so they would override the template.
 
 4. **Copy the templates** from the Laravel column of the table above, then adjust `withPaths()` (Rector), the `Finder` (PHP-CS-Fixer) and `paths` / `excludePaths` (PHPStan) to your project layout.
@@ -1345,7 +1311,7 @@ For Laravel 13.
 
 For CakePHP 5.4.
 
-1. **Pin the PHP version** as in [4.7](#4.7). The skeleton's `"php"` constraint also starts below 8.5 — same reason as for Laravel.
+1. **Pin the PHP version** as in [4.7](#4.7).
 
 2. **Install packages**
 
@@ -1354,21 +1320,18 @@ For CakePHP 5.4.
    bin/cake plugin load IdeHelper --only-cli --optional
    ```
 
-   - `cakedc/cakephp-phpstan` (4.x) plays the role of Larastan: it types `fetchTable()`, `loadComponent()`, `Table::get()` / `newEntity()` / `patchEntity()` / `save()` and associations. It does **not** know the properties of an entity or `$this->Users` in a controller — those come from the `@property` / `@method` annotations that bake writes and IdeHelper keeps in sync (step 6).
-   - It also enables its own rules: no `debug()` / `dd()` / `pr()` calls, no array access on entities, and checks on associations, behaviors, components, mailers and controller actions. To turn one off, set it to `false` under `parameters.cakeDC` (e.g. `disallowEntityArrayAccessRule: false`), following [Disabling a rule](#disabling-a-rule).
+   - `cakedc/cakephp-phpstan` enables its own rules: no `debug()` / `dd()` / `pr()` calls, no array access on entities, and checks on associations, behaviors, components, mailers and controller actions. To turn one off, set it to `false` under `parameters.cakeDC` (e.g. `disallowEntityArrayAccessRule: false`), following [Disabling a rule](#disabling-a-rule).
 
 3. **Remove the skeleton's own tooling**
 
    - Delete `phpstan.neon`: PHPStan reads it before `phpstan.dist.neon`, so it would override the template.
-   - Delete `psalm.xml` and `phpcs.xml`, and run `composer remove --dev cakephp/cakephp-codesniffer`. The CakePHP coding standard puts the `{` of a method on its own line — the opposite of [2.1](#2.1).
+   - Delete `psalm.xml` and `phpcs.xml`, and run `composer remove --dev cakephp/cakephp-codesniffer`.
    - Remove the `check`, `cs-check` and `cs-fix` scripts from `composer.json`: `check` would clash with the one in the [Shared steps](#shared-steps). Keep `test`.
    - Delete the `.github/` folder. It belongs to the cakephp/app repository itself (issue templates, Dependabot), and its `ci.yml` runs phpcs. Write your own CI with `composer check` and `composer test`.
 
 4. **Copy the templates** from the CakePHP column of the table above. They cover `config/`, `plugins/`, `src/` and `tests/`; if the project has no `plugins/` folder, remove it from all three.
-   - `templates/` (and `plugins/*/templates/`) is excluded from all three tools: templates mix HTML and PHP and do not declare strict types.
-   - The Rector template skips `ThrowWithPreviousExceptionRector`. CakePHP's `HttpException` takes the HTTP status as `$code`, so passing the caught exception's code turns a `throw new NotFoundException()` inside a `catch` into a 500 response.
 
-5. **Configure IdeHelper** — add this block to `config/app.php`. Without it, the `@method` annotations on a table use a bare `array` for every parameter, and PHPStan reports around 20 `missingType.iterableValue` errors per table:
+5. **Configure IdeHelper** — add this block to `config/app.php`:
 
    ```php
    'IdeHelper' => [
@@ -1395,18 +1358,6 @@ For CakePHP 5.4.
    ]
    ```
 
-   Run `composer annotate` after every `bake` and every schema change. It reads the table schemas, so it needs a migrated database — which is why it is not part of `check`. The scripts call `@php bin/cake.php` rather than `bin/cake` so that they also run on Windows.<br />
-   `reportMagicProperties: true` in the PHPStan template is what catches a missing annotation: without it, `$user->name` on an entity with no `@property` for `name` passes as `mixed`, and level 8 does not check it.
-
-7. **CI** — PHPStan loads `config/bootstrap.php`, which needs a security salt. Without `config/app_local.php` (it is git-ignored) and without a `SECURITY_SALT` environment variable, `composer stan` stops with a `TypeError`. Run `composer install` with its scripts enabled (the skeleton's installer creates `app_local.php`), or set `SECURITY_SALT` in the CI job.
-
-8. **Code from `bin/cake bake`** does not pass level 8 as is. After `composer fix`, fix by hand:
-   - `if ($this->Users->save($user))` → `if ($this->Users->save($user) !== false)`: `save()` returns the entity or `false`, and only booleans are allowed in a condition.
-   - the `@return \Cake\Http\Response|null|void` tag of `index()` / `view()`: Rector adds the `void` return type, and PHPStan reports that the tag no longer matches (`return.phpDocType`) — delete the tag.
-   - `unset($this->Users)` in the `tearDown()` of a table test (`unset.possiblyHookedProperty`): declare the test class `final`.
-
-   To upgrade CakePHP itself, use [`cakephp/upgrade`](https://github.com/cakephp/upgrade) (Rector-based) as a standalone application — not as a dev dependency of the project.
-
 ### Shared steps
 
 1. **Ignore the caches** — add to `.gitignore`:
@@ -1432,8 +1383,6 @@ For CakePHP 5.4.
    },
    ```
 
-   What each script does: [Rector](#rector), [PHP-CS-Fixer](#php-cs-fixer), [PHPStan](#phpstan), [Running all three](#running-all-three).
-
 3. **First run**
    - Run `composer fix`, then the test suite: Rector and the risky fixers rewrite code, and the tests are what show a change in behaviour.
    - If `composer rector` still reports changes, run `composer fix` again — some rewrites only become possible after another one (a closure turned into an arrow function gets its return type on the next pass).
@@ -1458,21 +1407,22 @@ This extension simply provides PHP CS Fixer command (include code format).
 
 ### PHPStan
 
-Both templates are written for PHPStan 2.x; PHP 8.5 syntax needs PHPStan 2.1.32 or later.
-
-Both templates turn off exactly one strict rule, `dynamicCallOnStaticMethod`: it reports PHPUnit's `$this->assertSame()` in every test, and in Laravel also macros such as `$request->validate()`.
-
-- **composer stan** — analyses the codebase at the configured level and reports violations.
-- **composer stan:baseline** — (re)generates `phpstan-baseline.neon`, freezing every current error so `composer stan` only fails on new ones. Run this once when adopting PHPStan on an existing codebase, then periodically to shrink the baseline. The baseline only takes effect once it is included in `phpstan.dist.neon`:
-
-  ```neon
-  includes:
-      - phpstan-baseline.neon
-  ```
+- **composer stan** — analyses the codebase and reports violations.
+- **composer stan:baseline** — (re)generates `phpstan-baseline.neon`, freezing the current errors so `composer stan` only fails on new ones (see [Existing codebase](#existing-codebase)).
 
 #### Existing codebase
 
-Every project runs **level 8** — do not lower or raise it. On an existing codebase, run `composer rector:fix` first — the type declarations it adds remove many missing-type errors — then `composer stan:baseline` to freeze the remaining errors, and shrink the baseline as you touch that code. Regenerate the baseline only to shrink it, never to absorb errors in new code.
+Every project runs **level 8** — do not lower or raise it. On an existing codebase:
+
+1. Run `composer rector:fix` — the type declarations it adds remove many missing-type errors.
+2. Run `composer stan:baseline` and include the baseline in `phpstan.dist.neon`:
+
+   ```neon
+   includes:
+       - phpstan-baseline.neon
+   ```
+
+3. Shrink the baseline as you touch that code. Regenerate it only to shrink it, never to absorb errors in new code.
 
 #### VSCode extension *(optional)*
 
@@ -1481,21 +1431,18 @@ Shows PHPStan errors inline as you type, without waiting for `composer stan`.
 
 ### Running all three
 
-Rector's output is not formatted to the house style, so PHP-CS-Fixer must run after it. The `fix` and `check` scripts from the [Shared steps](#shared-steps) fix that order once:
-
 - **composer fix** — applies Rector's rewrites, then formats the result.
 - **composer check** — dry-run of all three tools, changes nothing. Use this in CI, together with the test suite.
 
 ### Disabling a rule
 
-Apart from `dynamicCallOnStaticMethod` in the PHPStan templates (see [PHPStan](#phpstan)) and `ThrowWithPreviousExceptionRector` in the CakePHP Rector template (see [CakePHP setup](#cakephp-setup)), none of the three tools should have a rule disabled by default — disabling is the exception, and the same discipline applies across PHP-CS-Fixer, Rector and PHPStan:
+Disabling a rule is an exception, with the same steps in all three tools:
 
-1. **Scope it as narrowly as possible** instead of turning a rule off project-wide:
-   - **PHP-CS-Fixer** (no per-line disable comment) — exclude the single path with `$finder->notPath(...)` / `->exclude(...)`.
-   - **Rector** (no per-line disable comment) — skip the single rule-and-path pair with `->withSkip([RuleClass::class => [__DIR__ . '/path/to/File.php']])`, the narrowest form; avoid removing the rule project-wide.
-   - **PHPStan** (the one tool with a native per-line disable comment) — prefer `// @phpstan-ignore <identifier> (<reason>)` on the offending line over an `excludePaths` entry in `phpstan.dist.neon`, unless the exception spans a whole file. `@phpstan-ignore-line` / `@phpstan-ignore-next-line` are not allowed: they silence every error on the line and cannot carry a reason, so the template rejects them (`reportIgnoresWithoutComments: true`). For a type error, fix the type first (`is_*()`, `instanceof`, a `null` check, a typed accessor) — ignoring is the last resort.
-   - The PHPStan `level` cannot be disabled or changed: it stays at 8 in every project (see [Existing codebase](#existing-codebase)).
-   - A behaviour that both Rector and PHP-CS-Fixer implement (see [6. Implement Lint](#6-implement-lint)) must be turned off in both — for example, keeping an `else` after a `return` means skipping `RemoveAlwaysElseRector` **and** turning off `no_useless_else` / `no_superfluous_elseif`.
+1. **Scope it as narrowly as possible**, never project-wide:
+   - **PHP-CS-Fixer** — exclude the path: `$finder->notPath(...)`.
+   - **Rector** — skip the rule for that path: `->withSkip([RuleClass::class => [__DIR__ . '/path/to/File.php']])`.
+   - **PHPStan** — fix the type first; otherwise `// @phpstan-ignore <identifier> (<reason>)` on the line. `@phpstan-ignore-line` / `@phpstan-ignore-next-line` are rejected.
+   - A behaviour both Rector and PHP-CS-Fixer implement is turned off in both — e.g. to keep an `else` after a `return`, skip `RemoveAlwaysElseRector` **and** turn off `no_useless_else` / `no_superfluous_elseif`.
 
 2. **Always add a comment explaining why**, next to the change:
 
@@ -1517,7 +1464,6 @@ Apart from `dynamicCallOnStaticMethod` in the PHPStan templates (see [PHPStan](#
      $client->fetchInvoice($invoiceNo);
      ```
 
-3. **Report the change to your PM/leader** before merging. A disabled rule without a written reason and without the PM being informed must be rejected in code review.
-4. If the same rule keeps getting disabled across the project, raise it with the leader — revisit the rule instead of accumulating exceptions.
+3. **Report the change to your PM/leader** before merging — a disabled rule without a written reason must be rejected in code review. If the same rule keeps getting disabled, raise it with the leader and revisit the rule.
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
