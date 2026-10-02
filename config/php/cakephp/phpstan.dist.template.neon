@@ -1,0 +1,23 @@
+includes:
+    - vendor/cakedc/cakephp-phpstan/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+parameters:
+    level: 8
+    tmpDir: .phpstan
+    bootstrapFiles:
+        - config/bootstrap.php
+    paths:
+        - config
+        - plugins
+        - src
+        - tests
+    excludePaths:
+        - config/app_local.php (?)
+        - plugins/*/templates/*
+    reportIgnoresWithoutComments: true
+    # Entity / Controller / Table properties are magic (__get): without this, a missing @property annotation passes as mixed — see PHP.md "CakePHP setup".
+    reportMagicProperties: true
+    strictRules:
+        disallowedLooseComparison: true
+        # Reports PHPUnit's $this->assert*() — see PHP.md "PHPStan".
+        dynamicCallOnStaticMethod: false
