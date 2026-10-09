@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "bwv-tools": { "php": "7.2" },
+    "ai-hub": { "php": "8.2", "env": "dev", "path": "/" },
+    "legacy": { "projectId": "<infisical-project-id>" },
+    "abc": { "infisical": false }
+  }
+}
