@@ -17,7 +17,7 @@ pulled from [Infisical](https://infisical.com) instead of `.env` files.
 
 - Windows 10/11, PowerShell 7 (`pwsh`) or Windows PowerShell 5.1
 - Laragon with Apache and Thread Safe x64 PHP builds (`php*apache2_4.dll` present)
-- [Infisical CLI](https://infisical.com/docs/cli/overview), logged in (`infisical login`)
+- [Infisical CLI](https://infisical.com/docs/cli/overview) 0.43.145 or later (needed for `.infisical.yaml`), logged in (`infisical login`)
 - `curl.exe` (ships with Windows 10+)
 
 ## Quick start
@@ -28,7 +28,7 @@ pulled from [Infisical](https://infisical.com) instead of `.env` files.
 3. In each project that should use Infisical:
    ```powershell
    cd D:\laragon\www\my-project
-   infisical init        # creates .infisical.json
+   infisical init        # creates .infisical.yaml
    ```
 4. Start everything:
    ```powershell
@@ -77,9 +77,10 @@ as-is into the default PHP instance, after the project vhosts, so they cannot sh
 
 ### What is read from each project
 
-`.infisical.json` (created by `infisical init`). If it exists, the project's secrets are
-fetched from that Infisical project. The environment defaults to whatever the Infisical CLI
-picks (`defaultEnvironment`, or `dev`).
+`.infisical.yaml` (created by `infisical init`), or the legacy `.infisical.json`. If either exists,
+the project's secrets are fetched from that Infisical project. The environment defaults to whatever
+the Infisical CLI picks: the `git-branch-to-environment` mapping for the current branch,
+`default-environment`, or `dev`.
 
 ### `projects.json`
 
@@ -103,8 +104,8 @@ Only for what Laragon does not know. Every key is optional. Copy
 | Key | Meaning |
 |---|---|
 | `projects.<folder>.php` | PHP version for the project: `"7.2"`, `"8.2.13"` or a full folder name. Default: the PHP selected in Laragon |
-| `projects.<folder>.env` / `.path` | Infisical environment / secret folder (overrides `.infisical.json`) |
-| `projects.<folder>.projectId` | Use Infisical for a project without `.infisical.json` |
+| `projects.<folder>.env` / `.path` | Infisical environment / secret folder (overrides `.infisical.yaml`) |
+| `projects.<folder>.projectId` | Use Infisical for a project without `.infisical.yaml` |
 | `projects.<folder>.infisical` | `false` disables Infisical for the project |
 | `apache.<php version>` | Pin an Apache build for a PHP version. Normally not needed |
 | `hostnameTemplate` | Domain for folders without a Laragon vhost. Default `{name}.test` |
@@ -204,7 +205,7 @@ Outside the launcher's control:
 |---|---|
 | `Port already in use` | Laragon's Apache (or another server) is listening on 80/443. Stop it in Laragon |
 | A PHP version fails the health check, or an extension works in `dev run` but not on the web | Run `dev selftest <php>`. It reports PHP/Apache pairs that cannot start and extensions the web does not load |
-| `infisical export failed` | Run `infisical login`; check `.infisical.json`, `env`, `projectId` |
+| `infisical export failed` | Run `infisical login`; check `.infisical.yaml`, `env`, `projectId` |
 | `skipped <KEY> (invalid variable name)` | The Infisical key is not a valid environment variable name |
 | A site shows Laragon's www index | The domain resolves to the wrong instance. Run `dev up` without `--no-hosts` and check `hosts` |
 | Logs | `runtime\instances\<php>\logs\error.log` and `access.log` |

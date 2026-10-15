@@ -19,7 +19,7 @@
     bin\apache\*\conf\httpd.conf Apache modules and settings
     etc\apache2\httpd-ssl.conf, etc\ssl\laragon.crt
   Read from each project:
-    .infisical.json              (created by `infisical init`) — if present, the project uses Infisical
+    .infisical.yaml              (created by `infisical init`; legacy .infisical.json) — if present, the project uses Infisical
 
   projects.json only declares what Laragon does not know:
     {
@@ -27,7 +27,7 @@
       "projects": {
         "bwv-tools": { "php": "7.2" },                        // default: the PHP selected in Laragon
         "ai-hub":    { "php": "8.2", "env": "dev", "path": "/" },
-        "legacy":    { "projectId": "xxx" },                  // use Infisical without .infisical.json
+        "legacy":    { "projectId": "xxx" },                  // use Infisical without .infisical.yaml
         "abc":       { "infisical": false }                   // disable Infisical for this project
       },
       "hostnameTemplate": "{name}.test",
@@ -325,7 +325,8 @@ function Get-Projects($Lg, $Config) {
 function Get-ProjectSettings($Project, $Config) {
     $cfg = Get-Prop (Get-Prop $Config 'projects') $Project.Name
     $projectId = Get-Prop $cfg 'projectId'
-    $enabled = (Get-Prop $cfg 'infisical') -ne $false -and ((Test-Path (Join-Path $Project.Dir '.infisical.json')) -or $projectId)
+    $hasConfig = @('.infisical.yaml', '.infisical.json') | Where-Object { Test-Path (Join-Path $Project.Dir $_) }
+    $enabled = (Get-Prop $cfg 'infisical') -ne $false -and ($hasConfig -or $projectId)
     [pscustomobject]@{
         Php       = Get-Prop $cfg 'php'
         Infisical = [bool]$enabled
@@ -380,7 +381,7 @@ function Get-AllProjectSecrets($Projects, [string]$InfisicalExe, [int]$Throttle 
 
 function ConvertFrom-SecretExport($Project, $r) {
     if ($r.ExitCode -ne 0) {
-        Fail "infisical export failed for '$($Project.Name)' (exit $($r.ExitCode)): $($r.StdErr.Trim())`n  → Did you run 'infisical login'? Are .infisical.json / projectId / env correct?"
+        Fail "infisical export failed for '$($Project.Name)' (exit $($r.ExitCode)): $($r.StdErr.Trim())`n  → Did you run 'infisical login'? Are .infisical.yaml / projectId / env correct?"
     }
     # Windows PowerShell 5.1 emits a JSON array as one object; ForEach-Object unrolls it (no-op on PowerShell 7)
     try { $items = @(ConvertFrom-Json -InputObject $r.StdOut | ForEach-Object { $_ }) }
