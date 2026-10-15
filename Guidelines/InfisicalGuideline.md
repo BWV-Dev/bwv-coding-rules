@@ -103,13 +103,13 @@ Update `scripts` in `package.json` to run the application through Infisical:
 ```json
 {
   "scripts": {
-    "dev:infisical": "infisical run --path=/backend -- npm run dev:app",
+    "dev:infisical": "infisical run --path=/backend -- npm run dev",
     "dev": "node --watch src/server.js"
   }
 }
 ```
 
-- `node --watch src/server.js` is only an example. Keep the other scripts unchanged.
+- Add `dev:infisical` and keep the existing `dev` script unchanged; `node --watch src/server.js` is only an example.
 - Replace `/backend` with the folder containing the application's secrets; use `/` if they are stored at the root.
 
 ##### PHP with Docker
@@ -143,7 +143,7 @@ services:
 
 As with Docker, the application must read its configuration with `env()`. No other change is needed in the repository.
 
-Write in the project's README the PHP version and, if the secrets are not stored at `/`, their folder. Members set them in the `projects.json` of laragon-dev ([3.3](#33-run-the-application)).
+Write in the project's README the PHP version and, if the secrets are not stored at `/`, their folder. Members set them in the `projects.json` of `lglocal` ([3.3](#33-run-the-application)).
 
 #### 2.4. Invite members to the correct project
 
@@ -185,7 +185,7 @@ After accepting the invitation, clone or pull the repository configured by the P
 ```bash
 infisical login --domain=https://vault.briswell-vn.com
 npm install
-npm run dev
+npm run dev:infisical
 ```
 
 Infisical fetches secrets and injects them into the application's environment variables.
@@ -203,19 +203,12 @@ After changing secrets or overrides, run the `infisical run ... docker compose u
 
 ##### PHP with Laragon
 
-Windows only. The launcher needs Laragon's Apache and its Thread Safe x64 PHP builds (Laragon's defaults); see the [laragon-dev requirements](../tools/laragon-dev/README.md#requirements).
+Windows only. Use [lglocal](https://github.com/BWV-Dev/laragon-local), which runs the projects on Laragon's Apache with their secrets from Infisical. Its README describes the requirements, configuration and troubleshooting.
 
 1. Clone the project into Laragon's `www` folder, for example `D:\laragon\www\my-project`, and select **Start All** in Laragon once so it creates the `my-project.test` site.
 2. Stop Apache in Laragon and uncheck **Apache** in **Preferences → Services & Ports** so **Start All** does not start it again. Keep using Laragon for MySQL and the other services.
-3. Install the launcher in `<laragon>\usr\dev\`; it finds Laragon from this folder:
-
-   ```powershell
-   New-Item -ItemType Directory -Force D:\laragon\usr\dev
-   Copy-Item <bwv-coding-rules>\tools\laragon-dev\* D:\laragon\usr\dev -Recurse -Force
-   ```
-
-   Replace `<bwv-coding-rules>` with your clone of this repository and `D:\laragon` with your Laragon folder. Run the same commands to update the launcher; your `projects.json` is kept. Add `D:\laragon\usr\dev` to `PATH` to type `dev` instead of `D:\laragon\usr\dev\dev.cmd`.
-4. If the project uses a PHP version other than Laragon's default, or its secrets are not stored at `/`, copy `projects.example.json` to `projects.json` in `D:\laragon\usr\dev` and set them:
+3. Install `lglocal` once per workstation by following its [installation steps](https://github.com/BWV-Dev/laragon-local#installation): clone it into `<laragon>\usr\laragon-local` and add that folder to `PATH`. To update it, run `git pull` in that folder.
+4. If the project uses a PHP version other than Laragon's default, or its secrets are not stored at `/`, create `projects.json` in `D:\laragon\usr\laragon-local` with only your projects:
 
    ```json
    {
@@ -229,25 +222,23 @@ Windows only. The launcher needs Laragon's Apache and its Thread Safe x64 PHP bu
 
    ```powershell
    infisical login --domain=https://vault.briswell-vn.com
-   dev up
+   lglocal up
    ```
 
    The first run may show a UAC prompt to update the `hosts` file. Check that the output lists `🔑 my-project.test (N secret(s))`, then open `http://my-project.test`.
 6. Run CLI commands with the project's PHP version and secrets:
 
    ```powershell
-   dev run my-project composer install
-   dev run my-project php artisan migrate
+   lglocal run my-project composer install
+   lglocal run my-project php artisan migrate
    ```
 
-- After changing secrets or overrides, run `dev restart`.
-- If the site is served from the wrong folder, Laragon has not created its site yet, so `dev up` uses `public\` or the project folder: run `dev down`, start Apache in Laragon once, stop it, then run `dev up`.
+- After changing secrets or overrides, run `lglocal restart`.
 - Multi-line values such as PEM keys are not supported; store them base64-encoded and decode them in the application.
-- For configuration options and troubleshooting, see the [laragon-dev README](../tools/laragon-dev/README.md).
 
 #### 3.4. Notes
 
-- After changing secrets or overrides, restart the application to load the new values (Node.js: run `npm run dev` again; PHP: see [3.3](#33-run-the-application)).
+- After changing secrets or overrides, restart the application to load the new values (Node.js: run `npm run dev:infisical` again; PHP: see [3.3](#33-run-the-application)).
 - Only pass public configuration to the frontend, such as `VITE_*` variables; values bundled into browser code can be viewed by users.
 - **PHP:** do not cache the configuration locally. `php artisan config:cache` and `php artisan optimize` write the secret values to `bootstrap/cache/config.php`; if you ran them, run `php artisan config:clear`.
 - **PHP:** in `phpunit.xml`, use `<server>` instead of `<env>` for test values. When PHP runs from the command line, as tests do, values from Infisical are in `$_SERVER`, which `env()` in Laravel and CakePHP reads first. `<env>` entries, even with `force="true"`, do not override them, so tests could run against the development database:

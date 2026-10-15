@@ -1,5 +1,0 @@
-# Generated config, Apache bin\ links, logs, PIDs, state and hosts backup
-/runtime/
-
-# Machine-specific configuration; see projects.example.json
-/projects.json

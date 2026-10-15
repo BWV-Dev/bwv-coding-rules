@@ -18,4 +18,4 @@
 ## 3. Guidelines
 - [**Dependency Upgrade**](./Guidelines/DependencyUpgradeGuideline.md)
 - [**Hide Version Information**](./Guidelines/HideVersionInfoGuideline.md)
-- [**Infisical**](./Guidelines/Infisical.md)
+- [**Infisical**](./Guidelines/InfisicalGuideline.md)
