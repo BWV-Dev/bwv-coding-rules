@@ -24,6 +24,7 @@
 - [2.5 Use async/await instead of callbacks wherever possible](#2.5)
 - [2.6 Use interface and type based on the use case](#2.6)
 - [2.7 Avoid non-null assertion unless there is a clear reason](#2.7)
+- [2.8 Declare variable types when they cannot be inferred](#2.8)
 
 [**3. Comment** ](#3-comment)
 - [3.1 Comments should explain why, not repeat what the code does](#3.1)  
@@ -651,6 +652,63 @@ if (residentsById.has(residentId)) {
   // has() above guarantees the entry exists
   const resident = residentsById.get(residentId)!;
 }
+```
+</td>
+</tr>
+
+<tr>
+<td id='2.8'>
+
+**2.8**
+</td>
+
+<td>
+
+Declare an explicit type for variables whose type cannot be inferred from the initial value:
+- Declared without a value, or initialized with `null` / `undefined` (`let resident;`)
+- Initialized with an empty array `[]`, empty object `{}` or an empty generic container (`new Map()`, `new Set()`)
+- Initialized from a value typed as `any` (`JSON.parse()`, `response.json()`, untyped libraries)
+
+Variables initialized from a value with a known type (function/method with a return type, literal, typed expression) do not need an extra annotation.
+</td>
+
+<td>
+
+**REQUIRED**
+</td>
+
+<td>
+
+```typescript
+// Bad - no initial value, type is implicit any
+let resident;
+
+// Bad - initialized with null, type is implicit any
+let companyCode = null;
+
+// Bad - empty array is any[]
+const residentNos = [];
+
+// Bad - empty object is {}, properties cannot be added
+const residentsByCompany = {};
+
+// Bad - Map<any, any>
+const residentsById = new Map();
+
+// Bad - JSON.parse() returns any
+const resident = JSON.parse(rawResident);
+
+// Good 👍
+let resident: Resident;
+let companyCode: string | null = null;
+const residentNos: string[] = [];
+const residentsByCompany: Record<string, Resident[]> = {};
+const residentsById = new Map<string, Resident>();
+const resident: Resident = JSON.parse(rawResident); // not checked at runtime, validate external data
+
+// Good 👍 return type is known, no annotation needed
+const transaction = await this.db.transaction();
+const isResidentActive = true;
 ```
 </td>
 </tr>
