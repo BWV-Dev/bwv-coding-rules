@@ -1,6 +1,8 @@
 includes:
     - vendor/larastan/larastan/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+    # Custom rules — see PHP.md "Custom PHPStan rules".
+    - lint/phpstan-rules.neon
 parameters:
     level: 8
     tmpDir: .phpstan

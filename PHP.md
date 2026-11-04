@@ -49,6 +49,7 @@
 - [Rector](#rector)
 - [PHP-CS-Fixer](#php-cs-fixer)
 - [PHPStan](#phpstan)
+- [Custom PHPStan rules](#custom-phpstan-rules)
 - [Running all three](#running-all-three)
 - [Disabling a rule](#disabling-a-rule)
 
@@ -1317,13 +1318,14 @@ We implement PHP lint using **Rector**, **PHP Coding Standards Fixer** and **PHP
 
 - **Rector** rewrites code: constructor promotion, `readonly`, `switch` → `match`, removing an `else` after a `return`, type declarations, and PHP 8.5 syntax and deprecations (e.g. `new Foo()->bar()`, `array_find()` / `array_any()`, `#[\Override]`). Guard clauses ([4.1](#4.1)) and `?->` ([2.9](#2.9)) stay manual. The Laravel template adds the rector-laravel sets; CakePHP has no maintained Rector set for code quality, so its template uses the generic sets only.
 - **PHP-CS-Fixer** formats code ([2.1](#2.1)). Some of its rewrites overlap with Rector (`??=`, a useless `else`, PHPDoc tags that repeat the signature, parentheses around `new`): the result is the same, but a behaviour you turn off must be turned off in both ([Disabling a rule](#disabling-a-rule)).
-- **PHPStan** only reports, at **level 8** with `phpstan-strict-rules` and the framework extension (Larastan for Laravel, `cakedc/cakephp-phpstan` for CakePHP). What it reports is noted in [2.4](#2.4), [2.8](#2.8), [2.9](#2.9), [3.4](#3.4) and [4.3](#4.3), plus non-boolean conditions. It does not check operations on `mixed` ([2.4](#2.4)).
+- **PHPStan** only reports, at **level 8** with `phpstan-strict-rules`, the framework extension (Larastan for Laravel, `cakedc/cakephp-phpstan` for CakePHP) and the [custom rules](#custom-phpstan-rules) in `lint/`. Apart from the custom rules, what it reports is noted in [2.4](#2.4), [2.8](#2.8), [2.9](#2.9), [3.4](#3.4) and [4.3](#4.3), plus non-boolean conditions. It does not check operations on `mixed` ([2.4](#2.4)).
 
 | Laravel | CakePHP | Copy to project root as |
 |---|---|---|
 | [laravel/rector.template.php](./config/php/laravel/rector.template.php) | [cakephp/rector.template.php](./config/php/cakephp/rector.template.php) | `rector.php` |
 | [laravel/.php-cs-fixer.dist.template.php](./config/php/laravel/.php-cs-fixer.dist.template.php) | [cakephp/.php-cs-fixer.dist.template.php](./config/php/cakephp/.php-cs-fixer.dist.template.php) | `.php-cs-fixer.dist.php` |
 | [laravel/phpstan.dist.template.neon](./config/php/laravel/phpstan.dist.template.neon) | [cakephp/phpstan.dist.template.neon](./config/php/cakephp/phpstan.dist.template.neon) | `phpstan.dist.neon` |
+| [lint/](./config/php/lint/) | [lint/](./config/php/lint/) | `lint/` |
 
 Set up a project with the steps for its framework, then the [Shared steps](#shared-steps).
 
@@ -1370,7 +1372,7 @@ For CakePHP 5.4.
    - Remove the `check`, `cs-check` and `cs-fix` scripts from `composer.json`: `check` would clash with the one in the [Shared steps](#shared-steps). Keep `test`.
    - Delete the `.github/` folder. It belongs to the cakephp/app repository itself (issue templates, Dependabot), and its `ci.yml` runs phpcs. Write your own CI with `composer check` and `composer test`.
 
-4. **Copy the templates** from the CakePHP column of the table above. They cover `config/`, `plugins/`, `src/` and `tests/`; if the project has no `plugins/` folder, remove it from all three.
+4. **Copy the templates** from the CakePHP column of the table above. They cover `config/`, `plugins/`, `src/` and `tests/`; if the project has no `plugins/` folder, remove it from the three config files.
 
 5. **Configure IdeHelper** — add this block to `config/app.php`:
 
@@ -1409,7 +1411,19 @@ For CakePHP 5.4.
    .phpstan/
    ```
 
-2. **Add scripts to composer.json**
+2. **Autoload the custom rules** — add the `Lint\Rules\` entry to `autoload-dev` in `composer.json`, keeping the existing ones, then run `composer dump-autoload`:
+
+   ```json
+   "autoload-dev": {
+       "psr-4": {
+           "Lint\\Rules\\": "lint/rules/"
+       }
+   },
+   ```
+
+   PHPStan builds its container before `bootstrapFiles` run, so the rules must come from Composer's autoloader. `lint/` stays outside PHPStan `paths:` and Rector `withPaths()`; PHP-CS-Fixer formats it like any other file.
+
+3. **Add scripts to composer.json**
 
    ```json
    "scripts": {
@@ -1424,10 +1438,10 @@ For CakePHP 5.4.
    },
    ```
 
-3. **First run**
+4. **First run**
    - Run `composer fix`, then the test suite: Rector and the risky fixers rewrite code, and the tests are what show a change in behaviour.
    - If `composer rector` still reports changes, run `composer fix` again — some rewrites only become possible after another one (a closure turned into an arrow function gets its return type on the next pass).
-   - Run `composer stan`. On a new project, fix what it still reports in the skeleton's own code (a handful of errors on Laravel, around 20 on CakePHP) instead of baselining it. On an existing codebase, follow [Existing codebase](#existing-codebase).
+   - Run `composer stan`. On a new project, fix what it still reports in the skeleton's own code (around 10 errors on Laravel and 70 on CakePHP, of which 5 and 49 are lines over 80 characters — [2.3](#2.3)) instead of baselining it. On an existing codebase, follow [Existing codebase](#existing-codebase).
 
 ### Rector
 
@@ -1469,6 +1483,28 @@ Every project runs **level 8** — do not lower or raise it. On an existing code
 
 https://marketplace.visualstudio.com/items?itemName=SanderRonde.phpstan-vscode<br />
 Shows PHPStan errors inline as you type, without waiting for `composer stan`.
+
+### Custom PHPStan rules
+
+[lint/](./config/php/lint/) adds 15 PHPStan rules for what Rector, PHP-CS-Fixer and PHPStan do not check. `lint/phpstan-rules.neon` registers them, and the `phpstan.dist.neon` templates include it. Each message ends with the rule ID of the code review standard (`CODING_STANDARDS.md`): `PHP-NAMING-002` is [1.2](#1.2), `PHP-STYLE-003` is [2.3](#2.3), and so on.
+
+| Rule | Reports | Identifier | Class |
+|---|---|---|---|
+| [1.1](#1.1) | A class, interface, trait, enum or enum case name not in PascalCase | `naming.validClassName` | `ValidClassNameRule` |
+| [1.2](#1.2) | A function or method name not in camelCase | `naming.camelCapsMethodName` | `CamelCapsMethodNameRule` |
+| [1.2](#1.2) | A property name not in camelCase | `naming.propertyName` | `PropertyNamingRule` |
+| [1.2](#1.2) | A parameter name, promoted properties included, not in camelCase | `naming.parameterName` | `ParameterNamingRule` |
+| [1.2](#1.2) | A variable assigned under a name not in camelCase | `naming.variableName` | `VariableNamingRule` |
+| [1.3](#1.3) | A constant (`const`, class constant, `define()`) not in UPPER_CASE_UNDERSCORE | `naming.upperCaseConstantName` | `UpperCaseConstantNameRule` |
+| [2.3](#2.3) | A line over **80** characters | `style.lineLength` | `LineLengthRule` |
+| [3.5](#3.5) | A comment with Vietnamese or other accented Latin letters | `comment.language` | `NonEnglishCommentRule` |
+| [4.2](#4.2) | `if`, loops, `switch` or `try` nested over **2** levels | `usage.nestingDepth` | `NestingDepthRule` |
+| [4.6](#4.6) | A file over **1000** lines | `usage.fileLength` | `FileLengthRule` |
+| CLEAN-FUNC-SIZE | A function body over **50** lines, closures excluded | `cleanCode.functionLength` | `FunctionLengthRule` |
+| CLEAN-PARAMS | A function with over **3** parameters, constructors excluded | `cleanCode.parameterCount` | `ParameterCountRule` |
+| Security [1](./WebSecurityRules.md#1) | Raw SQL built by interpolation, concatenation or `sprintf()` | `security.rawSqlInterpolation` | `RawSqlInterpolationRule` |
+| Security [5](./WebSecurityRules.md#5) | `echo` / `<?= ?>` of a value not wrapped in `h()`, `e()` or `htmlspecialchars()` | `security.unescapedOutput` | `UnescapedOutputRule` |
+| Security [6](./WebSecurityRules.md#6) | Request input passed straight to a file, redirect or shell function | `security.userInputInPath` | `UserInputInPathRule` |
 
 ### Running all three
 
