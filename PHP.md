@@ -10,6 +10,7 @@
 - [1.3 Use UPPER_CASE for constants](#1.3)
 - [1.4 Use meaningful names and avoid unclear abbreviations](#1.4)
 - [1.5 Use boolean names that describe state or capability](#1.5)
+- [1.6 Start function and method names with a verb](#1.6)
 
 [**2. Styling & Types** ](#2-styling--types)
 - [2.1 Let PHP-CS-Fixer handle formatting rules](#2.1)
@@ -126,7 +127,7 @@ trait CommonTrait
 
 <td>
 
-Use **camelCase** for functions, methods, properties and variables. Function and method names should start with a **verb**.
+Use **camelCase** for functions, methods, properties and variables.
 </td>
 
 <td>
@@ -239,6 +240,46 @@ $hasPermission = true;
 $canResize = false;
 $shouldConfirm = true;
 $enabled = true;
+```
+
+</td>
+</tr>
+
+<tr>
+<td id='1.6'>
+
+**1.6**
+</td>
+
+<td>
+
+Function and method names should start with a **verb**. **Exception**: names that PHP or the framework defines or calls by name, such as controller actions (`index`), Eloquent relationships (`posts`), accessors returning `Attribute`, framework hooks (`casts`, `rules`, `definition`, `up`, `down`, `validationDefault`, `beforeFilter`) and interface methods (`current`, `key`). Renaming them breaks the code that calls them.
+</td>
+
+<td>
+
+**RECOMMENDED**
+</td>
+
+<td>
+
+```php
+// Bad
+public function userName(): string {}
+
+// Good 👍
+public function getUserName(): string {}
+public function sendInvoice(Invoice $invoice): void {}
+
+// Good 👍 names the framework calls (keep them)
+// Laravel
+public function index(): View {}             // Route::resource() action
+public function posts(): HasMany {}          // $user->posts, with('posts')
+protected function firstName(): Attribute {} // accessor of first_name
+protected function casts(): array {}
+
+// CakePHP
+public function validationDefault(Validator $validator): Validator {}
 ```
 
 </td>
