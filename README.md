@@ -19,3 +19,4 @@
 - [**Dependency Upgrade**](./Guidelines/DependencyUpgradeGuideline.md)
 - [**Hide Version Information**](./Guidelines/HideVersionInfoGuideline.md)
 - [**Infisical**](./Guidelines/InfisicalGuideline.md)
+- [**Claude Code Auto Mode**](./Guidelines/ClaudeCodeAutoModeGuideline.md)
