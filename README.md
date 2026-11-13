@@ -13,6 +13,7 @@
 - [**PHP**](./PHP.md) (Laravel, CakePHP)
 - [**Python**](./Python.md)
 - [**Security**](./WebSecurityRules.md)
+- [**Testing**](./TestingRules.md)
 - [**Case Studies**](./WebCaseStudies.md)
 
 ## 3. Guidelines
